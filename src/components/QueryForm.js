@@ -21,7 +21,7 @@ export default function QueryForm({ isLoading, submitQueryCallback }) {
   function handleSubmit(e) {
     e.preventDefault();
     // build query obj
-    const querySub = new QuerySubmission(endpointQuery, endpointQuery, query)
+    const querySub = new QuerySubmission(endpointQuery, endpointQuery, query);
     submitQueryCallback(querySub);
   }
 
