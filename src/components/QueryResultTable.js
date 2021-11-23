@@ -1,8 +1,13 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
 import QueryResultTableInputCell from './QueryResultTableInputCell';
+import { prefixes, shrink } from '@zazuko/rdf-vocabularies';
 
 export default function QueryResultTable({ refreshTableCallback, sparqlSubmission, sparqlResultBindings }) {
+
+  // add prefixes from query (overrides default prefixes)
+  const queryObj = sparqlSubmission.getQueryObject();
+  Object.entries(queryObj.prefixes).forEach( ([pref,uri]) => prefixes[pref] = uri);
 
   const tableHeadColumns = Object.keys(sparqlResultBindings[0])
     .filter(key => sparqlResultBindings[0][key].include === true)
@@ -17,7 +22,9 @@ export default function QueryResultTable({ refreshTableCallback, sparqlSubmissio
         const rowBinding = sparqlResultBindings[rowIndex];
         return <QueryResultTableInputCell key={keyForInputCell} refreshTableCallback={refreshTableCallback} sparqlSubmission={sparqlSubmission} rowBinding={rowBinding} variable={variable} />;
       } else { // not editable
-        return <td key={key}>{binding.value}</td>;
+        // shrink with prefix
+        const displayValue = shrink(binding.value) || binding.value;
+        return <td key={key}>{displayValue}</td>;
       }      
     } else { // skip not selected vars
       return null;

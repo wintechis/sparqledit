@@ -7,7 +7,7 @@ import Container from 'react-bootstrap/Container';
 import QueryForm from './components/QueryForm';
 import QueryResultTable from './components/QueryResultTable';
 
-import {executeSelectQuery} from './scripts/sparqledit';
+import { executeSelectQuery } from './scripts/sparqledit';
 
 function App() {
   const [isLoading, setIsLoading] = React.useState(false);

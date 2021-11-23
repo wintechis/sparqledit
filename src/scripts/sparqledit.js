@@ -57,7 +57,7 @@ export function buildUpdateQueryForVariable(queryStr, variableRow) {
   return updateQuery;
 }
 
-function buildQueryObject(queryStr) {
+export function buildQueryObject(queryStr) {
   // init parser and parse query string to JS object
   const parser = new SparqlParser();
   const queryObject = parser.parse(queryStr);
