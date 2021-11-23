@@ -1,5 +1,7 @@
 import React from "react";
 import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import QuerySubmission from "../scripts/QuerySubmission";
@@ -16,25 +18,32 @@ export default function QueryForm({ isLoading, submitQueryCallback }) {
 
   // TODO: use localstorage hook
   const [endpointQuery, setEndpointQuery] = React.useState(initialUrl);
+  const [endpointUpdate, setEndpointUpdate] = React.useState();
   const [query, setQuery] = React.useState(initialQuery);
 
   function handleSubmit(e) {
     e.preventDefault();
     // build query obj
-    const querySub = new QuerySubmission(endpointQuery, endpointQuery, query);
+    const updateUrl = endpointUpdate ? endpointUpdate : endpointQuery;
+    const querySub = new QuerySubmission(endpointQuery, updateUrl, query);
     submitQueryCallback(querySub);
   }
 
   return (
-    // TODO: floating labels
     <Form>
-      <Form.Group className="mb-3" controlId="formSparqlEndpoint">
-        <Form.Label>SPARQL endpoint</Form.Label>
-        <Form.Control type="url" value={endpointQuery} onChange={e => setEndpointQuery(e.target.value)} required />
-        <Form.Text className="text-muted">
-          URL for queries and update queries.
-        </Form.Text>
-      </Form.Group>
+      <Row className="mb-1">
+        <Form.Group as={Col} controlId="formSparqlEndpoint">
+          <Form.Label>SPARQL query endpoint</Form.Label>
+          <Form.Control type="url" value={endpointQuery} onChange={e => setEndpointQuery(e.target.value)} required />
+        </Form.Group>
+        <Form.Group as={Col} controlId="formSparqlUpdateEndpoint">
+          <Form.Label>(optional) update endpoint *</Form.Label>
+          <Form.Control type="url" value={endpointUpdate} onChange={e => setEndpointUpdate(e.target.value)} />
+          <Form.Text className="text-muted">
+            * necessary if different URLs for query and update are used.
+          </Form.Text>
+        </Form.Group>
+      </Row>
 
       <Form.Group className="mb-3" controlId="formSparqlQuery">
         <Form.Label>Query (with prefixes)</Form.Label>
@@ -42,7 +51,7 @@ export default function QueryForm({ isLoading, submitQueryCallback }) {
       </Form.Group>
 
       <Button variant="primary" type="submit" disabled={isLoading} onClick={!isLoading ? e=>handleSubmit(e) : null}>
-        { isLoading ? <><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> loading …</> : 'Submit query'}
+        { isLoading ? <><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> loading …</> : <><i className="bi bi-send"></i> submit query</>}
       </Button>
     </Form>
   );
