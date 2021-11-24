@@ -135,7 +135,7 @@ function buildUpdateQueryObject(queryObject, bindingsRow) {
       modQuery.where.splice(i, 1); // remove unsupported where elements, e.g. filter 
     }
   }
-  console.dir(modQuery, { depth: null })
+  //console.dir(modQuery, { depth: null })
 
   function replaceAllNamedVariables(bgpTriples, sparqlResultBindings) {
     // replace all (named) variables with literal + value in bgp

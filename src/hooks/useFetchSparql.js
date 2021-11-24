@@ -1,4 +1,5 @@
 import React from 'react';
+import { QueryError } from '../scripts/CustomErrors';
 import QuerySubmissionResult from '../scripts/QuerySubmissionResult';
 import { executeSelectOrUpdateQuery } from '../scripts/sparqledit';
 
@@ -34,9 +35,11 @@ function useFetchSparql(querySubmission, initialFetchState = defaultInitialFetch
           result: new QuerySubmissionResult(querySubmission, queryResult)
         });
       } catch (error) {
+        const customError = new QueryError(
+          `The query execution failed.\n${error.name} - ${error.message}`);
         dispatch({
           type: "FETCH_FAIL",
-          error
+          error: customError
         });
       }
     }

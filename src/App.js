@@ -10,6 +10,7 @@ import QueryResult from './components/QueryResult';
 import ErrorBox from './components/ErrorBox';
 
 import useFetchSparql from './hooks/useFetchSparql';
+import QuerySubmission from './scripts/QuerySubmission';
 
 function App() {
   const [submittedQuery, setSubmittedQuery] = React.useState();
@@ -21,7 +22,10 @@ function App() {
   } = useFetchSparql(submittedQuery);
 
   const executeQuery = (querySubmission) => {
-    setSubmittedQuery(querySubmission);
+    setSubmittedQuery(new QuerySubmission(
+      querySubmission.endpointQuery,
+      querySubmission.endpointUpdate,
+      querySubmission.queryString));
   };
 
   return (
