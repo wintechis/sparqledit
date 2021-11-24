@@ -5,7 +5,8 @@ import Form from 'react-bootstrap/Form';
 import Badge from 'react-bootstrap/Badge';
 import Modal from 'react-bootstrap/Modal';
 import { fromRdf } from 'rdf-literal';
-import { buildUpdateQueryForVariable, executeUpdateQuery } from '../scripts/sparqledit';
+import { buildUpdateQueryForVariable, executeSelectOrUpdateQuery } from '../scripts/sparqledit';
+import QuerySubmission from '../scripts/QuerySubmission';
 
 
 export default function QueryResultTableInputCell({ refreshTableCallback, sparqlSubmission, rowBinding, variable }) {
@@ -33,9 +34,13 @@ export default function QueryResultTableInputCell({ refreshTableCallback, sparql
 
   async function handleLiteralUpdate(e) {
     e.preventDefault();
-    const updateResult = await executeUpdateQuery(sparqlSubmission.endpointUpdate, updateQuery);
+    const updateSubmission = new QuerySubmission(
+      sparqlSubmission.endpointQuery, 
+      sparqlSubmission.endpointUpdate, 
+      updateQuery);
+    const updateResult = await executeSelectOrUpdateQuery(updateSubmission);
     setUpdateResult(updateResult);
-    if(updateResult === 'success') {
+    if(updateResult === 'SUCCESS') {
       setUpdateQuery(null);
       refreshTableCallback(sparqlSubmission);
     }

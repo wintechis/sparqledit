@@ -50,7 +50,7 @@ export default function QueryForm({ isLoading, submitQueryCallback }) {
         <Form.Control as="textarea" rows={6} value={query} onChange={e => setQuery(e.target.value)} required />
       </Form.Group>
 
-      <Button variant="primary" type="submit" disabled={isLoading} onClick={!isLoading ? e=>handleSubmit(e) : null}>
+      <Button variant="primary" type="submit" className='mb-4' disabled={isLoading} onClick={!isLoading ? e=>handleSubmit(e) : null}>
         { isLoading ? <><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> loading …</> : <><i className="bi bi-send"></i> submit query</>}
       </Button>
     </Form>

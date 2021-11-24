@@ -1,7 +1,16 @@
-import { submitQuery, submitUpdateQuery } from '../scripts/sparqlclient';
+import sparqlClient from '../scripts/sparqlclient';
 import { Parser as SparqlParser } from 'sparqljs';
 import { Generator as SparqlGenerator } from 'sparqljs';
 import { Wildcard } from 'sparqljs';
+
+export async function executeSelectOrUpdateQuery(querySubmission) {
+  const queryType = sparqlClient.getQueryType(querySubmission.queryString);
+  if (queryType === 'SELECT') {
+    return executeSelectQuery(querySubmission.endpointQuery, querySubmission.queryString);
+  } else {
+    return sparqlClient.submitUpdateQuery(querySubmission.endpointUpdate, querySubmission.queryString);
+  }
+}
 
 export async function executeSelectQuery(sparqlUrl, queryStr) {
   // parse query string into JS object
@@ -17,7 +26,7 @@ export async function executeSelectQuery(sparqlUrl, queryStr) {
   }
   
   // execute wildcard query
-  const sparql_results = await submitQuery(
+  const sparql_results = await sparqlClient.submitQuery(
     sparqlUrl, stringifyQueryObject(queryObj));
   
   // mark variables not included in original query
@@ -33,16 +42,6 @@ export async function executeSelectQuery(sparqlUrl, queryStr) {
   });
 
   return sparql_results;
-}
-
-export async function executeUpdateQuery(sparqlUrl, queryStr) {
-  let stausUpdate = 'unknown';
-  try {
-    stausUpdate = await submitUpdateQuery(sparqlUrl, queryStr);
-  } catch (error) {
-    stausUpdate = `failed - ${error.name}: ${error.message}`;
-  }
-  return stausUpdate;
 }
 
 export function buildUpdateQueryForVariable(queryStr, variableRow) {

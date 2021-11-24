@@ -2,7 +2,11 @@ import { SparqlEndpointFetcher } from "fetch-sparql-endpoint";
 
 const sparqlFetcher = new SparqlEndpointFetcher();
 
-export async function submitQuery(sparqlUrl, queryStr) {
+function getQueryType(queryStr) {
+  return sparqlFetcher.getQueryType(queryStr);
+}
+
+async function submitQuery(sparqlUrl, queryStr) {
 
   const stream = await sparqlFetcher.fetchBindings(sparqlUrl, queryStr);
   
@@ -21,7 +25,14 @@ export async function submitQuery(sparqlUrl, queryStr) {
   });
 }
 
-export async function submitUpdateQuery(sparqlUrl, queryStr) {
+async function submitUpdateQuery(sparqlUrl, queryStr) {
   await sparqlFetcher.fetchUpdate(sparqlUrl, queryStr);
-  return 'success';
+  return 'SUCCESS';
 }
+
+const client = {
+  getQueryType: getQueryType,
+  submitQuery: submitQuery,
+  submitUpdateQuery: submitUpdateQuery
+};
+export default client;

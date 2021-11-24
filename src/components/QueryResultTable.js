@@ -8,8 +8,11 @@ import { shrink } from '@zazuko/rdf-vocabularies/shrink';
 
 const ROWS_PER_PAGE = 20;
 
-export default function QueryResultTable({ refreshTableCallback, sparqlSubmission, sparqlResultBindings }) {
+export default function QueryResultTable({ refreshTableCallback, sparqlResult }) {
   const [page, setPage] = React.useState(0);
+
+  const sparqlResultBindings = sparqlResult.queryResult;
+  const sparqlSubmission = sparqlResult.querySubmission;
 
   // calculate the selected page and rows
   const numberOfPages = Math.ceil(sparqlResultBindings.length / ROWS_PER_PAGE);
@@ -47,7 +50,7 @@ export default function QueryResultTable({ refreshTableCallback, sparqlSubmissio
   const tableBody = sparqlResultBindingsForPage.map( (bindingsRow,i) => <tr key={i}>{generateTableBodyRow(bindingsRow,i)}</tr>);
 
   return (
-    <section className='mt-4'>
+    <section>
       <Table bordered hover size="sm" responsive>
         <thead>
           {tableHead}
