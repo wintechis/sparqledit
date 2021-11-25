@@ -140,19 +140,23 @@ function buildUpdateQueryObject(queryObject, bindingsRow) {
   function replaceAllNamedVariables(bgpTriples, sparqlResultBindings) {
     // replace all (named) variables with literal + value in bgp
     for (const bgpline of bgpTriples) {
-      // replace subjects and objects
-      for (const so of ['subject', 'predicate', 'object']) {
-        if (bgpline[so].termType === 'Variable') {
+      // replace subjects, predicates and objects
+      for (const spo of ['subject', 'predicate', 'object']) {
+        if (bgpline[spo].termType === 'Variable') {
           // iterate over variables list
           Object.keys(sparqlResultBindings).forEach(variable => {
-            if (bgpline[so].value === variable) {
+            if (bgpline[spo].value === variable) {
               // match -> replace with cell value from query (from bindingsRow)
               const rdfType = sparqlResultBindings[variable].termType;
               if (rdfType === 'NamedNode' || rdfType === 'Literal') {
-                bgpline[so] = sparqlResultBindings[variable];
+                bgpline[spo] = sparqlResultBindings[variable];
               }
             }
           });
+        }
+        // blank node -> replace with named variable
+        if (bgpline[spo].termType === 'BlankNode') {
+          bgpline[spo].termType = 'Variable';
         }
       }
     }
