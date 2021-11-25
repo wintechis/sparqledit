@@ -1,0 +1,60 @@
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix om2: <http://www.ontology-of-units-of-measure.org/resource/om-2/> .
+@prefix schema: <http://schema.org/> .
+
+@base <http://example.org/> .
+
+<patient/1> a schema:Patient, foaf:Person ;
+  foaf:name "John Doe" ;
+  foaf:familyName "Doe" ;
+  foaf:mbox <mailto:john.doe@mail.com> ;
+  schema:email "mailto:john.doe@mail.com" ;
+  schema:birthDate "1990-10-22"^^xsd:date ;
+  schema:weight [
+    a schema:QuantitativeValue ;
+    schema:value "80.5"^^xsd:decimal ;
+    schema:unitCode om2:kilogram
+  ] ;
+  schema:memberOf <medicaloffice/drschwartz> .
+
+<patient/2> a schema:Patient, foaf:Person ;
+  foaf:name "Emily Example" ;
+  schema:birthDate "1980-01-05"^^xsd:date ;
+  schema:weight [
+    a schema:QuantitativeValue ;
+    schema:value "62"^^xsd:decimal ;
+    schema:unitCode om2:kilogram
+  ] ;
+  schema:memberOf <medicaloffice/drschwartz>, <medicaloffice/drheilmann> .
+
+<medicaloffice/drschwartz> a schema:Physician ;
+  schema:openingHours "Mo,Tu,We,Th 08:00-17:00" ;
+  schema:telephone "(09131) 6812345" ;
+  schema:address [
+    a schema:PostalAddress ;
+    schema:addressCountry "DE";
+    schema:streetAddress "Medicstreet 12" ;
+    schema:postalCode 91058
+  ] .
+
+<medicaloffice/drheilmann> a schema:Physician ;
+  schema:openingHours "Mo,We,Fr 09:00-12:00" ;
+  schema:telephone "(09131) 6789876" ;
+  schema:address [
+    a schema:PostalAddress ;
+    schema:addressCountry "DE";
+    schema:streetAddress "Krankenstraße 6" ;
+    schema:postalCode 87654
+  ] .
+
+<patient/123> a schema:Patient, foaf:Person ;
+  foaf:name "Max Power" ;
+  foaf:familyName "Simpson" ;
+  foaf:mbox <mailto:home.j@simpson.com> ;
+  schema:weight [
+    a schema:QuantitativeValue ;
+    schema:value "125"^^xsd:decimal ;
+    schema:unitCode om2:kilogram
+  ] ;
+  schema:memberOf <medicaloffice/drhibbert> .
