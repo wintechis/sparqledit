@@ -6,7 +6,7 @@ import QueryResultTableInputCell from './QueryResultTableInputCell';
 import prefixes from '@zazuko/rdf-vocabularies/prefixes';
 import { shrink } from '@zazuko/rdf-vocabularies/shrink';
 
-const ROWS_PER_PAGE = 20;
+const ROWS_PER_PAGE = 10;
 
 export default function QueryResultTable({ refreshTableCallback, sparqlResult }) {
   const [page, setPage] = React.useState(0);
@@ -25,12 +25,26 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
   const queryObj = sparqlSubmission.getQueryObject();
   Object.entries(queryObj.prefixes).forEach(([pref, uri]) => prefixes[pref] = uri);
 
-  const tableHeadColumns = Object.keys(sparqlResultBindings[0])
-    .filter(key => sparqlResultBindings[0][key].include === true)
-    .map(key => <th key={key}>{key}</th>);
-  const tableHead = <tr>{tableHeadColumns}</tr>;
+  // collect all columns to display in result table
+  const columnNames = new Set(sparqlResultBindings.flatMap(binding => 
+    Object.keys(binding).filter(key => binding[key].include === true)));
+  const tableColumns = [...columnNames]; // transform to array
+  // create table head
+  const tableHead = <tr>{tableColumns.map(key => <th key={key}>{key}</th>)}</tr>;
 
-  const generateTableBodyRowCell = (variable,binding,rowIndex) => {
+  // create table body
+  function generateTableBody(sparqlResultBindings, columnNames) {
+    return sparqlResultBindings.map( 
+      (bindingsRow,i) => <tr key={i}>{generateTableBodyRow(columnNames, bindingsRow, i)}</tr>
+    );
+  }
+  function generateTableBodyRow(columnNames, rowBinding, rowIndex) {
+    return columnNames.map(columnName => 
+      rowBinding.hasOwnProperty(columnName) ? generateTableBodyRowCell(columnName,rowBinding[columnName],rowIndex) : <td></td>
+    );
+  };
+
+  function generateTableBodyRowCell(variable, binding, rowIndex) {
     const key = `${rowIndex}_${variable}_${binding.value}`;
     if (binding.include === true) { 
       if(binding.termType === 'Literal') { // editable
@@ -44,10 +58,7 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
       return null;
     }
   };
-  const generateTableBodyRow = (rowBinding,rowIndex) => {
-    return Object.entries(rowBinding).map(([variable,binding]) => generateTableBodyRowCell(variable,binding,rowIndex));
-  };
-  const tableBody = sparqlResultBindingsForPage.map( (bindingsRow,i) => <tr key={i}>{generateTableBodyRow(bindingsRow,i)}</tr>);
+  const tableBody = generateTableBody(sparqlResultBindingsForPage, tableColumns);
 
   return (
     <section>

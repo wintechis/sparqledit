@@ -28,6 +28,8 @@ function App() {
       querySubmission.queryString));
   };
 
+  if (sparqlResult) console.log(sparqlResult);
+
   return (
     <Container className="App">
       <h1 className="mb-4">SPARQL_edit</h1>
