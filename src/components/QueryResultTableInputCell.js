@@ -167,14 +167,17 @@ function inputCellStatehReducer(state, action) {
       const newState = { 
         origSparqlSubmission: state.origSparqlSubmission, 
         origCellValue: state.origCellValue,
-        currentCellValue: action.currentCellValue
       };
-      try {
-        const updateQu = action.buildUpdateQuery();
-        newState.updateQuery = updateQu;
-      } catch (error) {
-        newState.updateQuery = null;
-        newState.buildingError = error;
+      // eslint-disable-next-line
+      if (action.currentCellValue != state.origCellValue) {
+        newState.currentCellValue = action.currentCellValue
+        try {
+          const updateQu = action.buildUpdateQuery();
+          newState.updateQuery = updateQu;
+        } catch (error) {
+          newState.updateQuery = null;
+          newState.buildingError = error;
+        }
       }
       return newState;
 
