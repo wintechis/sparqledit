@@ -93,6 +93,12 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 Build the app for production to the `build` folder: `npm run build`
 
+Test the build: `serve -s build`
+
+Build Docker image with local build: `docker build -f Dockerfile.prod -t sparqledit .`
+
+Start Docker container: `docker run -p 3001:80 --name sparql_edit sparqledit`
+
 ### TODOs
 
 * Algorithm
@@ -100,11 +106,11 @@ Build the app for production to the `build` folder: `npm run build`
   * check restrictions (restricted SPARQL grammar -> paper)
   * editable object URIs ?
 * React app
+  * special input components for different datatypes (e.g. xsd:dateTime)
   * form validation
     * SPARQL endpoint, query syntax + restrictions
     * Input cell content
   * maybe use Yasgui components (with modifications?)
-  * special input components for different datatypes (e.g. xsd:dateTime)
 * SOLID app
   * represent saved queries (+ metadata & endpoint URLs) with RDF
   * load/store saved queries from/on SOLID POD
@@ -120,6 +126,8 @@ Build the app for production to the `build` folder: `npm run build`
 #### AbortController fix
 
 In the bundled package for the browser, using the `fetchUpdate` function from the `fetch-sparql-endpoint` library causes a problem with the `AbortController` in the `node_modules/fetch-sparql-endpoint/lib/SparqlEndpointFetcher.js` script in line 125.
+
+`TypeError: abort_controller_1.AbortController is not a constructor`
 
 Quick solution:
 ```javascript
