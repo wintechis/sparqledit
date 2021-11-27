@@ -1,15 +1,11 @@
 import React from 'react';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Badge from 'react-bootstrap/Badge';
-import Modal from 'react-bootstrap/Modal';
-import Alert from 'react-bootstrap/Alert';
-import Spinner from 'react-bootstrap/Spinner';
-
+import QueryResultTableInputCellButtons from './QueryResultTableInputCellButtons';
+import QueryResultTableInputCellModal from './QueryResultTableInputCellModal';
+import { QuerySubmission } from '../../scripts/QuerySubmission';
 import { fromRdf } from 'rdf-literal';
-import { buildUpdateQueryForVariable, executeSelectOrUpdateQuery } from '../scripts/sparqledit';
-import QuerySubmission from '../scripts/QuerySubmission';
+import { buildUpdateQueryForVariable, executeSelectOrUpdateQuery } from '../../scripts/sparqledit';
 
 export default function QueryResultTableInputCell({ refreshTableCallback, sparqlSubmission, rowBinding, variable }) {
   const [modalShow, setModalShow] = React.useState(false);
@@ -94,69 +90,18 @@ export default function QueryResultTableInputCell({ refreshTableCallback, sparql
 
   const anyError = inputCellState.buildingError || inputCellState.updateError;
   const inputValue = inputCellState.currentCellValue ? inputCellState.currentCellValue : inputCellState.origCellValue;
+
   return (
     <td>
       <Form>
         <Form.Control type={inputType} onChange={e => handleInputChange(e)} isInvalid={anyError} ref={inputRef} value={inputValue} />
         { inputCellState.updateQuery || inputCellState.buildingError ?
-          <ButtonGroup aria-label="update controls" className="mt-1">
-            <Button variant="success" type="submit" alt="update" onClick={e => handleLiteralUpdate(e)} disabled={inputCellState.isExecutingQuery || inputCellState.buildingError}>
-              { inputCellState.isExecutingQuery ? <><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> saving …</> : <span><i className="bi bi-pencil-square"></i> save </span>}
-            </Button>
-            <Button variant="secondary" type="reset" onClick={e => handleInputReset(e)} disabled={inputCellState.isExecutingQuery}>
-              <i className="bi bi-arrow-counterclockwise"></i> reset
-            </Button>
-            { anyError ?
-              <Button variant="danger" onClick={() => setModalShow(true)} disabled={inputCellState.isExecutingQuery}>
-                <i className="bi bi-x-square"></i> error
-              </Button> :
-              <Button variant="primary" onClick={() => setModalShow(true)} disabled={inputCellState.isExecutingQuery}>
-                <i className="bi bi-info-square"></i> info
-              </Button> }
-          </ButtonGroup>
-          : null }
+          <QueryResultTableInputCellButtons handleLiteralUpdate={handleLiteralUpdate} handleInputReset={handleInputReset} 
+            openModal={() => setModalShow(true)} inputCellState={inputCellState} /> : null }
         { inputCellState.updateResult ? <Badge bg="success">SUCCESS</Badge> : null }
-
       </Form>
-      <UpdateInfoModal show={modalShow} onHide={() => setModalShow(false)} inputCellState={inputCellState} />
+      <QueryResultTableInputCellModal show={modalShow} onHide={() => setModalShow(false)} inputCellState={inputCellState} />
     </td>
-  );
-}
-
-function UpdateInfoModal({ show, onHide, inputCellState}) {
-  const anyError = inputCellState.buildingError || inputCellState.updateError;
-  return (
-    <Modal show={show} onHide={onHide} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
-      <Modal.Header className={anyError ? 'alert-danger' : ''} closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          SPARQL update {anyError ? 'error' : 'information'}
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body className={anyError ? 'alert-danger' : ''}>
-        { inputCellState.updateQuery ?
-          <Form>
-            <Form.Group className="mb-3" controlId="formSparqlUpdateQuery">
-              <Form.Label>Auto-generated update query</Form.Label>
-              <Form.Control as="textarea" rows={6} defaultValue={inputCellState.updateQuery} />
-            </Form.Group>
-          </Form>
-         : null }
-        { inputCellState.buildingError ? <UpdateInfoModalError errorTitle={'Update query generation error'} errorObject={inputCellState.buildingError} />  : null }
-        { inputCellState.updateError ? <UpdateInfoModalError errorTitle={'Update execution error'} errorObject={inputCellState.updateError} />  : null }
-      </Modal.Body>
-      {/* <Modal.Footer>
-        <Button onClick={onHide}>Close</Button>
-      </Modal.Footer> */}
-    </Modal>
-  );
-}
-
-function UpdateInfoModalError({ errorTitle, errorObject }) {
-  return (
-    <Alert variant="light">
-      <h4>{errorTitle}</h4>
-      <p>{`${errorObject.name} - ${errorObject.message}`}</p>
-    </Alert>   
   );
 }
 

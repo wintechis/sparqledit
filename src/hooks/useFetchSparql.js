@@ -1,6 +1,6 @@
 import React from 'react';
 import { QueryError } from '../scripts/CustomErrors';
-import QuerySubmissionResult from '../scripts/QuerySubmissionResult';
+import { QuerySubmissionResult } from '../scripts/QuerySubmission';
 import { executeSelectOrUpdateQuery } from '../scripts/sparqledit';
 
 const defaultInitialFetchState = {
