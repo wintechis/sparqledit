@@ -48,12 +48,27 @@ export default function QueryForm({ isLoading, submitQueryCallback }) {
 
     if (!yasqe) {
       // create instance of YASQE
-      const newYasqe = new Yasqe(document.getElementById("yasqe"));
+      const yasqeSettings = {
+        lineNumbers: false,
+        persistent: null,
+        showQueryButton: true,
+        extraKeys: {
+          "Ctrl-Enter": handlerSubmit,
+          "Ctrl-S": null
+        }
+      }
+      const newYasqe = new Yasqe(document.getElementById("yasqe"), yasqeSettings);
+      //newYasqe.query = () => Promise.reject("No querying via yasqe.");
+      newYasqe.query = async () => handlerSubmit();
       // set initial query and endpoint
       newYasqe.setValue(querySub.queryString);
-      //newYasqe.options.requestConfig.endpoint = querySub.endpointQuery;
+      newYasqe.options.requestConfig.endpoint = querySub.endpointQuery;
       setYasqe(newYasqe);
     } else {
+      // update yasqe query function
+      yasqe.query = async () => handlerSubmit();
+      // update query endpoint
+      yasqe.options.requestConfig.endpoint = querySub.endpointQuery;
       // register event handler
       yasqe.on("query", handlerSubmit);
       yasqe.on("change", handlerChange);
@@ -70,24 +85,26 @@ export default function QueryForm({ isLoading, submitQueryCallback }) {
   }, [yasqe, querySub]);
 
   return (
-    <Form className='mb-4'>
-      <Row className="mb-2">
-        <Form.Group as={Col} controlId="formSparqlEndpoint">
-          <Form.Label>SPARQL query endpoint</Form.Label>
-          <Form.Control type="url" value={querySub.endpointQuery} onChange={e => handleFormChange('endpointQuery', e.target.value)} required />
-        </Form.Group>
-        <Form.Group as={Col} controlId="formSparqlUpdateEndpoint">
-          <Form.Label>(optional) update endpoint *</Form.Label>
-          <Form.Control type="url" value={querySub.endpointUpdate} onChange={e => handleFormChange('endpointUpdate', e.target.value)} />
-          <Form.Text className="text-muted">
-            * necessary if different URLs for query and update are used.
-          </Form.Text>
-        </Form.Group>
-      </Row>
+    <section className='mb-4'>
+      <Form className='mb-1' id="queryForm">
+        <Row className="mb-2">
+          <Form.Group as={Col} controlId="formSparqlEndpoint">
+            <Form.Label>SPARQL query endpoint</Form.Label>
+            <Form.Control type="url" value={querySub.endpointQuery} onChange={e => handleFormChange('endpointQuery', e.target.value)} required />
+          </Form.Group>
+          <Form.Group as={Col} controlId="formSparqlUpdateEndpoint">
+            <Form.Label>(optional) update endpoint *</Form.Label>
+            <Form.Control type="url" value={querySub.endpointUpdate} onChange={e => handleFormChange('endpointUpdate', e.target.value)} />
+            <Form.Text className="text-muted">
+              * necessary if different URLs for query and update are used.
+            </Form.Text>
+          </Form.Group>
+        </Row>
+      </Form>
       <div id='yasqe' />
-      <Button variant="primary" type="submit" className='mt-1' disabled={isLoading} onClick={!isLoading ? e => handleSubmit(e) : null}>
-        { isLoading ? <><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> loading … </> : <><i className="bi bi-send"></i> submit query </>}
+      <Button variant="primary" type="submit" form="queryForm" disabled={isLoading} onClick={!isLoading ? e => handleSubmit(e) : null}>
+          { isLoading ? <><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> loading … </> : <><i className="bi bi-send"></i> submit query </>}
       </Button>
-    </Form>
+    </section>
   );
 }
