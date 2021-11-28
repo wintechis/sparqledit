@@ -30,6 +30,7 @@ function useFetchSparql(querySubmission, initialFetchState = defaultInitialFetch
       dispatch({ type: "FETCH_START" });
       try {
         const queryResult = await executeSelectOrUpdateQuery(querySubmission);
+        console.log("QueryResult", queryResult);
         dispatch({
           type: "FETCH_SUCCESS",
           result: new QuerySubmissionResult(querySubmission, queryResult)

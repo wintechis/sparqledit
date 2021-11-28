@@ -7,6 +7,9 @@ import Spinner from 'react-bootstrap/Spinner';
 import { QuerySubmission } from "../scripts/QuerySubmission";
 import useLocalStorage from "../hooks/useLocalStorage";
 
+import Yasqe from "@triply/yasqe";
+import "@triply/yasqe/build/yasqe.min.css";
+
 const initialQuery = 
 `SELECT ?s ?p ?o 
 WHERE {
@@ -16,10 +19,14 @@ LIMIT 20`;
 
 export default function QueryForm({ isLoading, submitQueryCallback }) {
   const initialQuerySub = new QuerySubmission('','',initialQuery);
-  const [querySub, setQuerySub] = useLocalStorage('queryFormData', initialQuerySub)
+  const [querySub, setQuerySub] = useLocalStorage('queryFormData', initialQuerySub);
+  const [yasqe, setYasqe] = React.useState(null);
 
   function handleSubmit(e) {
     e.preventDefault();
+    handleYasqeSubmit();
+  }
+  function handleYasqeSubmit() {
     const submitQuerySub = {...querySub};
     // if no update endpoint => same as query endpoint
     if(submitQuerySub.endpointUpdate.length < 1) {
@@ -34,9 +41,37 @@ export default function QueryForm({ isLoading, submitQueryCallback }) {
     setQuerySub(newQuerySub);
   }
 
+  React.useEffect(() => {
+    //const handlerSubmit = (yasqe, reqest) => handleYasqeSubmit(yasqe, reqest);
+    const handlerSubmit = () => handleYasqeSubmit();
+    const handlerChange = (yasqe) => handleFormChange('queryString', yasqe.getValue());
+
+    if (!yasqe) {
+      // create instance of YASQE
+      const newYasqe = new Yasqe(document.getElementById("yasqe"));
+      // set initial query and endpoint
+      newYasqe.setValue(querySub.queryString);
+      //newYasqe.options.requestConfig.endpoint = querySub.endpointQuery;
+      setYasqe(newYasqe);
+    } else {
+      // register event handler
+      yasqe.on("query", handlerSubmit);
+      yasqe.on("change", handlerChange);
+    }
+
+    // cleanup
+    return () => {
+      if (yasqe) {
+        yasqe.off("query", handlerSubmit);
+        yasqe.off("change", handlerChange);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [yasqe, querySub]);
+
   return (
-    <Form>
-      <Row className="mb-1">
+    <Form className='mb-4'>
+      <Row className="mb-2">
         <Form.Group as={Col} controlId="formSparqlEndpoint">
           <Form.Label>SPARQL query endpoint</Form.Label>
           <Form.Control type="url" value={querySub.endpointQuery} onChange={e => handleFormChange('endpointQuery', e.target.value)} required />
@@ -49,16 +84,10 @@ export default function QueryForm({ isLoading, submitQueryCallback }) {
           </Form.Text>
         </Form.Group>
       </Row>
-
-      <Form.Group className="mb-3" controlId="formSparqlQuery">
-        <Form.Label>Query (with prefixes)</Form.Label>
-        <Form.Control as="textarea" rows={6} value={querySub.queryString} onChange={e => handleFormChange('queryString', e.target.value)} required />
-      </Form.Group>
- 
-      <Button variant="primary" type="submit" className='mb-4' disabled={isLoading} onClick={!isLoading ? e => handleSubmit(e) : null}>
-        { isLoading ? <><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> loading …</> : <><i className="bi bi-send"></i> submit query</>}
+      <div id='yasqe' />
+      <Button variant="primary" type="submit" className='mt-1' disabled={isLoading} onClick={!isLoading ? e => handleSubmit(e) : null}>
+        { isLoading ? <><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> loading … </> : <><i className="bi bi-send"></i> submit query </>}
       </Button>
-      
     </Form>
   );
 }
