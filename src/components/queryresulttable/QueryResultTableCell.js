@@ -15,9 +15,9 @@ export default function QueryResultTableCell({ rawUri, prefixUri }) {
   return (
     <td className="text-break px-2">
       <OverlayTrigger placement={'top'} trigger="click" overlay={
-          <Tooltip>
-            <a href={rawUri}>{rawUri}</a>
-          </Tooltip>
+        <Tooltip>
+          <a href={rawUri}>{rawUri}</a>
+        </Tooltip>
       }>
         {displayJSX}
       </OverlayTrigger>

@@ -106,7 +106,6 @@ Start Docker container: `docker run -p 3001:80 --name sparql_edit sparqledit`
   * check restrictions (restricted SPARQL grammar -> paper)
   * editable object URIs ?
 * React app
-  * Bugfix: ResultTable unique keys for blank cells (<td></td>)
   * special input components for different datatypes (e.g. xsd:dateTime)
   * form validation
     * SPARQL endpoint, query syntax + restrictions

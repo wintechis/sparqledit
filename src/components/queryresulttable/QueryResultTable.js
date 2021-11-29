@@ -40,7 +40,9 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
   }
   function generateTableBodyRow(columnNames, rowBinding, rowIndex) {
     return columnNames.map(columnName => 
-      rowBinding.hasOwnProperty(columnName) ? generateTableBodyRowCell(columnName,rowBinding[columnName],rowIndex) : <td></td>
+      rowBinding.hasOwnProperty(columnName) ? 
+        generateTableBodyRowCell(columnName,rowBinding[columnName],rowIndex) : 
+        <td key={`${rowIndex}_${columnName}`}></td>
     );
   };
 
