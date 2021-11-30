@@ -65,8 +65,9 @@ export default function QueryForm({ isLoading, submitQueryCallback }) {
       newYasqe.options.requestConfig.endpoint = querySub.endpointQuery;
       setYasqe(newYasqe);
     } else {
-      // update yasqe query function
+      // update yasqe query function with new functions from new closure
       yasqe.query = async () => handlerSubmit();
+      yasqe.options.extraKeys["Ctrl-Enter"] = handlerSubmit;
       // update query endpoint
       yasqe.options.requestConfig.endpoint = querySub.endpointQuery;
       // register event handler
