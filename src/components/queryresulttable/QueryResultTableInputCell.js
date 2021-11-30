@@ -11,20 +11,8 @@ export default function QueryResultTableInputCell({ refreshTableCallback, sparql
   const [modalShow, setModalShow] = React.useState(false);
 
   const binding = rowBinding[variable];
-  let origValue = fromRdf(binding);
-  let inputType = 'text';
-  switch (typeof(origValue)) {
-    case 'number':
-      inputType = 'number';
-      break;
-    case 'object':
-      if(origValue instanceof Date) {
-        inputType = 'date';
-        origValue = origValue.toISOString().substring(0,10); // no time
-      }
-      break;
-    default:
-  }
+  const { value: origValue, inputType, inputStep } = getInputTypeForLiteral(binding);
+
   const initialInputCellStateState = {
     origSparqlSubmission: sparqlSubmission,
     origCellValue: origValue,
@@ -39,6 +27,10 @@ export default function QueryResultTableInputCell({ refreshTableCallback, sparql
 
   async function handleLiteralUpdate(e) {
     e.preventDefault();
+    if(!inputCellState.updateQuery || inputCellState.isExecutingQuery) {
+      return; // no action if form is submitted in wrong state
+    }
+
     dispatch({ type: "INPUTCELL_UPDATE_START" });
     try {
       const updateSubmission = new QuerySubmission(
@@ -66,8 +58,15 @@ export default function QueryResultTableInputCell({ refreshTableCallback, sparql
     }
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange= (e) => {
     const newValue = String(e.target.value);
+    handleChange(newValue);
+  }
+  const handleCheckboxChange = (e) => {
+    const newValue = String(e.target.checked);
+    handleChange(newValue);
+  }
+  const handleChange = (newValue) => {
     const buildUpdateQuery = () => {
       rowBinding[variable].valueNew = String(newValue);
       const updateQu = buildUpdateQueryForVariable(sparqlSubmission.queryString, rowBinding);
@@ -93,8 +92,10 @@ export default function QueryResultTableInputCell({ refreshTableCallback, sparql
 
   return (
     <td>
-      <Form>
-        <Form.Control type={inputType} onChange={e => handleInputChange(e)} isInvalid={anyError} ref={inputRef} value={inputValue} />
+      <Form onSubmit={e => handleLiteralUpdate(e)}>
+        { inputType === 'checkbox' ? 
+        <Form.Check type="checkbox" onChange={e => handleCheckboxChange(e)} label={inputValue} isInvalid={anyError} ref={inputRef} checked={inputValue === 'true' ? true : false} /> :
+        <Form.Control type={inputType} onChange={e => handleInputChange(e)} isInvalid={anyError} ref={inputRef} value={inputValue} step={inputStep} /> }
         { inputCellState.updateQuery || inputCellState.buildingError ?
           <QueryResultTableInputCellButtons handleLiteralUpdate={handleLiteralUpdate} handleInputReset={handleInputReset} 
             openModal={() => setModalShow(true)} inputCellState={inputCellState} /> : null }
@@ -163,4 +164,40 @@ function inputCellStatehReducer(state, action) {
     default:
       throw new Error(`Invalid reducer action: ${action.type}`);
   }
+}
+
+function getInputTypeForLiteral(binding) {
+  const bindingDatatype = binding.datatype.value.toLowerCase();
+  let origValue = fromRdf(binding);
+  let inputType = 'text';
+  let inputStep = null;
+  switch (typeof(origValue)) {
+    case 'number':
+      inputType = 'number';
+      break;
+    case 'boolean':
+      inputType = 'checkbox';
+      origValue = String(origValue);
+      break;
+    case 'object':
+      if(origValue instanceof Date) {
+        if (bindingDatatype.endsWith('#date')) {
+          origValue = origValue.toISOString().substring(0,10); // only date
+          inputType = 'date';
+        } else if (bindingDatatype.endsWith('#datetime')) {
+          const timezoneOffset = origValue.getTimezoneOffset() * 60000;
+          const correctedTime = new Date(origValue.getTime() - timezoneOffset);
+          origValue = correctedTime.toISOString().substring(0,19); // only date+time
+          inputType = 'datetime-local';
+          inputStep = 1;
+        }
+      }
+      break;
+    default:
+  }
+  return {
+    value: origValue,
+    inputType,
+    inputStep
+  };
 }

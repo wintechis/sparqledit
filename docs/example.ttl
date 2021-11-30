@@ -31,6 +31,7 @@
 <medicaloffice/drschwartz> a schema:Physician ;
   schema:openingHours "Mo,Tu,We,Th 08:00-17:00" ;
   schema:telephone "(09131) 6812345" ;
+  schema:isAcceptingNewPatients true ;
   schema:address [
     a schema:PostalAddress ;
     schema:addressCountry "DE";
@@ -38,9 +39,16 @@
     schema:postalCode 91058
   ] .
 
+[] a schema:WebSite ;
+  schema:about <medicaloffice/drschwartz> ;
+  schema:url "https://www.drmedschwartz.com/"^^xsd:anyURI ;
+  schema:datePublished "2019-10-26T14:30:00"^^xsd:dateTime ;
+  schema:dateModified "2021-11-30T08:22:50"^^xsd:dateTime  .
+
 <medicaloffice/drheilmann> a schema:Physician ;
   schema:openingHours "Mo,We,Fr 09:00-12:00" ;
   schema:telephone "(09131) 6789876" ;
+  schema:isAcceptingNewPatients false ;
   schema:address [
     a schema:PostalAddress ;
     schema:addressCountry "DE";

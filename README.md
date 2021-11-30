@@ -115,34 +115,11 @@ Start Docker container: `docker run -p 3001:80 --name sparql_edit sparqledit`
   * represent saved queries (+ metadata & endpoint URLs) with RDF
   * load/store saved queries from/on SOLID POD
   * alternative if not signed in: load/store from/in BrowserDB
-* Misc.
-  * create GitHub issue for AbortController problem when bundled
 * Additional features/ideas
   * sub-graph visualization
   * SPARQLedit for LDP documents with internal SPARQL engine and PUT request
 
 ### Important notes
-
-#### AbortController fix
-
-In the bundled package for the browser, using the `fetchUpdate` function from the `fetch-sparql-endpoint` library causes a problem with the `AbortController` in the `node_modules/fetch-sparql-endpoint/lib/SparqlEndpointFetcher.js` script in line 125.
-
-`TypeError: abort_controller_1.AbortController is not a constructor`
-
-Quick solution:
-```javascript
-async fetchUpdate(endpoint, query) {
-    // create AbortController depending on the execution environment
-    let abortController;
-    if (typeof window === 'undefined') { // --> nodeJS
-        abortController = new abort_controller_1.AbortController();
-    } else { // --> browser
-        abortController = new AbortController();
-    }
-    //const abortController = new abort_controller_1.AbortController(); // instead of this
-    ...
-}
-```
 
 #### Mixed Content restriction
 
