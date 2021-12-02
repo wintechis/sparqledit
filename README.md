@@ -9,8 +9,8 @@ The result table displays literals as editable input fields where the user can s
 When the changes are saved, SPARQL_edit automatically creates a [SPARQL Update query](https://www.w3.org/TR/sparql11-update/) and executes it. 
 There are, however, some restrictions for the generation of the update query. This relates to the _database view update problem_.
 
-SPARQL_edit supports simple 'SELECT' queries with a basic graph pattern (BGP) that may contain 
-* blank node constructs (n-ary relations)
+SPARQL_edit supports simple ['SELECT' queries](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#select) on the [default graph](https://www.w3.org/TR/sparql11-query/#specifyingDataset) with a [basic graph pattern (BGP)](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#BasicGraphPatterns) that may contain 
+* [blank node patterns](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#QSynBlankNodes) such as [n-ary relations](https://www.w3.org/TR/swbp-n-aryRelations/)
 * 'FILTER' statements
 * 'OPTIONAL' triple patterns
 
@@ -41,8 +41,8 @@ Procedure:
 2. replace all (named) variables in bgp statements with named nodes (URIs) or literals from query results
     1. go over basic and 'OPTIONAL' bgp triples
     2. if subject, predicate or object is a (named) variable, replace with cell value from result table's row where literal was modified
-    3. if subject, predicate or object is blank node, replace with variable
-3. build update query
+    3. if subject, predicate or object is blank node, replace with variable (reasons: [1.1](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#BlankNodesInResults), [1.2](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#BGPsparqlBNodes), [2](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#grammarBNodes))
+3. build update query ([delete-insert-where](https://www.w3.org/TR/sparql11-update/#deleteInsert))
     1. copy prefixes
     2. copy modified BGP triples from (2.)
     3. create 'DELETE' and 'INSERT' triple based on (2.)
@@ -102,10 +102,12 @@ Start Docker container: `docker run -p 3001:80 --name sparql_edit sparqledit`
 ### TODOs
 
 * Algorithm
+  * support named graphs (FROM, FROM NAMED)
   * support for other [Graph Pattern](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#GraphPattern)
-  * check restrictions (restricted SPARQL grammar -> paper)
+  * check restrictions (restricted [SPARQL grammar](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#sparqlGrammar) -> paper)
   * editable object URIs ?
 * React app
+  * endpoints with basic auth (-> own fetcher witch creds)
   * special input components for different datatypes (e.g. xsd:dateTime)
   * form validation
     * SPARQL endpoint, query syntax + restrictions
