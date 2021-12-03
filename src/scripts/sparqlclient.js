@@ -26,7 +26,9 @@ async function submitQuery(sparqlUrl, queryStr) {
 }
 
 async function submitUpdateQuery(sparqlUrl, queryStr) {
+  // update request doesn't return any data (server response '204 No content')
   await sparqlFetcher.fetchUpdate(sparqlUrl, queryStr);
+  // return something instead of 'void'
   return 'SUCCESS';
 }
 

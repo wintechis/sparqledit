@@ -123,6 +123,14 @@ Start Docker container: `docker run -p 3001:80 --name sparql_edit sparqledit`
 
 ### Important notes
 
+#### SPARQL server CORS support
+
+SPARQL_edit can only send and receive requests if the SPARQL server supports [Cross-Origin Resource Sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).
+
+[Apache Jena Fuseki](https://jena.apache.org/documentation/fuseki2/) supports CORS by default. The rules are included in Jetty's application server configuration which can be found in the file `apache-jena-fuseki-*\webapp\WEB-INF\web.xml`.
+
+[GraphDB](https://graphdb.ontotext.com/documentation/standard/workbench-user-interface.html#id2) does _not_ support CORS by default. It can be activated with command line parameters: `-Dgraphdb.workbench.cors.enable=true`.
+
 #### Mixed Content restriction
 
 If the app is served over _HTTPS_ the browser blocks _HTTP_ requests to other websites. ([Firefox docu](https://support.mozilla.org/en-US/kb/mixed-content-blocking-firefox))
