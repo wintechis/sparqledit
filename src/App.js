@@ -4,6 +4,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './styles/App.css';
 
+import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container';
 import QueryForm from './components/QueryForm';
 import QueryResult from './components/QueryResult';
@@ -29,12 +31,25 @@ function App() {
   };
 
   return (
-    <Container className="App">
-      <h1 className="mb-4">SPARQL_edit</h1>
-      <QueryForm isLoading={isLoading} submitQueryCallback={executeQuery} />
-      { error ? <ErrorBox error={error} /> : null }
-      { sparqlResult ? <QueryResult refreshTableCallback={executeQuery} sparqlResult={sparqlResult} /> : null }
-    </Container>
+    <>
+      <Navbar bg="light" variant="light" className="mb-4">
+        <Container>
+          <Navbar.Brand href="#">
+            <h1>SPARQL_edit</h1>
+          </Navbar.Brand>
+          <Nav className="justify-content-end">
+            <Nav.Item>
+              <Nav.Link className="justify-content-end" href="mailto:sascha.meckler@iis.fraunhofer.de">Contact</Nav.Link>
+            </Nav.Item>
+          </Nav>
+        </Container>
+      </Navbar>
+      <Container className="App">
+        <QueryForm isLoading={isLoading} submitQueryCallback={executeQuery} />
+        {error ? <ErrorBox error={error} /> : null}
+        {sparqlResult ? <QueryResult refreshTableCallback={executeQuery} sparqlResult={sparqlResult} /> : null}
+      </Container>
+    </>
   );
 }
 

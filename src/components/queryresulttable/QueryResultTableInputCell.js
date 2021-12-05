@@ -1,6 +1,7 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Badge from 'react-bootstrap/Badge';
+import Collapse from 'react-bootstrap/Collapse';
 import QueryResultTableInputCellButtons from './QueryResultTableInputCellButtons';
 import QueryResultTableInputCellModal from './QueryResultTableInputCellModal';
 import { QuerySubmission } from '../../scripts/QuerySubmission';
@@ -87,18 +88,22 @@ export default function QueryResultTableInputCell({ refreshTableCallback, sparql
   };
   const inputRef = React.useRef(null);
 
-  const anyError = inputCellState.buildingError || inputCellState.updateError;
+  const showButtons = (inputCellState.updateQuery || inputCellState.buildingError) ? true : false;
+  const anyError = (inputCellState.buildingError || inputCellState.updateError) ? true : false;
   const inputValue = inputCellState.currentCellValue ? inputCellState.currentCellValue : inputCellState.origCellValue;
 
   return (
     <td>
       <Form onSubmit={e => handleLiteralUpdate(e)}>
         { inputType === 'checkbox' ? 
-        <Form.Check type="checkbox" onChange={e => handleCheckboxChange(e)} label={inputValue} isInvalid={anyError} ref={inputRef} checked={inputValue === 'true' ? true : false} /> :
-        <Form.Control type={inputType} onChange={e => handleInputChange(e)} isInvalid={anyError} ref={inputRef} value={inputValue} step={inputStep} /> }
-        { inputCellState.updateQuery || inputCellState.buildingError ?
-          <QueryResultTableInputCellButtons handleLiteralUpdate={handleLiteralUpdate} handleInputReset={handleInputReset} 
-            openModal={() => setModalShow(true)} inputCellState={inputCellState} /> : null }
+          <Form.Check type="checkbox" onChange={e => handleCheckboxChange(e)} label={inputValue} isInvalid={anyError} ref={inputRef} checked={inputValue === 'true' ? true : false} /> :
+          <Form.Control type={inputType} onChange={e => handleInputChange(e)} isInvalid={anyError} ref={inputRef} value={inputValue} step={inputStep} /> 
+        }
+        <Collapse in={showButtons} mountOnEnter={true} unmountOnExit={true}>
+          <div>
+            <QueryResultTableInputCellButtons handleLiteralUpdate={handleLiteralUpdate} handleInputReset={handleInputReset} openModal={() => setModalShow(true)} inputCellState={inputCellState} />
+          </div>
+        </Collapse>
         { inputCellState.updateResult ? <Badge bg="success">SUCCESS</Badge> : null }
       </Form>
       <QueryResultTableInputCellModal show={modalShow} onHide={() => setModalShow(false)} inputCellState={inputCellState} />
