@@ -108,11 +108,10 @@ Start Docker container: `docker run -p 3001:80 --name sparql_edit sparqledit`
   * editable object URIs ?
 * React app
   * endpoints with basic auth (-> own fetcher witch creds)
-  * special input components for different datatypes (e.g. xsd:dateTime)
+  * special input components for different datatypes (e.g. xsd:time)
   * form validation
     * SPARQL endpoint, query syntax + restrictions
     * Input cell content
-  * maybe use Yasgui components (with modifications?)
 * SOLID app
   * represent saved queries (+ metadata & endpoint URLs) with RDF
   * load/store saved queries from/on SOLID POD
