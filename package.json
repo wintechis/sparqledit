@@ -15,9 +15,11 @@
     "react-scripts": "4.0.3",
     "sparqljs": "^3.5.1"
   },
+  "homepage": ".",
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build"
+    "build": "react-scripts build",
+    "solid-upload": "node solid-upload.js"
   },
   "eslintConfig": {
     "extends": [
@@ -34,5 +36,8 @@
       "last 1 chrome version",
       "last 1 firefox version"
     ]
+  },
+  "devDependencies": {
+    "solid-file-client": "^2.1.0"
   }
 }

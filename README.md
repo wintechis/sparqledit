@@ -111,9 +111,21 @@ Build the app for production to the `build` folder: `npm run build`
 
 Test the build: `serve -s build`
 
-Build Docker image with local build: `docker build -f Dockerfile.prod -t sparqledit .`
+#### Docker
+
+Build Docker image: `docker build -f Dockerfile.prod -t sparqledit .`
 
 Start Docker container: `docker run -p 3001:80 --name sparql_edit sparqledit`
+
+#### Upload to SOLID POD
+
+Build the app for production to the `build` folder: `npm run build`
+
+__Note:__ Use `"homepage": "."` in package.json if the app is not deployed to root.
+
+Export SOLID credentials as environment variables: `export SOLID_USERNAME=myusername; export SOLID_PASSWORD=mypassword`
+
+Start upload script: `npm run solid-upload`
 
 ### TODOs
 

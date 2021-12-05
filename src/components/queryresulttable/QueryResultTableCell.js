@@ -15,7 +15,7 @@ export default function QueryResultTableCell({ rawUri, prefixUri }) {
 
   return (
     <td className="text-break px-2">
-      <OverlayTrigger placement="top" delay={{ show: 280, hide: 800 }} overlay={
+      <OverlayTrigger placement="top" delay={{ show: 400, hide: 800 }} overlay={
         <Tooltip className="tooltip-light text-nowrap">
           <div className="m-1">
             <a href={rawUri} target="_blank" rel="noopener noreferrer">{rawUri}</a>
