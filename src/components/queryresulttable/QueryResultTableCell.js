@@ -1,6 +1,7 @@
 import React from 'react';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
+import '../../styles/tooltip.css';
 
 export default function QueryResultTableCell({ rawUri, prefixUri }) {
 
@@ -14,9 +15,11 @@ export default function QueryResultTableCell({ rawUri, prefixUri }) {
 
   return (
     <td className="text-break px-2">
-      <OverlayTrigger placement={'top'} trigger="click" overlay={
-        <Tooltip>
-          <a href={rawUri}>{rawUri}</a>
+      <OverlayTrigger placement="top" delay={{ show: 280, hide: 800 }} overlay={
+        <Tooltip className="tooltip-light text-nowrap">
+          <div className="m-1">
+            <a href={rawUri} target="_blank" rel="noopener noreferrer">{rawUri}</a>
+          </div>
         </Tooltip>
       }>
         {displayJSX}

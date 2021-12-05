@@ -30,7 +30,7 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
     Object.keys(binding).filter(key => binding[key].include === true)));
   const tableColumns = [...columnNames]; // transform to array
   // create table head
-  const tableHead = <tr>{tableColumns.map(key => <th key={key}>{key}</th>)}</tr>;
+  const tableHead = <tr>{tableColumns.map(key => <th key={key} className="text-break px-2"><h4>{key}</h4></th>)}</tr>;
 
   // create table body
   function generateTableBody(sparqlResultBindings, columnNames) {

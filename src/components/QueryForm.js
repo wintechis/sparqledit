@@ -87,7 +87,7 @@ export default function QueryForm({ isLoading, submitQueryCallback }) {
 
   return (
     <section className='mb-4'>
-      <Form className='mb-1' id="queryForm">
+      <Form className='mb-1' id="queryForm" onSubmit={!isLoading ? e => handleSubmit(e) : null}>
         <Row className="mb-2">
           <Form.Group as={Col} controlId="formSparqlEndpoint">
             <Form.Label>SPARQL query endpoint</Form.Label>
@@ -103,7 +103,7 @@ export default function QueryForm({ isLoading, submitQueryCallback }) {
         </Row>
       </Form>
       <div id='yasqe' />
-      <Button variant="primary" type="submit" form="queryForm" disabled={isLoading} onClick={!isLoading ? e => handleSubmit(e) : null}>
+      <Button variant="primary" type="submit" form="queryForm" disabled={isLoading}>
           { isLoading ? <><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> loading … </> : <><i className="bi bi-send"></i> submit query </>}
       </Button>
     </section>

@@ -25,6 +25,20 @@ SPARQL_edit supports simple ['SELECT' queries](https://www.w3.org/TR/2013/REC-sp
   * no RDF containers and collections
 * no sub-queries
 
+### Usage tips
+
+Shortcuts for the SPARQL editor
+| | |
+|---|---|
+| [ctrl] + [enter] | submit query |
+| [ctrl] + # | comment/uncomment |
+| [crtl] + [shift] + F | auto-format |
+| [crtl] + Z | undo last change |
+| [crtl] + Y | redo last change |
+More shortcuts are in the [YASQE docs](https://triply.cc/docs/yasgui#supported-key-combinations).
+
+Changes to input fields can be submitted with `ENTER`.
+
 ### Algorithm for generating the update query
 
 Inputs:
@@ -79,7 +93,9 @@ WHERE {
 ## Developer info
 
 SPARQL_edit is a React app written in JavaScript. The styling and design is done with Bootstrap.
-SPARQL_edit uses different RDF-related libraries:
+
+SPARQL_edit uses the [YASQE](https://triply.cc/docs/yasgui-api#yasqe) component from [YASGUI](https://github.com/TriplyDB/Yasgui) as query editor.
+It uses different RDF-related libraries:
 * [SPARQL.js](https://github.com/RubenVerborgh/SPARQL.js) for translating SPARQL queries into JS objects and back
 * [fetch-sparql-endpoint.js](https://github.com/rubensworks/fetch-sparql-endpoint.js/) for sending queries to the SPARQL endpoint
 * [rdf-literal.js](https://github.com/rubensworks/rdf-literal.js) for mapping RDF literals to JavaScript primitives
@@ -108,10 +124,12 @@ Start Docker container: `docker run -p 3001:80 --name sparql_edit sparqledit`
   * editable object URIs ?
 * React app
   * endpoints with basic auth (-> own fetcher witch creds)
-  * special input components for different datatypes (e.g. xsd:time)
+  * special input components
+    * for different datatypes (e.g. xsd:time)
+    * textbox input for multiline xsd:string
   * form validation
     * SPARQL endpoint, query syntax + restrictions
-    * Input cell content
+    * input cell content
 * SOLID app
   * represent saved queries (+ metadata & endpoint URLs) with RDF
   * load/store saved queries from/on SOLID POD
