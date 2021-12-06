@@ -4,34 +4,24 @@ import Badge from 'react-bootstrap/Badge';
 import Collapse from 'react-bootstrap/Collapse';
 import QueryResultTableInputCellButtons from './QueryResultTableInputCellButtons';
 import QueryResultTableInputCellModal from './QueryResultTableInputCellModal';
+import { initialInputCellState, inputCellStateReducer } from '../../scripts/component-scripts/inputCellStateReducer';
+import getInputTypeForLiteral from '../../scripts/component-scripts/inputCellDatatypeHelper';
 import { QuerySubmission } from '../../scripts/QuerySubmission';
-import { fromRdf } from 'rdf-literal';
 import { buildUpdateQueryForVariable, executeSelectOrUpdateQuery } from '../../scripts/sparqledit';
 
 export default function QueryResultTableInputCell({ refreshTableCallback, sparqlSubmission, rowBinding, variable }) {
   const [modalShow, setModalShow] = React.useState(false);
 
-  const binding = rowBinding[variable];
-  const { value: origValue, inputType, inputStep } = getInputTypeForLiteral(binding);
+  const { value: origValue, inputType, inputStep } = getInputTypeForLiteral(rowBinding[variable]);
+  const initialState = initialInputCellState(sparqlSubmission, origValue);
 
-  const initialInputCellStateState = {
-    origSparqlSubmission: sparqlSubmission,
-    origCellValue: origValue,
-    currentCellValue: null,
-    buildingError: null,
-    updateQuery: null,
-    updateResult: null,
-    updateError: null,
-    isExecutingQuery: false
-  };
-  const [inputCellState, dispatch] = React.useReducer(inputCellStatehReducer, initialInputCellStateState);
+  const [inputCellState, dispatch] = React.useReducer(inputCellStateReducer, initialState);
 
   async function handleLiteralUpdate(e) {
     e.preventDefault();
     if(!inputCellState.updateQuery || inputCellState.isExecutingQuery) {
       return; // no action if form is submitted in wrong state
     }
-
     dispatch({ type: "INPUTCELL_UPDATE_START" });
     try {
       const updateSubmission = new QuerySubmission(
@@ -109,100 +99,4 @@ export default function QueryResultTableInputCell({ refreshTableCallback, sparql
       <QueryResultTableInputCellModal show={modalShow} onHide={() => setModalShow(false)} inputCellState={inputCellState} />
     </td>
   );
-}
-
-function inputCellStatehReducer(state, action) {
-  switch (action.type) {
-    
-    case "INPUTCELL_CHANGE":
-      const newState = { 
-        origSparqlSubmission: state.origSparqlSubmission, 
-        origCellValue: state.origCellValue,
-      };
-      // eslint-disable-next-line
-      if (action.currentCellValue != state.origCellValue) {
-        newState.currentCellValue = action.currentCellValue
-        try {
-          const updateQu = action.buildUpdateQuery();
-          newState.updateQuery = updateQu;
-        } catch (error) {
-          newState.updateQuery = null;
-          newState.buildingError = error;
-        }
-      }
-      return newState;
-
-    case "INPUTCELL_RESET":
-      return { 
-        origSparqlSubmission: state.origSparqlSubmission, 
-        origCellValue: state.origCellValue 
-      };
-
-    case "INPUTCELL_UPDATE_START":
-      return { 
-        origSparqlSubmission: state.origSparqlSubmission, 
-        origCellValue: state.origCellValue,
-        currentCellValue: state.currentCellValue,
-        updateQuery: state.updateQuery,
-        isExecutingQuery: true
-      };
-
-    case "INPUTCELL_UPDATE_SUCCESS":
-      // wrong state/value if update successful but no effect
-      return { 
-        origSparqlSubmission: state.origSparqlSubmission, 
-        origCellValue: state.currentCellValue,
-        updateResult: action.result,
-        isExecutingQuery: false
-      };
-      
-    case "INPUTCELL_UPDATE_FAIL":
-      return { 
-        origSparqlSubmission: state.origSparqlSubmission, 
-        origCellValue: state.origCellValue,
-        currentCellValue: state.currentCellValue,
-        updateQuery: state.updateQuery,
-        updateError: action.error,
-        isExecutingQuery: false
-      };
-
-    default:
-      throw new Error(`Invalid reducer action: ${action.type}`);
-  }
-}
-
-function getInputTypeForLiteral(binding) {
-  const bindingDatatype = binding.datatype.value.toLowerCase();
-  let origValue = fromRdf(binding);
-  let inputType = 'text';
-  let inputStep = null;
-  switch (typeof(origValue)) {
-    case 'number':
-      inputType = 'number';
-      break;
-    case 'boolean':
-      inputType = 'checkbox';
-      origValue = String(origValue);
-      break;
-    case 'object':
-      if(origValue instanceof Date) {
-        if (bindingDatatype.endsWith('#date')) {
-          origValue = origValue.toISOString().substring(0,10); // only date
-          inputType = 'date';
-        } else if (bindingDatatype.endsWith('#datetime')) {
-          const timezoneOffset = origValue.getTimezoneOffset() * 60000;
-          const correctedTime = new Date(origValue.getTime() - timezoneOffset);
-          origValue = correctedTime.toISOString().substring(0,19); // only date+time
-          inputType = 'datetime-local';
-          inputStep = 1;
-        }
-      }
-      break;
-    default:
-  }
-  return {
-    value: origValue,
-    inputType,
-    inputStep
-  };
 }
