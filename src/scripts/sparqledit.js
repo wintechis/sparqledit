@@ -191,6 +191,12 @@ function buildUpdateQueryObject(queryObject, bindingsRow) {
     triples: [insertCopy]
   });
 
+  // 3.4 copy default graph name
+  if (modQuery?.from?.default[0] !== 'undefined') { // if FROM present
+    // copy to 'graph' property in update query obj
+    updateQueryObject.updates[0].graph = modQuery.from.default[0];
+  }
+
   //console.dir(updateQueryObject, { depth: null })
   return updateQueryObject;
 }

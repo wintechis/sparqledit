@@ -11,8 +11,10 @@ There are, however, some restrictions for the generation of the update query. Th
 
 SPARQL_edit supports simple ['SELECT' queries](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#select) on the [default graph](https://www.w3.org/TR/sparql11-query/#specifyingDataset) with a [basic graph pattern (BGP)](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#BasicGraphPatterns) that may contain 
 * [blank node patterns](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#QSynBlankNodes) such as [n-ary relations](https://www.w3.org/TR/swbp-n-aryRelations/)
-* 'FILTER' statements
+* one or none 'FROM' keyword for defining the default graph
 * 'OPTIONAL' triple patterns
+* 'FILTER' statements
+* solution sequence modifier ('ORDER','LIMIT','OFFSET')
 
 ### Restrictions
 * only queries with all or specific selected variables
@@ -60,6 +62,7 @@ Procedure:
     1. copy prefixes
     2. copy modified BGP triples from (2.)
     3. create 'DELETE' and 'INSERT' triple based on (2.)
+    4. (optionally) copy the specified default graph ('FROM' -> 'WITH')
 
 Example:
 ```
