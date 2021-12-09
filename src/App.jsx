@@ -35,7 +35,7 @@ function App() {
       <Navbar bg="light" variant="light" className="mb-4">
         <Container>
           <Navbar.Brand>
-            <img alt="" src="/logo_cs.png" height="40" className="d-inline-block" />
+            <img alt="" src="logo_cs.png" height="40" className="d-inline-block" />
             <h2 className="d-inline-block align-middle mx-2">SPARQL_edit</h2>
           </Navbar.Brand>
           <Nav className="justify-content-end">
