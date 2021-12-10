@@ -141,6 +141,10 @@ Start upload script: `npm run solid-upload`
   * editable object URIs ?
 * React app
   * endpoints with basic auth (-> own fetcher witch creds)
+  * HTML table filter/search features
+    * own simple index/regex search for all columns
+    * display number of displayed, filtered and total results
+    * prof. table tools (bootstrap-table)
   * special input components
     * for different datatypes (e.g. xsd:time)
     * textbox input for multiline xsd:string

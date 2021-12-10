@@ -1,5 +1,6 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
+import Form from 'react-bootstrap/Form';
 import Pagination from 'react-bootstrap/Pagination';
 import QueryResultTableCell from './QueryResultTableCell';
 import QueryResultTableInputCell from './QueryResultTableInputCell';
@@ -10,9 +11,13 @@ const ROWS_PER_PAGE = 10;
 
 export default function QueryResultTable({ refreshTableCallback, sparqlResult }) {
   const [page, setPage] = React.useState(0);
+  const [searchString, setSearchString] = React.useState("");
 
-  const sparqlResultBindings = sparqlResult.queryResult;
+  const sparqlResultBindingsRaw = sparqlResult.queryResult;
   const sparqlSubmission = sparqlResult.querySubmission;
+
+  // filter
+  const sparqlResultBindings = sparqlResultBindingsRaw.filter(binding => Object.values(binding).some(spo => spo.value.toLowerCase().indexOf(searchString.toLowerCase()) > -1));
 
   // calculate the selected page and rows
   const numberOfPages = Math.ceil(sparqlResultBindings.length / ROWS_PER_PAGE);
@@ -64,6 +69,8 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
 
   return (
     <section>
+      <p>{`Displaying ${sparqlResultBindingsForPage.length} rows of ${sparqlResultBindings.length} filtered results from ${sparqlResultBindingsRaw.length} query results.`}</p>
+      <Form.Control type="text" value={searchString} onChange={e => setSearchString(e.target.value)} />
       <Table bordered hover size="sm" responsive>
         <thead>
           {tableHead}
