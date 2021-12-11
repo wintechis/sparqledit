@@ -62,7 +62,8 @@ export function inputCellStateReducer(state, action) {
       
     case "INPUTCELL_UPDATE_FAIL":
       const updateError = new UpdateError(
-        `The update query failed.\n${action.error.name} - ${action.error.message}`);
+        `The update query failed.\n${action.error.name} - ${action.error.message}`,
+        state.origSparqlSubmission.endpointUpdate);
       return { 
         origSparqlSubmission: state.origSparqlSubmission, 
         origCellValue: state.origCellValue,

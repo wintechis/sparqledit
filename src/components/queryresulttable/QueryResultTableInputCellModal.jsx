@@ -37,14 +37,14 @@ function UpdateInfoModalError({ errorTitle, errorObject }) {
     causeNotices.push('An unsupported SPARQL language feature was used in the original query');
   }
   if (errorObject instanceof UpdateError) {
-    if (errorObject.message.indexOf('404') > -1) {
+    if (errorObject.message.includes('404')) {
       causeNotices.push('Wrong SPARQL update endpoint URL');
     }
-    if (errorObject.message.indexOf('415') > -1) {
+    if (errorObject.message.includes('415')) {
       causeNotices.push('The given update URL is not a valid SPARQL update endpoint');
     }
-    if (errorObject.message.indexOf('401') > -1 ||
-      errorObject.message.toLowerCase().indexOf('failed to fetch') > -1) {
+    if (errorObject.message.includes('401') ||
+      errorObject.message.toLowerCase().includes('failed to fetch')) {
       causeNotices.push('The SPARQL endpoint requires authentication (e.g. username/password)');
     }
   }

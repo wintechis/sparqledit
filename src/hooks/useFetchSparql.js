@@ -37,7 +37,8 @@ function useFetchSparql(querySubmission, initialFetchState = defaultInitialFetch
         });
       } catch (error) {
         const customError = new QueryError(
-          `The query execution failed.\n${error.name} - ${error.message}`);
+          `The query execution failed.\n${error.name} - ${error.message}`, 
+          querySubmission.endpointQuery);
         dispatch({
           type: "FETCH_FAIL",
           error: customError
