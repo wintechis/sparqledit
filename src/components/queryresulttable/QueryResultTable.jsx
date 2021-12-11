@@ -2,6 +2,7 @@ import React from 'react';
 import Table from 'react-bootstrap/Table';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
+import Button from 'react-bootstrap/Button';
 import Pagination from 'react-bootstrap/Pagination';
 import QueryResultTableCell from './QueryResultTableCell';
 import QueryResultTableInputCell from './QueryResultTableInputCell';
@@ -14,12 +15,38 @@ const ROWS_PER_PAGE = 10;
 export default function QueryResultTable({ refreshTableCallback, sparqlResult }) {
   const [page, setPage] = React.useState(0);
   const [searchString, setSearchString] = React.useState("");
+  const [sortColumnName, setSortColumnName] = React.useState("");
 
   const sparqlResultBindingsRaw = sparqlResult.queryResult;
   const sparqlSubmission = sparqlResult.querySubmission;
 
   // filter
   const sparqlResultBindings = sparqlResultBindingsRaw.filter(binding => Object.values(binding).some(spo => spo.value.toLowerCase().indexOf(searchString.toLowerCase()) > -1));
+
+  // sorting
+  function sortColumnNameHandler(key) {
+    setSortColumnName(sortColumnName === key ? "" : key);
+  }
+  function compare(b1, b2) {
+    if (b1[sortColumnName] && b2[sortColumnName]) {
+      if (b1[sortColumnName].value.toLowerCase() === b2[sortColumnName].value.toLowerCase()) {
+        return 0; // equal values
+      } else { // compare
+        return b1[sortColumnName].value.toLowerCase() < b2[sortColumnName].value.toLowerCase() ? -1 : 1;
+      }
+    } else { // b1 and/or b2 are undefined
+      if (b1[sortColumnName]) {
+        return -1; // sort values before null
+      } else if (b2[sortColumnName]) {
+        return 1;
+      } else { // both undefined
+        return 0;
+      }
+    }
+  };
+  if (sortColumnName && sortColumnName.length > 0) {
+    sparqlResultBindings.sort(compare);
+  }
 
   // calculate the selected page and rows
   const numberOfPages = Math.ceil(sparqlResultBindings.length / ROWS_PER_PAGE);
@@ -44,7 +71,13 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
     Object.keys(binding).filter(key => binding[key].include === true)));
   const tableColumns = [...columnNames]; // transform to array
   // create table head
-  const tableHead = <tr>{tableColumns.map(key => <th key={key} className="text-break px-2 pb-2">{key}</th>)}</tr>;
+  const tableHead = <tr>{tableColumns.map(key => 
+    <th key={key}>
+      <div className="d-flex justify-content-between">
+        <h5 className="text-break my-auto mx-1">{key}</h5>
+        <Button variant="link" className={ key === sortColumnName ? 'text-primary' : 'text-secondary'} onClick={() => sortColumnNameHandler(key)}><i className="bi bi-sort-alpha-down"></i></Button>
+      </div>
+    </th>)}</tr>;
 
   // create table body
   function generateTableBody(sparqlResultBindings, columnNames) {
@@ -79,7 +112,7 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
   return (
     <section>
       <TableUtilities resultNumbers={resultNumbers} searchString={searchString} searchChangeCallback={e => setSearchString(e.target.value)} />
-      <Table bordered hover size="sm" responsive>
+      <Table hover size="sm" responsive>
         <thead>
           {tableHead}
         </thead>
@@ -97,8 +130,8 @@ function TableUtilities({ resultNumbers, searchString, searchChangeCallback }) {
     <Row>
       <Col>
         {searchString ?
-          <p class="align-middle">Displaying <strong>{resultNumbers.displayed}</strong><strong> / {resultNumbers.filtered}</strong> filtered results ( <strong>{resultNumbers.total}</strong> total results )</p> :
-          <p class="align-middle">Displaying <strong>{resultNumbers.displayed}</strong><strong> / {resultNumbers.total}</strong> total results</p>
+          <p className="align-middle">Displaying <strong>{resultNumbers.displayed}</strong><strong> / {resultNumbers.filtered}</strong> filtered results ( <strong>{resultNumbers.total}</strong> total results )</p> :
+          <p className="align-middle">Displaying <strong>{resultNumbers.displayed}</strong><strong> / {resultNumbers.total}</strong> total results</p>
         }
       </Col>
       <Col xs="auto">

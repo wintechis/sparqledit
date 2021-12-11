@@ -49,7 +49,7 @@ export default function QueryForm({ isLoading, submitQueryCallback }) {
     if (!yasqe) {
       // create instance of YASQE
       const yasqeSettings = {
-        lineNumbers: false,
+        lineNumbers: true,
         persistent: null,
         showQueryButton: true,
         extraKeys: {
