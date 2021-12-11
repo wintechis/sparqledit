@@ -1,11 +1,13 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
-import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
+import FormControl from 'react-bootstrap/FormControl';
 import Pagination from 'react-bootstrap/Pagination';
 import QueryResultTableCell from './QueryResultTableCell';
 import QueryResultTableInputCell from './QueryResultTableInputCell';
 import prefixes from '@zazuko/rdf-vocabularies/prefixes';
 import { shrink } from '@zazuko/rdf-vocabularies/shrink';
+import { Col, Row } from 'react-bootstrap';
 
 const ROWS_PER_PAGE = 10;
 
@@ -26,6 +28,13 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
     setPage(0); // reset pagination if new results have less pages
   }
 
+  // number of displayed, filtered and total results
+  const resultNumbers = {
+    displayed: sparqlResultBindingsForPage.length,
+    filtered: sparqlResultBindings.length,
+    total: sparqlResultBindingsRaw.length
+  }
+
   // add prefixes from query (overrides default prefixes)
   const queryObj = sparqlSubmission.getQueryObject();
   Object.entries(queryObj.prefixes).forEach(([pref, uri]) => prefixes[pref] = uri);
@@ -35,7 +44,7 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
     Object.keys(binding).filter(key => binding[key].include === true)));
   const tableColumns = [...columnNames]; // transform to array
   // create table head
-  const tableHead = <tr>{tableColumns.map(key => <th key={key} className="text-break px-2"><h4>{key}</h4></th>)}</tr>;
+  const tableHead = <tr>{tableColumns.map(key => <th key={key} className="text-break px-2 pb-2">{key}</th>)}</tr>;
 
   // create table body
   function generateTableBody(sparqlResultBindings, columnNames) {
@@ -69,8 +78,7 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
 
   return (
     <section>
-      <p>{`Displaying ${sparqlResultBindingsForPage.length} rows of ${sparqlResultBindings.length} filtered results from ${sparqlResultBindingsRaw.length} query results.`}</p>
-      <Form.Control type="text" value={searchString} onChange={e => setSearchString(e.target.value)} />
+      <TableUtilities resultNumbers={resultNumbers} searchString={searchString} searchChangeCallback={e => setSearchString(e.target.value)} />
       <Table bordered hover size="sm" responsive>
         <thead>
           {tableHead}
@@ -81,6 +89,26 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
       </Table>
       <PaginationControl numberOfPages={numberOfPages} page={page} setPage={setPage} />
     </section>
+  );
+}
+
+function TableUtilities({ resultNumbers, searchString, searchChangeCallback }) {
+  return (
+    <Row>
+      <Col>
+        {searchString ?
+          <p class="align-middle">Displaying <strong>{resultNumbers.displayed}</strong><strong> / {resultNumbers.filtered}</strong> filtered results ( <strong>{resultNumbers.total}</strong> total results )</p> :
+          <p class="align-middle">Displaying <strong>{resultNumbers.displayed}</strong><strong> / {resultNumbers.total}</strong> total results</p>
+        }
+      </Col>
+      <Col xs="auto">
+        <InputGroup className="mb-3">
+          <FormControl placeholder="search ..." aria-label="full-text search" aria-describedby="search-field"
+            value={searchString} onChange={searchChangeCallback} />
+          <InputGroup.Text id="search-field"><i className="bi bi-search"></i></InputGroup.Text>
+        </InputGroup>
+      </Col>
+    </Row>
   );
 }
 

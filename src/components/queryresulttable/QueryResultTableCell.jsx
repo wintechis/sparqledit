@@ -14,7 +14,7 @@ export default function QueryResultTableCell({ rawUri, prefixUri }) {
   }
 
   return (
-    <td className="text-break px-2">
+    <td className="text-break px-2 align-middle">
       <OverlayTrigger placement="bottom" delay={{ show: 400, hide: 800 }} overlay={
         <Tooltip className="tooltip-light text-nowrap">
           <div className="m-1">
