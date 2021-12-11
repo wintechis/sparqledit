@@ -141,16 +141,13 @@ Start upload script: `npm run solid-upload`
   * editable object URIs ?
 * React app
   * endpoints with basic auth (-> own fetcher witch creds)
-  * HTML table filter/search features
-    * own simple index/regex search for all columns
-    * display number of displayed, filtered and total results
-    * prof. table tools (bootstrap-table)
   * special input components
     * for different datatypes (e.g. xsd:time)
     * textbox input for multiline xsd:string
   * form validation
     * SPARQL endpoint, query syntax + restrictions
     * input cell content
+  * support for changing the generated update query
 * SOLID app
   * represent saved queries (+ metadata & endpoint URLs) with RDF
   * load/store saved queries from/on SOLID POD

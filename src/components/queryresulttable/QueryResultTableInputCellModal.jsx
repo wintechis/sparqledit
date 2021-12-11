@@ -2,6 +2,7 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Alert from 'react-bootstrap/Alert';
+import { BuildingError, UpdateError } from '../../scripts/CustomErrors';
 
 export default function QueryResultTableInputCellModal({ show, onHide, inputCellState }) {
 
@@ -31,10 +32,31 @@ export default function QueryResultTableInputCellModal({ show, onHide, inputCell
 }
 
 function UpdateInfoModalError({ errorTitle, errorObject }) {
+  let causeNotices = [];
+  if (errorObject instanceof BuildingError) {
+    causeNotices.push('An unsupported SPARQL language feature was used in the original query');
+  }
+  if (errorObject instanceof UpdateError) {
+    if (errorObject.message.indexOf('404') > -1) {
+      causeNotices.push('Wrong SPARQL update endpoint URL');
+    }
+    if (errorObject.message.indexOf('415') > -1) {
+      causeNotices.push('The given update URL is not a valid SPARQL update endpoint');
+    }
+    if (errorObject.message.indexOf('401') > -1 ||
+      errorObject.message.toLowerCase().indexOf('failed to fetch') > -1) {
+      causeNotices.push('The SPARQL endpoint requires authentication (e.g. username/password)');
+    }
+  }
+
   return (
     <Alert variant="light">
       <h4>{errorTitle}</h4>
       <p>{`${errorObject.name} - ${errorObject.message}`}</p>
+      { causeNotices.length > 0 ? <div>
+          <p className="font-weight-bold mb-1">Possible causes:</p>
+          <ul>{causeNotices.map( cause => <li key={cause}>{cause}</li>)}</ul>
+        </div> : null }
     </Alert>   
   );
 }

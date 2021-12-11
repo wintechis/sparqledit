@@ -1,6 +1,6 @@
 {
   "name": "sparqledit",
-  "version": "0.0.2",
+  "version": "0.2.1",
   "private": true,
   "dependencies": {
     "@triply/yasqe": "^4.2.20",

@@ -1,3 +1,5 @@
+import { BuildingError, UpdateError } from '../CustomErrors';
+
 export function initialInputCellState(sparqlSubmission, origValue) {
   return {
     origSparqlSubmission: sparqlSubmission,
@@ -26,8 +28,10 @@ export function inputCellStateReducer(state, action) {
           const updateQu = action.buildUpdateQuery();
           newState.updateQuery = updateQu;
         } catch (error) {
+          const buildingError = new BuildingError(
+            `The update query building algorithm failed.\n${error.name} - ${error.message}`);
           newState.updateQuery = null;
-          newState.buildingError = error;
+          newState.buildingError = buildingError;
         }
       }
       return newState;
@@ -57,12 +61,14 @@ export function inputCellStateReducer(state, action) {
       };
       
     case "INPUTCELL_UPDATE_FAIL":
+      const updateError = new UpdateError(
+        `The update query failed.\n${action.error.name} - ${action.error.message}`);
       return { 
         origSparqlSubmission: state.origSparqlSubmission, 
         origCellValue: state.origCellValue,
         currentCellValue: state.currentCellValue,
         updateQuery: state.updateQuery,
-        updateError: action.error,
+        updateError: updateError,
         isExecutingQuery: false
       };
 
