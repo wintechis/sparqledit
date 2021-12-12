@@ -2,11 +2,19 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Alert from 'react-bootstrap/Alert';
-import { BuildingError, UpdateError } from '../../scripts/CustomErrors';
+import possibleErrorCauses from '../../scripts/component-scripts/possibleErrorCauses';
+
+const TEXTAREA_ROWS_MIN = 4;
+const TEXTAREA_ROWS_MAX = 16;
 
 export default function QueryResultTableInputCellModal({ show, onHide, inputCellState }) {
 
   const anyError = inputCellState.buildingError || inputCellState.updateError;
+  let textareaRows = TEXTAREA_ROWS_MIN;
+  if (inputCellState.updateQuery) {
+    const numberOfLines = inputCellState.updateQuery.split(/\r\n|\r|\n/).length;
+    textareaRows = Math.max(TEXTAREA_ROWS_MIN, Math.min(numberOfLines, TEXTAREA_ROWS_MAX));
+  }
 
   return (
     <Modal show={show} onHide={onHide} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
@@ -20,7 +28,7 @@ export default function QueryResultTableInputCellModal({ show, onHide, inputCell
           <Form>
             <Form.Group className="mb-3" controlId="formSparqlUpdateQuery">
               <Form.Label>Auto-generated update query</Form.Label>
-              <Form.Control as="textarea" rows={6} defaultValue={inputCellState.updateQuery} />
+              <Form.Control as="textarea" rows={textareaRows} defaultValue={inputCellState.updateQuery} className="white-readonly" readOnly />
             </Form.Group>
           </Form>
          : null }
@@ -32,22 +40,7 @@ export default function QueryResultTableInputCellModal({ show, onHide, inputCell
 }
 
 function UpdateInfoModalError({ errorTitle, errorObject }) {
-  let causeNotices = [];
-  if (errorObject instanceof BuildingError) {
-    causeNotices.push('An unsupported SPARQL language feature was used in the original query');
-  }
-  if (errorObject instanceof UpdateError) {
-    if (errorObject.message.includes('404')) {
-      causeNotices.push('Wrong SPARQL update endpoint URL');
-    }
-    if (errorObject.message.includes('415')) {
-      causeNotices.push('The given update URL is not a valid SPARQL update endpoint');
-    }
-    if (errorObject.message.includes('401') ||
-      errorObject.message.toLowerCase().includes('failed to fetch')) {
-      causeNotices.push('The SPARQL endpoint requires authentication (e.g. username/password)');
-    }
-  }
+  let causeNotices = possibleErrorCauses(errorObject);
 
   return (
     <Alert variant="light">

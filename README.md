@@ -41,6 +41,16 @@ More shortcuts are in the [YASQE docs](https://triply.cc/docs/yasgui#supported-k
 
 Changes to input fields can be submitted with `ENTER`.
 
+#### Default SPARQL endpoints
+
+* Fuseki "test" dataset
+  * Query/Update: [http://localhost:3030/test](http://localhost:3030/test)
+  * Query: [http://localhost:3030/test/query](http://localhost:3030/test/query)
+  * Update: [http://localhost:3030/test/update](http://localhost:3030/test/update)
+* GraphDB "test" repository
+  * Query: [http://localhost:7200/repositories/test](http://localhost:7200/repositories/test)
+  * Update: [http://localhost:7200/repositories/test/statements](http://localhost:7200/repositories/test/statements)
+
 ### Algorithm for generating the update query
 
 Inputs:
