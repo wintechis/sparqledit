@@ -1,0 +1,8 @@
+textarea[readonly].white-readonly {
+  background-color: white;
+}
+
+/* .modal-90w {
+  width: 90%;
+  max-width: none;
+} */

@@ -3,9 +3,10 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Alert from 'react-bootstrap/Alert';
 import possibleErrorCauses from '../../scripts/component-scripts/possibleErrorCauses';
+import '../../styles/inputcellmodal.css';
 
 const TEXTAREA_ROWS_MIN = 4;
-const TEXTAREA_ROWS_MAX = 16;
+const TEXTAREA_ROWS_MAX = 12;
 
 export default function QueryResultTableInputCellModal({ show, onHide, inputCellState }) {
 
@@ -13,11 +14,11 @@ export default function QueryResultTableInputCellModal({ show, onHide, inputCell
   let textareaRows = TEXTAREA_ROWS_MIN;
   if (inputCellState.updateQuery) {
     const numberOfLines = inputCellState.updateQuery.split(/\r\n|\r|\n/).length;
-    textareaRows = Math.max(TEXTAREA_ROWS_MIN, Math.min(numberOfLines, TEXTAREA_ROWS_MAX));
+    textareaRows = Math.max(TEXTAREA_ROWS_MIN, Math.min(numberOfLines + 1, TEXTAREA_ROWS_MAX));
   }
 
   return (
-    <Modal show={show} onHide={onHide} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
+    <Modal show={show} onHide={onHide} size="lg" dialogClassName="modal-90w" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header className={anyError ? 'alert-danger' : ''} closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
           SPARQL update {anyError ? 'error' : 'information'}

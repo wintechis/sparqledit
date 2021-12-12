@@ -83,7 +83,7 @@ export default function QueryResultTableInputCell({ refreshTableCallback, sparql
   const inputValue = inputCellState.currentCellValue ? inputCellState.currentCellValue : inputCellState.origCellValue;
 
   return (
-    <td>
+    <td className="align-middle">
       <Form onSubmit={e => handleLiteralUpdate(e)}>
         { inputType === 'checkbox' ? 
           <Form.Check type="checkbox" onChange={e => handleCheckboxChange(e)} label={inputValue} isInvalid={anyError} ref={inputRef} checked={inputValue === 'true' ? true : false} /> :

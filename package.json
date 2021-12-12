@@ -19,7 +19,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "solid-upload": "node solid-upload.js"
+    "solid-upload": "node solid-upload.js",
+    "sass" : "sass src/styles/sass:src/styles --watch --no-source-map"
   },
   "eslintConfig": {
     "extends": [
@@ -38,6 +39,7 @@
     ]
   },
   "devDependencies": {
+    "sass": "^1.45.0",
     "solid-file-client": "^2.1.0"
   }
 }

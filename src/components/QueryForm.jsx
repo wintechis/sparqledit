@@ -4,11 +4,12 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
-import { QuerySubmission } from "../scripts/QuerySubmission";
-import useLocalStorage from "../hooks/useLocalStorage";
+import { QuerySubmission } from '../scripts/QuerySubmission';
+import useLocalStorage from '../hooks/useLocalStorage';
 
-import Yasqe from "@triply/yasqe";
-import "@triply/yasqe/build/yasqe.min.css";
+import Yasqe from '@triply/yasqe';
+import '@triply/yasqe/build/yasqe.min.css';
+import '../styles/queryform.css';
 
 const initialQuery = 
 `SELECT ?s ?p ?o 
@@ -96,7 +97,7 @@ export default function QueryForm({ isLoading, submitQueryCallback }) {
           <Form.Group as={Col} controlId="formSparqlUpdateEndpoint">
             <Form.Label>(optional) update endpoint *</Form.Label>
             <Form.Control type="url" value={querySub.endpointUpdate} onChange={e => handleFormChange('endpointUpdate', e.target.value)} />
-            <Form.Text className="text-muted">
+            <Form.Text className="text-muted px-1">
               * necessary if different URLs for query and update are used.
             </Form.Text>
           </Form.Group>
