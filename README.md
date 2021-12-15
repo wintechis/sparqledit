@@ -163,8 +163,10 @@ Start upload script: `npm run solid-upload`
   * load/store saved queries from/on SOLID POD
   * alternative if not signed in: load/store from/in BrowserDB
 * Additional features/ideas
+  * SPARQL_edit for RDF documents using an internal SPARQL engine
+    * load local RDF files, SPARQL_edit and save as RDF file
+    * GET, SPARQL_edit and PUT LDP documents 
   * sub-graph visualization
-  * SPARQLedit for LDP documents with internal SPARQL engine and PUT request
 
 ### Important notes
 

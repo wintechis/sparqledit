@@ -71,12 +71,21 @@ export default function QueryResultTableInputCell({ refreshTableCallback, sparql
   };
 
   const handleInputReset = (e) => {
-    inputRef.current.focus();
+    inputRef.current.dataset.reset = true; // set flag for useEffect
     dispatch({
       type: "INPUTCELL_RESET"
     });
   };
+
+  // focus input field
   const inputRef = React.useRef(null);
+  React.useEffect(() => {
+    // if reset flag -> focus
+    if (inputRef.current.dataset?.reset) {
+      inputRef.current.dataset.reset = null;
+      inputRef.current.focus();
+    }
+  }, [inputCellState]);
 
   const showButtons = (inputCellState.updateQuery || inputCellState.buildingError) ? true : false;
   const anyError = (inputCellState.buildingError || inputCellState.updateError) ? true : false;
