@@ -10,7 +10,8 @@ export default function possibleErrorCauses(error) {
     if (error.message.includes('401')) {
       causeNotices.push('The SPARQL endpoint requires authentication (e.g. username/password)');
     }
-    if (error.message.toLowerCase().indexOf('failed to fetch') > -1) {
+    if (error.message.toLowerCase().includes('failed to fetch') ||
+      error.message.toLowerCase().includes('networkerror')) {
       if (error.endpointQuery && error.endpointQuery.length > 1) {
         const httpLocalhostRegex = /^http:\/\/localhost[:/]/ig;
         const isHTTPLocalhostQueryURL = httpLocalhostRegex.test(error.endpointQuery);

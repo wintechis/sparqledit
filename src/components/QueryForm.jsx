@@ -53,6 +53,7 @@ export default function QueryForm({ isLoading, submitQueryCallback }) {
         lineNumbers: true,
         persistent: null,
         showQueryButton: true,
+        tabSize: 2,
         extraKeys: {
           "Ctrl-Enter": handlerSubmit,
           "Ctrl-S": null
@@ -68,6 +69,9 @@ export default function QueryForm({ isLoading, submitQueryCallback }) {
     } else {
       // update yasqe query function with new functions from new closure
       yasqe.query = async () => handlerSubmit();
+      // override share url
+      yasqe.config.createShareableLink = () => window.location.href;
+      // override shortcut submit with own handler
       yasqe.options.extraKeys["Ctrl-Enter"] = handlerSubmit;
       // update query endpoint
       yasqe.options.requestConfig.endpoint = querySub.endpointQuery;
