@@ -3,9 +3,15 @@ import { fromRdf } from 'rdf-literal';
 export default function getInputTypeForLiteral(binding) {
   const bindingDatatype = binding.datatype.value.toLowerCase();
   let origValue = fromRdf(binding);
-  let inputType = 'text';
+  let inputType = 'text'; // default
   let inputStep = null;
   switch (typeof(origValue)) {
+    case 'string':
+      const newlineRegex = /\r?\n|\r/gm;
+      if (newlineRegex.test(origValue)) {
+        inputType = 'textarea';
+      }
+      break;
     case 'number':
       inputType = 'number';
       break;

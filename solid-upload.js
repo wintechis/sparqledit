@@ -4,8 +4,9 @@ const credentials = {
   username: process.env.SOLID_USERNAME,                  
   password: process.env.SOLID_PASSWORD
 }
-const remote = "https://smeckler.solidcommunity.net/private/apps/sparqledit/"
-const local  = "file://" + process.cwd() + "/build/"
+const remote = 'https://smeckler.solidcommunity.net/private/apps/sparqledit/'
+//const remote = 'https://solid.ti.rw.fau.de/private/sparqledit/app/'
+const local  = 'file://' + process.cwd() + '/build/'
 // ---------------------------------------------------------------
 
 const auth = require('solid-auth-cli')

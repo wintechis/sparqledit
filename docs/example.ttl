@@ -52,7 +52,7 @@
   schema:address [
     a schema:PostalAddress ;
     schema:addressCountry "DE";
-    schema:streetAddress "Krankenstraße 6" ;
+    schema:streetAddress "Krankenstraße 6\nHaus B" ;
     schema:postalCode 87654
   ] .
 

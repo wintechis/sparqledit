@@ -95,9 +95,12 @@ export default function QueryResultTableInputCell({ refreshTableCallback, sparql
   return (
     <td className="align-middle">
       <Form onSubmit={e => handleLiteralUpdate(e)}>
-        { inputType === 'checkbox' ? 
-          <Form.Check type="checkbox" onChange={e => handleCheckboxChange(e)} label={inputValue} isInvalid={anyError} ref={inputRef} checked={inputValue === 'true' ? true : false} /> :
-          <Form.Control type={inputType} onChange={e => handleInputChange(e)} isInvalid={anyError} ref={inputRef} value={inputValue} step={inputStep} isValid={inputCellState.updateResult ? true : null} /> 
+        {
+          {
+            'checkbox': <Form.Check type="checkbox" onChange={e => handleCheckboxChange(e)} label={inputValue} ref={inputRef} checked={inputValue === 'true' ? true : false} isInvalid={anyError} />,
+            'textarea': <Form.Control as='textarea' onChange={e => handleInputChange(e)} ref={inputRef} value={inputValue} isInvalid={anyError} isValid={inputCellState.updateResult ? true : null} />
+          }[inputType] ||
+          <Form.Control type={inputType} onChange={e => handleInputChange(e)} isInvalid={anyError} ref={inputRef} value={inputValue} step={inputStep} isValid={inputCellState.updateResult ? true : null} />
         }
         <Collapse in={showButtons} mountOnEnter={true} unmountOnExit={true}>
           <div>

@@ -1,6 +1,6 @@
 # SPARQL_edit
 
-alternative name: **L**iteral **EDIT**ing with **SPARQL** (Ledit-SPARQL)
+v0.2: **L**iteral **EDIT**ing with **SPARQL** (Ledit-SPARQL)
 
 ## SPARQL_edit is a Web app that facilitates the editing of RDF literal values in a Knowledge Graph
 

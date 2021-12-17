@@ -42,6 +42,7 @@ export default function QueryForm({ isLoading, submitQueryCallback }) {
     setQuerySub(newQuerySub);
   }
 
+  // init and update YASQE
   React.useEffect(() => {
     //const handlerSubmit = (yasqe, reqest) => handleYasqeSubmit(yasqe, reqest);
     const handlerSubmit = () => handleYasqeSubmit();
