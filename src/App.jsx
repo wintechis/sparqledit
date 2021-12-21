@@ -12,7 +12,7 @@ import QueryResult from './components/QueryResult';
 import ErrorBox from './components/ErrorBox';
 
 import useFetchSparql from './hooks/useFetchSparql';
-import { QuerySubmission } from './scripts/QuerySubmission';
+import { QuerySubmission } from './scripts/models/QuerySubmission';
 
 function App() {
   const [submittedQuery, setSubmittedQuery] = React.useState();

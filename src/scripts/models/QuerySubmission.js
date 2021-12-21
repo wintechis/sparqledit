@@ -1,4 +1,4 @@
-import { buildQueryObject } from './sparqledit';
+import { buildQueryObject } from '../sparqledit';
 
 export class QuerySubmission {
   constructor(endpointQuery, endpointUpdate, queryString) {

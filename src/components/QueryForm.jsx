@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
-import { QuerySubmission } from '../scripts/QuerySubmission';
+import { QuerySubmission } from '../scripts/models/QuerySubmission';
 import useLocalStorage from '../hooks/useLocalStorage';
 
 import Yasqe from '@triply/yasqe';
