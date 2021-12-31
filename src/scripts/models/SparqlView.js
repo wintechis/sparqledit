@@ -1,11 +1,6 @@
+import { RDF_NAMESPACES } from './RdfNamespaces';
 import { DataFactory, Store, Writer } from 'n3';
 const { quad, namedNode, literal } = DataFactory;
-
-const RDF_NAMESPACES = {
-  schema: 'http://schema.org/',
-  xsd: 'http://www.w3.org/2001/XMLSchema#',
-  spedit: 'http://iis.fraunhofer.de/sparqledit/ontology#'
-}
 
 export default class SparqlView {
   constructor(
@@ -75,6 +70,7 @@ export default class SparqlView {
     ]);
     return store.getQuads();
   }
+
   serializeToTurtle() {
     const writer = new Writer({ prefixes: RDF_NAMESPACES });
     return new Promise((resolve, reject) => {

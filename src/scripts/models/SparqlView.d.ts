@@ -1,17 +1,22 @@
-import { Quad } from 'n3';
-
 declare class SparqlView {
   constructor(
-    public name: string,
-    public description: string,
-    public creator: string,
-    public dateCreated: Date,
-    public queryURL: string,
-    public updateURL: string,
-    public query: string,
-    public requiresBasicAuth: boolean
+    name: string,
+    description: string,
+    creator: string,
+    dateCreated: Date,
+    queryURL: string,
+    updateURL: string,
+    query: string,
+    requiresBasicAuth: boolean
   );
-  private createRdfQuads(): Quad[];
+  name: string;
+  description: string;
+  creator: string;
+  dateCreated: Date;
+  queryURL: string;
+  updateURL: string;
+  query: string;
+  requiresBasicAuth: boolean
   serializeToTurtle(): string;
   serializeToJsonld(): string;
 }

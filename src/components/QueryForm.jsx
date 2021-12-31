@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -18,10 +18,20 @@ WHERE {
 }
 LIMIT 20`;
 
-export default function QueryForm({ isLoading, submitQueryCallback }) {
-  const initialQuerySub = new QuerySubmission('','',initialQuery);
-  const [querySub, setQuerySub] = useLocalStorage('queryFormData', initialQuerySub);
+export default function QueryForm({ querySubmission, isLoading, submitQueryCallback }) {
+  const initialQuerySub = querySubmission || new QuerySubmission('','',initialQuery);
+  //const [querySub, setQuerySub] = useLocalStorage('queryFormData', initialQuerySub);
+  const [querySub, setQuerySub] = React.useState(initialQuerySub);
   const [yasqe, setYasqe] = React.useState(null);
+
+  // // workaround to change the state on reloads
+  // // TODO: work with 'querySubmission' object from parent instead
+  // React.useEffect(() => { 
+  //   setQuerySub(initialQuerySub);
+  //   if (yasqe) {
+  //     yasqe.setValue(querySubmission.queryString);
+  //   }
+  // }, [querySubmission] );
 
   function handleSubmit(e) {
     e.preventDefault();

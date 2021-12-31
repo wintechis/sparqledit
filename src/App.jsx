@@ -7,29 +7,10 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container';
-import QueryForm from './components/QueryForm';
-import QueryResult from './components/QueryResult';
-import ErrorBox from './components/ErrorBox';
 
-import useFetchSparql from './hooks/useFetchSparql';
-import { QuerySubmission } from './scripts/models/QuerySubmission';
+import SparqlViews from './components/SparqlViews';
 
 function App() {
-  const [submittedQuery, setSubmittedQuery] = React.useState();
-
-  const { 
-    loading: isLoading, 
-    result: sparqlResult,
-    error
-  } = useFetchSparql(submittedQuery);
-
-  const executeQuery = (querySubmission) => {
-    setSubmittedQuery(new QuerySubmission(
-      querySubmission.endpointQuery,
-      querySubmission.endpointUpdate,
-      querySubmission.queryString));
-  };
-
   return (
     <>
       <Navbar bg="light" variant="light" className="mb-4">
@@ -46,9 +27,7 @@ function App() {
         </Container>
       </Navbar>
       <Container className="App">
-        <QueryForm isLoading={isLoading} submitQueryCallback={executeQuery} />
-        {error ? <ErrorBox error={error} /> : null}
-        {sparqlResult ? <QueryResult refreshTableCallback={executeQuery} sparqlResult={sparqlResult} /> : null}
+        <SparqlViews />
       </Container>
     </>
   );
