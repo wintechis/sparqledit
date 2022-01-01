@@ -10,7 +10,7 @@ import ErrorBox from './ErrorBox';
 import useFetchSparql from '../hooks/useFetchSparql';
 import { QuerySubmission } from '../scripts/models/QuerySubmission';
 
-export default function SparqlViewDetail({ sparqlView, isEditMode }) {
+export default function SparqlViewDetail({ sparqlView, isEditMode = true }) {
   const initialQuery = new QuerySubmission(
     sparqlView.queryURL,
     sparqlView.updateURL,

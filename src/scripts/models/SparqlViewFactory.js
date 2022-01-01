@@ -26,8 +26,14 @@ WHERE {
 
 export default class SparqlViewFactory {
 
+  static generateUnsafeUuid() {
+    return Math.random().toString(36).substring(2, 15) +
+      Math.random().toString(36).substring(2, 15);
+  }
+
   static newBlankSparqlView() {
     return new SparqlView(
+      this.generateUnsafeUuid(),
       'New SPARQL view',
       'This is a new SPARQL view.',
       'unknown user',
@@ -41,6 +47,7 @@ export default class SparqlViewFactory {
 
   static newSparqlViewExample() {
     return new SparqlView(
+      this.generateUnsafeUuid(),
       'Simple S-P-O view',
       'Edit this view or create a new one.\nConnect to a SPARQL endpoint and edit any literal value.',
       'system',
@@ -54,6 +61,7 @@ export default class SparqlViewFactory {
 
   static newSparqlViewAdvancedExample() {
     return new SparqlView(
+      this.generateUnsafeUuid(),
       'Advanced features example view',
       'This example view shows SPARQL language features which are supported by SPARQL_edit.',
       'system',

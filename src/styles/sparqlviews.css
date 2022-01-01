@@ -1,0 +1,17 @@
+.card:hover {
+  border-color: darkgray;
+}
+
+.viewCardTab {
+  min-width: 100px;
+}
+
+/* bootstrap icon margins */
+.bi {
+  margin-right: 3px;
+  margin-left: 3px;
+}
+.bi-cardTab {
+  margin-right: 5px;
+  margin-left: 5px;
+}

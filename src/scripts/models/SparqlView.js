@@ -4,6 +4,7 @@ const { quad, namedNode, literal } = DataFactory;
 
 export default class SparqlView {
   constructor(
+    id,
     name,
     description,
     creator,
@@ -13,6 +14,7 @@ export default class SparqlView {
     query,
     requiresBasicAuth
   ) {
+    this.id = id;
     this.name = name;
     this.description = description;
     this.creator = creator;

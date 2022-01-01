@@ -5,7 +5,6 @@ import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import { QuerySubmission } from '../scripts/models/QuerySubmission';
-import useLocalStorage from '../hooks/useLocalStorage';
 
 import Yasqe from '@triply/yasqe';
 import '@triply/yasqe/build/yasqe.min.css';
@@ -20,18 +19,8 @@ LIMIT 20`;
 
 export default function QueryForm({ querySubmission, isLoading, submitQueryCallback }) {
   const initialQuerySub = querySubmission || new QuerySubmission('','',initialQuery);
-  //const [querySub, setQuerySub] = useLocalStorage('queryFormData', initialQuerySub);
   const [querySub, setQuerySub] = React.useState(initialQuerySub);
   const [yasqe, setYasqe] = React.useState(null);
-
-  // // workaround to change the state on reloads
-  // // TODO: work with 'querySubmission' object from parent instead
-  // React.useEffect(() => { 
-  //   setQuerySub(initialQuerySub);
-  //   if (yasqe) {
-  //     yasqe.setValue(querySubmission.queryString);
-  //   }
-  // }, [querySubmission] );
 
   function handleSubmit(e) {
     e.preventDefault();
