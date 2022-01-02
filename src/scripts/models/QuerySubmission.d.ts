@@ -1,7 +1,7 @@
 import { IBindings } from "fetch-sparql-endpoint";
 import { SparqlQuery } from "sparqljs";
 
-declare class QuerySubmission {
+export class QuerySubmission {
   constructor(endpointQuery: string, endpointUpdate: string, queryString: string);
   endpointQuery: string;
   endpointUpdate: string;
@@ -9,7 +9,7 @@ declare class QuerySubmission {
   getQueryObject(): SparqlQuery;
 }
 
-declare class QuerySubmissionResult {
+export class QuerySubmissionResult {
   constructor(querySubmission: QuerySubmission, queryResult: Array<IBindings>|string);
   querySubmission: QuerySubmission;
   queryResult: Array<IBindings>|string;

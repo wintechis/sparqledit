@@ -1,5 +1,6 @@
-declare class SparqlView {
+export default class SparqlView {
   constructor(
+    id: string,
     name: string,
     description: string,
     creator: string,
@@ -9,6 +10,7 @@ declare class SparqlView {
     query: string,
     requiresBasicAuth: boolean
   );
+  id: string;
   name: string;
   description: string;
   creator: string;
@@ -16,7 +18,7 @@ declare class SparqlView {
   queryURL: string;
   updateURL: string;
   query: string;
-  requiresBasicAuth: boolean
+  requiresBasicAuth: boolean;
   serializeToTurtle(): string;
   serializeToJsonld(): string;
 }
