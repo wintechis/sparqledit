@@ -1,5 +1,8 @@
 import SparqlView from "./SparqlView";
-//import { RDF_NAMESPACES } from './RdfNamespaces';
+import { JsonLdParser } from "jsonld-streaming-parser";
+import { RDF_NAMESPACES } from './RdfNamespaces';
+import { DataFactory, Store } from 'n3';
+const { quad, namedNode, literal } = DataFactory;
 
 const simpleExampleQuery = 'SELECT *\nWHERE {\n  ?s ?p ?o\n  FILTER( isLiteral(?o) )\n} LIMIT 25';
 const advancedExampleQuery = `
@@ -107,6 +110,51 @@ export default class SparqlViewFactory {
       return this.newSparqlViewExample(input);
     }
     throw new TypeError('Unable to create a SparqlView instance from ' + input);
+  }
+
+  static async createFromRDF(rdf) {
+    const quads = await this.parseJsonldToQuads(rdf);
+    const store = new Store();
+    store.addQuads(quads);
+
+    if (store.countQuads(null, namedNode(RDF_NAMESPACES.rdf + 'type'), namedNode(RDF_NAMESPACES.spedit + 'SparqlView')) < 1) {
+      throw new TypeError('Could not find a SparqlView defintion inside the parsed triples.');
+    }
+    const sparqlViewBN = store.getSubjects(null, namedNode(RDF_NAMESPACES.rdf + 'type'), namedNode(RDF_NAMESPACES.spedit + 'SparqlView'))[0];
+    const name = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.schema + 'name'), null)[0]?.value || 'unknown name';
+    const description = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.schema + 'description'), null)[0]?.value || 'unknown description';
+    const creator = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.schema + 'creator'), null)[0]?.value || 'unknown creator';
+    const dateCreated = new Date(store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.schema + 'dateCreated'), null)[0].value);
+    const queryURL = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'queryURL'), null)[0]?.value || 'unknown queryURL';
+    const updateURL = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'updateURL'), null)[0]?.value || 'unknown updateURL';
+    const query = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'query'), null)[0]?.value || 'unknown query';
+    const requiresBasicAuth = Boolean(store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'requiresBasicAuth'), null)[0]?.value || false);
+
+    return new SparqlView(
+      this.generateUnsafeUuid(),
+      name, description, creator, dateCreated,
+      queryURL, updateURL, query, requiresBasicAuth
+    );
+  }
+
+  static parseJsonldToQuads(jsonld) {
+    const myParser = new JsonLdParser();
+
+    return new Promise((resolve, reject) => {
+      let quads = [];
+      myParser.on('data', quad => {
+        quads.push(quad);
+      });
+      myParser.on('end', () => {
+        resolve(quads);
+      });
+      myParser.on('error', err => {
+        console.error(err);
+        reject(err);
+      });
+      myParser.write(jsonld);
+      myParser.end();
+    });
   }
 
 }

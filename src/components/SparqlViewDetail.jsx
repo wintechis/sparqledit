@@ -36,8 +36,8 @@ export default function SparqlViewDetail({ sparqlView, isEditMode = true }) {
       { isEditMode ? 
         <QueryForm querySubmission={initialQuery} isLoading={isLoading} onlyShowSubmitButton={!isEditMode} submitQueryCallback={executeQuery} /> :
         <div className='mb-4'>
-          <Button variant="primary" onClick={() => executeQuery(initialQuery)} form="queryForm" disabled={isLoading}>
-          { isLoading ? <><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> loading … </> : <><i className="bi bi-send"></i> load data table </>}
+          <Button variant="primary" onClick={() => executeQuery(initialQuery)} form="queryForm" disabled={isLoading} className="px-2">
+          { isLoading ? <><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="mx-2" /> loading … </> : <><i className="bi bi-send"></i> load data table </>}
           </Button>
         </div>
       }

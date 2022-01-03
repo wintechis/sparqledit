@@ -106,7 +106,7 @@ export default class SparqlView {
         '@type': 'xsd:dateTime'
       },
       queryURL: {
-        '@id': 'spedit:queryUrl',
+        '@id': 'spedit:queryURL',
         '@type': 'xsd:anyURI'
       },
       updateURL: {
