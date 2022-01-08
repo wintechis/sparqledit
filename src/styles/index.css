@@ -1,4 +1,10 @@
 body {
   margin: 0;
-  margin-bottom: 25px;
+}
+
+.customSeparatorLine {
+  margin-top: 50px;
+  margin-bottom: 8px;
+  margin-left: 30%;
+  margin-right: 30%;
 }

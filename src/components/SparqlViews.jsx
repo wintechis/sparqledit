@@ -4,9 +4,11 @@ import '../styles/sparqlviews.css';
 
 import Card from 'react-bootstrap/Card';
 import Stack from 'react-bootstrap/Stack';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 
 import SparqlViewsActiveCard from './SparqlViewsActiveCard';
-import SparqlViewsAddNewCard from './SparqlViewsAddNewCard';
+import SparqlViewsAddNewControls from './SparqlViewsAddNewControls';
 
 import SparqlViewFactory from '../scripts/models/SparqlViewFactory';
 import useLocalStorage from '../hooks/useLocalStorage';
@@ -68,23 +70,30 @@ export default function SparqlViews() {
   }
 
   return (
-    <>
-      <section>
-        <h3 className="text-center my-4">{views.length + ' SPARQL views'}</h3>
-        <Stack gap={3}>
-          {views.map( view => (
-            view.id === activeViewId ? 
+    <section>
+      
+      <Row className="justify-content-center mb-2">
+        <Col lg="6">
+          <h3 className="text-center">{views.length + ' SPARQL views'}</h3>
+          <p className="infoText px-2">
+            A "SPARQL view" is a simple configuration object. It defines how to load a table of values from a Knowledge Graph. SPARQL_edit allows you to edit literal values in the table.
+          </p>
+        </Col>
+      </Row>
+
+      <Stack gap={3}>
+        {views.map( view => (
+          view.id === activeViewId ?
             <SparqlViewsActiveCard key={view.id} sparqlView={view} sparqlViewUpdateCallback={sparqlViewUpdate} handleDeleteCard={handleDeleteCard} handleCloneCard={handleCloneCard} handleSaveCard={handleSaveCard} /> :
-            <Card key={view.id} onClick={() => handleActiveCardChange(view.id)}>
+            <Card key={view.id} onClick={() => handleActiveCardChange( view.id )}>
               <Card.Header><h5>{view.name}</h5></Card.Header>
               <Card.Body>
                 <Card.Text>{view.description}</Card.Text>
               </Card.Body>
             </Card>
-          ))}
-          <SparqlViewsAddNewCard addNewHandler={addNewHandler} />
-        </Stack>
-      </section>
-    </>
+        ) )}
+        <SparqlViewsAddNewControls addNewHandler={addNewHandler} />
+      </Stack>
+    </section>
   );
 }

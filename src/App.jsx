@@ -12,7 +12,7 @@ import SparqlViews from './components/SparqlViews';
 
 function App() {
   return (
-    <>
+    <div className="d-flex flex-column min-vh-100">
       <Navbar bg="light" variant="light" className="mb-4">
         <Container>
           <Navbar.Brand>
@@ -21,15 +21,28 @@ function App() {
           </Navbar.Brand>
           <Nav className="justify-content-end">
             <Nav.Item>
-              <Nav.Link className="justify-content-end" href="mailto:sascha.meckler@iis.fraunhofer.de">Contact</Nav.Link>
+              TODO: SOLID LOGIN
             </Nav.Item>
           </Nav>
         </Container>
       </Navbar>
-      <Container className="App">
+      <Container className="App flex-fill">
         <SparqlViews />
       </Container>
-    </>
+      <AppFooter />
+    </div>
+  );
+}
+
+function AppFooter() {
+  const version = process.env.REACT_APP_VERSION || '0.3';
+  return (
+    <footer className="footer">
+      <hr className="customSeparatorLine" />
+      <div className="d-flex justify-content-center">
+        <p className="text-secondary">SPARQL_edit (v{version}) by <a href="mailto:sascha.meckler@iis.fraunhofer.de" className="text-secondary">Sascha Meckler</a></p>
+      </div>
+    </footer>
   );
 }
 
