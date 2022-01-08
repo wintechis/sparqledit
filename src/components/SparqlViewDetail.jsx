@@ -10,12 +10,8 @@ import ErrorBox from './ErrorBox';
 import useFetchSparql from '../hooks/useFetchSparql';
 import { QuerySubmission } from '../scripts/models/QuerySubmission';
 
-export default function SparqlViewDetail({ sparqlView, isEditMode = true }) {
-  const initialQuery = new QuerySubmission(
-    sparqlView.queryURL,
-    sparqlView.updateURL,
-    sparqlView.query
-  );
+export default function SparqlViewDetail({ sparqlView, sparqlViewUpdateCallback, isEditMode = true }) {
+  // query execution
   const [submittedQuery, setSubmittedQuery] = React.useState();
 
   const { 
@@ -24,19 +20,21 @@ export default function SparqlViewDetail({ sparqlView, isEditMode = true }) {
     error
   } = useFetchSparql(submittedQuery);
 
-  const executeQuery = (querySubmission) => {
+  const executeQuery = () => {
+    // if no explicit update endpoint => same as query endpoint
+    const updateURL = sparqlView.updateURL && sparqlView.updateURL.length > 1 ? sparqlView.updateURL : sparqlView.queryURL;
     setSubmittedQuery(new QuerySubmission(
-      querySubmission.endpointQuery,
-      querySubmission.endpointUpdate,
-      querySubmission.queryString));
+      sparqlView.queryURL,
+      updateURL,
+      sparqlView.query));
   };
 
   return (
     <section>
       { isEditMode ? 
-        <QueryForm querySubmission={initialQuery} isLoading={isLoading} onlyShowSubmitButton={!isEditMode} submitQueryCallback={executeQuery} /> :
+        <QueryForm sparqlView={sparqlView} sparqlViewUpdateCallback={sparqlViewUpdateCallback} isLoading={isLoading} onlyShowSubmitButton={!isEditMode} submitQueryCallback={executeQuery} /> :
         <div className='mb-4'>
-          <Button variant="primary" onClick={() => executeQuery(initialQuery)} form="queryForm" disabled={isLoading} className="px-2">
+          <Button variant="primary" onClick={executeQuery} form="queryForm" disabled={isLoading} className="px-2">
           { isLoading ? <><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="mx-2" /> loading … </> : <><i className="bi bi-send"></i> load data table </>}
           </Button>
         </div>

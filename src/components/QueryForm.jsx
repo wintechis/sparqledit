@@ -2,50 +2,43 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
-import { QuerySubmission } from '../scripts/models/QuerySubmission';
 
 import Yasqe from '@triply/yasqe';
 import '@triply/yasqe/build/yasqe.min.css';
 import '../styles/queryform.css';
 
-const initialQuery = 
-`SELECT ?s ?p ?o 
-WHERE {
-  ?s ?p ?o .
-}
-LIMIT 20`;
-
-export default function QueryForm({ querySubmission, isLoading, submitQueryCallback }) {
-  const initialQuerySub = querySubmission || new QuerySubmission('','',initialQuery);
-  const [querySub, setQuerySub] = React.useState(initialQuerySub);
+export default function QueryForm({ sparqlView, sparqlViewUpdateCallback, isLoading, submitQueryCallback }) {
   const [yasqe, setYasqe] = React.useState(null);
+  const [credentials, setCredentials] = React.useState({ username: '', password: ''});
 
   function handleSubmit(e) {
     e.preventDefault();
     handleYasqeSubmit();
   }
   function handleYasqeSubmit() {
-    const submitQuerySub = {...querySub};
-    // if no update endpoint => same as query endpoint
-    if(submitQuerySub.endpointUpdate.length < 1) {
-      submitQuerySub.endpointUpdate = submitQuerySub.endpointQuery;
-    }
-    submitQueryCallback(submitQuerySub);
+    submitQueryCallback();
   }
 
-  function handleFormChange(querySubKey, newValue) {
-    const newQuerySub = {...querySub};
-    newQuerySub[querySubKey] = newValue;
-    setQuerySub(newQuerySub);
+  function handleFormChange(sparqlViewKey, newValue) {
+    sparqlView[sparqlViewKey] = newValue;
+    sparqlView['dateCreated'] = Date.now();
+    sparqlViewUpdateCallback(sparqlView);
+  }
+  
+  function handleCredsChange(key, newValue) {
+    const newCredentials = {...credentials};
+    newCredentials[key] = newValue;
+    setCredentials(newCredentials);
   }
 
   // init and update YASQE
   React.useEffect(() => {
     //const handlerSubmit = (yasqe, reqest) => handleYasqeSubmit(yasqe, reqest);
     const handlerSubmit = () => handleYasqeSubmit();
-    const handlerChange = (yasqe) => handleFormChange('queryString', yasqe.getValue());
+    const handlerChange = (yasqe) => handleFormChange('query', yasqe.getValue());
 
     if (!yasqe) {
       // create instance of YASQE
@@ -63,8 +56,8 @@ export default function QueryForm({ querySubmission, isLoading, submitQueryCallb
       //newYasqe.query = () => Promise.reject("No querying via yasqe.");
       newYasqe.query = async () => handlerSubmit();
       // set initial query and endpoint
-      newYasqe.setValue(querySub.queryString);
-      newYasqe.options.requestConfig.endpoint = querySub.endpointQuery;
+      newYasqe.setValue(sparqlView.query);
+      newYasqe.options.requestConfig.endpoint = sparqlView.queryURL;
       setYasqe(newYasqe);
     } else {
       // update yasqe query function with new functions from new closure
@@ -74,7 +67,7 @@ export default function QueryForm({ querySubmission, isLoading, submitQueryCallb
       // override shortcut submit with own handler
       yasqe.options.extraKeys["Ctrl-Enter"] = handlerSubmit;
       // update query endpoint
-      yasqe.options.requestConfig.endpoint = querySub.endpointQuery;
+      yasqe.options.requestConfig.endpoint = sparqlView.queryURL;
       // register event handler
       yasqe.on("query", handlerSubmit);
       yasqe.on("change", handlerChange);
@@ -88,29 +81,96 @@ export default function QueryForm({ querySubmission, isLoading, submitQueryCallb
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [yasqe, querySub]);
+  }, [yasqe, sparqlView]);
 
   return (
     <section className='mb-4'>
       <Form className='mb-1' id="queryForm" onSubmit={!isLoading ? e => handleSubmit(e) : null}>
-        <Row className="mb-2">
-          <Form.Group as={Col} controlId="formSparqlEndpoint">
-            <Form.Label>SPARQL query endpoint</Form.Label>
-            <Form.Control type="url" value={querySub.endpointQuery} onChange={e => handleFormChange('endpointQuery', e.target.value)} required />
-          </Form.Group>
-          <Form.Group as={Col} controlId="formSparqlUpdateEndpoint">
-            <Form.Label>(optional) update endpoint *</Form.Label>
-            <Form.Control type="url" value={querySub.endpointUpdate} onChange={e => handleFormChange('endpointUpdate', e.target.value)} />
-            <Form.Text className="text-muted px-1">
-              * necessary if different URLs for query and update are used.
-            </Form.Text>
-          </Form.Group>
+        <Row className="mb-2 mt-3">
+          <Col lg={3}>
+            <h5 className="mb-4">General information</h5>
+          </Col>
+          <Col>
+            <Form.Group as={Row} className="mb-3" controlId="formName">
+              <Form.Label column sm={3}>Name *</Form.Label>
+              <Col sm={9}>
+                <Form.Control type="text" value={sparqlView.name} onChange={e => handleFormChange('name', e.target.value)} required />
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" controlId="formCreator">
+              <Form.Label column sm={3}>Creator</Form.Label>
+              <Col sm={9}>
+                <Form.Control type="text" value={sparqlView.creator} onChange={e => handleFormChange('creator', e.target.value)} />
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" controlId="formDescription">
+              <Form.Label column sm={3}>Description</Form.Label>
+              <Col sm={9}>
+                <Form.Control as="textarea" rows={3} value={sparqlView.description} onChange={e => handleFormChange('description', e.target.value)} />
+              </Col>
+            </Form.Group>
+          </Col>
+          <Col lg="2">
+            <p class="text-secondary">* required fields</p>
+          </Col>
         </Row>
-      </Form>
-      <div id='yasqe' />
-      <Button variant="primary" type="submit" form="queryForm" disabled={isLoading}>
-          { isLoading ? <><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> loading … </> : <><i className="bi bi-send"></i> submit query </>}
-      </Button>
+        <Row className="mb-2">
+          <Col lg={3}>
+            <h5 className="mb-4">SPARQL endpoint</h5>
+          </Col>
+          <Col>
+            <Form.Group as={Row} className="mb-3" controlId="formQueryUrl">
+              <Form.Label column sm={3}>Query URL *</Form.Label>
+              <Col sm={9}>
+                <Form.Control type="text" value={sparqlView.queryURL} onChange={e => handleFormChange('queryURL', e.target.value)} required />
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" controlId="formUpdateUrl">
+              <Form.Label column sm={3}>Update URL</Form.Label>
+              <Col sm={9}>
+                <Form.Control type="text" value={sparqlView.updateURL} onChange={e => handleFormChange('updateURL', e.target.value)} />
+                <Form.Text className="text-muted px-1">
+                  necessary if different URLs for query and update are used
+                </Form.Text>
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" controlId="formBasicAuth">
+              <Form.Label column sm={3}>Basic Auth</Form.Label>
+              <Col sm={9}>
+                <Form.Check type="switch" className="form-switch-md" size="lg" id="formBasicAuthSwitch" checked={sparqlView.requiresBasicAuth} onChange={e => handleFormChange('requiresBasicAuth', e.target.checked)} />
+                { sparqlView.requiresBasicAuth && 
+                  <Row>
+                    <Col>
+                      <FloatingLabel controlId="formCredentialsUsername" label="Username *">
+                        <Form.Control type="text" placeholder="username" autoComplete="username" value={credentials.username} onChange={e => handleCredsChange('username', e.target.value)} required />
+                      </FloatingLabel>
+                    </Col>
+                    <Col>
+                      <FloatingLabel controlId="formCredentialsPassword" label="Password *">
+                        <Form.Control type="password" placeholder="password" autoComplete="current-password" value={credentials.password} onChange={e => handleCredsChange('password', e.target.value)} required />
+                      </FloatingLabel>
+                    </Col>
+                  </Row>
+                }
+              </Col>
+            </Form.Group>
+          </Col>
+          <Col lg="2"></Col>
+        </Row>
+        </Form>
+        <Row className="mb-2">
+          <Col lg={3}>
+            <h5 className="mb-4">SPARQL query</h5>
+          </Col>
+          <Col>
+            <div id='yasqe' />
+            <div className="d-grid gap-2">
+              <Button variant="primary" type="submit" form="queryForm" disabled={isLoading} className="my-2">
+                { isLoading ? <><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> loading … </> : <><i className="bi bi-send"></i> submit query </>}
+              </Button>
+            </div>
+          </Col>
+        </Row>    
     </section>
   );
 }

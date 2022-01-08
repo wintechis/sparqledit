@@ -2,7 +2,6 @@ import SparqlView from "./SparqlView";
 import { JsonLdParser } from "jsonld-streaming-parser";
 import { RDF_NAMESPACES } from './RdfNamespaces';
 import { DataFactory, Store } from 'n3';
-const { quad, namedNode, literal } = DataFactory;
 
 const simpleExampleQuery = 'SELECT *\nWHERE {\n  ?s ?p ?o\n  FILTER( isLiteral(?o) )\n} LIMIT 25';
 const advancedExampleQuery = `
@@ -113,6 +112,7 @@ export default class SparqlViewFactory {
   }
 
   static async createFromRDF(rdf) {
+    const { namedNode } = DataFactory;
     const quads = await this.parseJsonldToQuads(rdf);
     const store = new Store();
     store.addQuads(quads);
@@ -155,6 +155,10 @@ export default class SparqlViewFactory {
       myParser.write(jsonld);
       myParser.end();
     });
+  }
+
+  static clone(sparqlView) {
+    return Object.assign(Object.create(Object.getPrototypeOf(sparqlView)), sparqlView);
   }
 
 }

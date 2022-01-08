@@ -20,7 +20,8 @@ export default class SparqlView {
     this.creator = creator;
     this.dateCreated = dateCreated;
     this.queryURL = queryURL;
-    this.updateURL = updateURL;
+    // if no explicit update endpoint => same as query endpoint
+    this.updateURL = updateURL && updateURL.length > 1 ? updateURL : queryURL;
     this.query = query;
     this.requiresBasicAuth = requiresBasicAuth;
   }
