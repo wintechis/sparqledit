@@ -3,12 +3,12 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 
-import QueryForm from './QueryForm';
-import QueryResult from './QueryResult';
-import ErrorBox from './ErrorBox';
+import SparqlViewDetailForm from './SparqlViewDetailForm';
+import QueryResult from '../queryresult/QueryResult';
+import ErrorBox from '../common/ErrorBox';
 
-import useFetchSparql from '../hooks/useFetchSparql';
-import { QuerySubmission } from '../scripts/models/QuerySubmission';
+import useFetchSparql from '../../hooks/useFetchSparql';
+import { QuerySubmission } from '../../scripts/models/QuerySubmission';
 
 export default function SparqlViewDetail({ sparqlView, sparqlViewUpdateCallback, isEditMode = true }) {
   // query execution
@@ -32,7 +32,7 @@ export default function SparqlViewDetail({ sparqlView, sparqlViewUpdateCallback,
   return (
     <section>
       { isEditMode ? 
-        <QueryForm sparqlView={sparqlView} sparqlViewUpdateCallback={sparqlViewUpdateCallback} isLoading={isLoading} onlyShowSubmitButton={!isEditMode} submitQueryCallback={executeQuery} /> :
+        <SparqlViewDetailForm sparqlView={sparqlView} sparqlViewUpdateCallback={sparqlViewUpdateCallback} isLoading={isLoading} onlyShowSubmitButton={!isEditMode} submitQueryCallback={executeQuery} /> :
         <div className='mb-4'>
           <Button variant="primary" onClick={executeQuery} form="queryForm" disabled={isLoading} className="px-2">
           { isLoading ? <><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="mx-2" /> loading … </> : <><i className="bi bi-send"></i> load data table </>}

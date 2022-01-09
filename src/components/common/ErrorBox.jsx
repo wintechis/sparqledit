@@ -1,6 +1,8 @@
 import React from 'react';
+
 import Alert from 'react-bootstrap/Alert';
-import possibleErrorCauses from '../scripts/component-scripts/possibleErrorCauses';
+
+import possibleErrorCauses from '../../scripts/component-scripts/possibleErrorCauses';
 
 export default function ErrorBox({ error }) {
   const [show, setShow] = React.useState(true);

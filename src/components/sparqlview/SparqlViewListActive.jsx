@@ -6,7 +6,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 
 import SparqlViewDetail from './SparqlViewDetail';
 
-export default function SparqlViewsActiveCard({ sparqlView, sparqlViewUpdateCallback, handleDeleteCard, handleCloneCard, handleSaveCard }) {
+export default function SparqlViewListActive({ sparqlView, sparqlViewUpdateCallback, handleDeleteCard, handleCloneCard, handleSaveCard }) {
   const [activeTabKey, setActiveTabKey] = React.useState('view');
 
   return (
@@ -31,7 +31,8 @@ export default function SparqlViewsActiveCard({ sparqlView, sparqlViewUpdateCall
         </div>
       </Card.Header>
       <Card.Body>
-        { activeTabKey === 'edit' ? <SparqlViewDetail sparqlView={sparqlView} sparqlViewUpdateCallback={sparqlViewUpdateCallback} /> :
+        { activeTabKey === 'edit' ? 
+          <SparqlViewDetail sparqlView={sparqlView} sparqlViewUpdateCallback={sparqlViewUpdateCallback} /> :
           <>
             <Card.Text>{sparqlView.description}</Card.Text>
             <dl className="row">

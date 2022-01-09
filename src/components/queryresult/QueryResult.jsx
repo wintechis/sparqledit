@@ -1,6 +1,7 @@
 
 import React from 'react';
-import QueryResultTable from './queryresulttable/QueryResultTable';
+
+import QueryResultTable from './QueryResultTable';
 
 export default function QueryResult(props) {
   const displayTable = (

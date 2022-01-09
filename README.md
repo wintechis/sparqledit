@@ -151,6 +151,9 @@ Start upload script: `npm run solid-upload`
   * editable object URIs ?
 * React app
   * endpoints with basic auth (-> own fetcher witch creds)
+  * Refactoring
+    * Provider pattern for SparqlView to simplify passing down the sparqlView object
+    * SparqlViewDetail edit mode
   * special input components
     * for different datatypes (e.g. xsd:time)
     * textbox input for multiline xsd:string

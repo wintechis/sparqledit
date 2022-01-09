@@ -1,20 +1,20 @@
 import React from 'react';
 
-import '../styles/sparqlviews.css';
+import '../../styles/sparqlviews.css';
 
 import Card from 'react-bootstrap/Card';
 import Stack from 'react-bootstrap/Stack';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
-import SparqlViewsActiveCard from './SparqlViewsActiveCard';
-import SparqlViewsAddNewControls from './SparqlViewsAddNewControls';
+import SparqlViewListActive from './SparqlViewListActive';
+import SparqlViewListAddControls from './SparqlViewListAddControls';
 
-import SparqlViewFactory from '../scripts/models/SparqlViewFactory';
-import useLocalStorage from '../hooks/useLocalStorage';
-import { createDowloadFileName } from '../scripts/utilities';
+import SparqlViewFactory from '../../scripts/models/SparqlViewFactory';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import { createDowloadFileName } from '../../scripts/utilities';
 
-export default function SparqlViews() {
+export default function SparqlViewList() {
   const initialViews = [
     SparqlViewFactory.createFrom('simple'),
     SparqlViewFactory.createFrom('advanced')
@@ -71,7 +71,6 @@ export default function SparqlViews() {
 
   return (
     <section>
-      
       <Row className="justify-content-center mb-2">
         <Col lg="6">
           <h3 className="text-center">{views.length + ' SPARQL views'}</h3>
@@ -80,11 +79,10 @@ export default function SparqlViews() {
           </p>
         </Col>
       </Row>
-
       <Stack gap={3}>
         {views.map( view => (
           view.id === activeViewId ?
-            <SparqlViewsActiveCard key={view.id} sparqlView={view} sparqlViewUpdateCallback={sparqlViewUpdate} handleDeleteCard={handleDeleteCard} handleCloneCard={handleCloneCard} handleSaveCard={handleSaveCard} /> :
+            <SparqlViewListActive key={view.id} sparqlView={view} sparqlViewUpdateCallback={sparqlViewUpdate} handleDeleteCard={handleDeleteCard} handleCloneCard={handleCloneCard} handleSaveCard={handleSaveCard} /> :
             <Card key={view.id} onClick={() => handleActiveCardChange( view.id )}>
               <Card.Header><h5>{view.name}</h5></Card.Header>
               <Card.Body>
@@ -92,7 +90,7 @@ export default function SparqlViews() {
               </Card.Body>
             </Card>
         ) )}
-        <SparqlViewsAddNewControls addNewHandler={addNewHandler} />
+        <SparqlViewListAddControls addNewHandler={addNewHandler} />
       </Stack>
     </section>
   );

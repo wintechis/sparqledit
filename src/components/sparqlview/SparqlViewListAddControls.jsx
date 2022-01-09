@@ -3,9 +3,9 @@ import React from 'react';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button'
 
-import SparqlViewFactory from '../scripts/models/SparqlViewFactory';
+import SparqlViewFactory from '../../scripts/models/SparqlViewFactory';
 
-export default function SparqlViewsAddNewControls({ addNewHandler }) {
+export default function SparqlViewListAddControls({ addNewHandler }) {
 
   function createBlankView() {
     const newView = SparqlViewFactory.createFrom();

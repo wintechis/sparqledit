@@ -1,4 +1,5 @@
 import React from 'react';
+
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -8,9 +9,9 @@ import Spinner from 'react-bootstrap/Spinner';
 
 import Yasqe from '@triply/yasqe';
 import '@triply/yasqe/build/yasqe.min.css';
-import '../styles/queryform.css';
+import '../../styles/queryform.css';
 
-export default function QueryForm({ sparqlView, sparqlViewUpdateCallback, isLoading, submitQueryCallback }) {
+export default function SparqlViewDetailForm({ sparqlView, sparqlViewUpdateCallback, isLoading, submitQueryCallback }) {
   const [yasqe, setYasqe] = React.useState(null);
   const [credentials, setCredentials] = React.useState({ username: '', password: ''});
 
@@ -111,7 +112,7 @@ export default function QueryForm({ sparqlView, sparqlViewUpdateCallback, isLoad
             </Form.Group>
           </Col>
           <Col lg="2">
-            <p class="text-secondary">* required fields</p>
+            <p className="text-secondary">* required fields</p>
           </Col>
         </Row>
         <Row className="mb-2">
