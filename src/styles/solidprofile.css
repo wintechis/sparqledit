@@ -12,3 +12,7 @@
   font-size: large;
   font-weight: bold;
 }
+
+.no-padding-in-children > * {
+  padding: 0px;
+}

@@ -1,0 +1,17 @@
+.customIDPFormControl {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 0.9rem;
+  border-bottom-right-radius: 0.9rem;
+  margin-left: -1px;
+}
+.customIDPInputGroup {
+  min-width: 250px;
+}
+#customIDPButton {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0.9rem;
+  margin-right: -1px;
+}

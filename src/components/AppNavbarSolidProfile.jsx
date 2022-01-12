@@ -8,8 +8,6 @@ import { RDF_NAMESPACES } from '../scripts/models/RdfNamespaces';
 
 import '../styles/solidprofile.css';
 
-import Placeholder from 'react-bootstrap/Placeholder';
-
 export default function AppNavbarSolidProfile({ webId }) {
   const imageProperty = RDF_NAMESPACES.vcard + 'hasPhoto';
   const nameProperties = [

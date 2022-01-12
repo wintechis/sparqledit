@@ -54,7 +54,7 @@ export default function SparqlViewListAddControls({ addNewHandler }) {
       </Button>
       <Button variant="outline-primary border-1" disabled>
         <i className="bi bi-cloud-arrow-down fs-2"></i>
-        <p className="text-wrap mb-1 fw-bolder">TODO: Load config from SOLID</p>
+        <p className="text-wrap mb-1 fw-bolder">TODO: Load config from Solid</p>
       </Button>
     </ButtonGroup>
   );
