@@ -41,7 +41,7 @@ export default function SparqlViewListAddControls({ addNewHandler }) {
   }
 
   return (
-    <ButtonGroup aria-label="Load view configurations">
+    <ButtonGroup aria-label="Load view configurations" className="mx-4">
       <Button variant="outline-primary border-1" onClick={createBlankView}>
         <i className="bi bi-plus-lg fs-2"></i>
         <p className="text-wrap mb-1 fw-bolder">Create blank view</p>

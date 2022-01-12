@@ -10,7 +10,7 @@ export default function SparqlViewListActive({ sparqlView, sparqlViewUpdateCallb
   const [activeTabKey, setActiveTabKey] = React.useState('view');
 
   return (
-    <Card border="primary">
+    <Card className="shadow">
       <Card.Header>
         <div className="d-flex pr-2 justify-content-between flex-wrap">
         <h5>{sparqlView.name}</h5>

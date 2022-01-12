@@ -1,6 +1,6 @@
 import React from 'react';
 
-import '../../styles/sparqlviews.css';
+import '../../styles/sparqlviewlist.css';
 
 import Card from 'react-bootstrap/Card';
 import Stack from 'react-bootstrap/Stack';
@@ -79,11 +79,11 @@ export default function SparqlViewList() {
           </p>
         </Col>
       </Row>
-      <Stack gap={3}>
+      <Stack gap={4}>
         {views.map( view => (
           view.id === activeViewId ?
             <SparqlViewListActive key={view.id} sparqlView={view} sparqlViewUpdateCallback={sparqlViewUpdate} handleDeleteCard={handleDeleteCard} handleCloneCard={handleCloneCard} handleSaveCard={handleSaveCard} /> :
-            <Card key={view.id} onClick={() => handleActiveCardChange( view.id )}>
+            <Card key={view.id} onClick={() => handleActiveCardChange( view.id )} className="shadow-sm mx-4">
               <Card.Header><h5>{view.name}</h5></Card.Header>
               <Card.Body>
                 <Card.Text>{view.description}</Card.Text>
