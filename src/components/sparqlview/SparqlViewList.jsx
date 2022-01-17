@@ -33,10 +33,10 @@ export default function SparqlViewList() {
     setActiveViewId(id);
   }
 
-  function addNewHandler(viewToAdd) {
-    if (viewToAdd) {
-      setViews([...views, viewToAdd]);
-      setActiveViewId(viewToAdd.id);
+  function addNewSparqlViews(viewsToAdd) {
+    if (viewsToAdd && viewsToAdd.length > 0) {
+      setViews([...views, ...viewsToAdd]);
+      setActiveViewId(viewsToAdd[0].id);
     }
   }
 
@@ -82,7 +82,8 @@ export default function SparqlViewList() {
       <Stack gap={4}>
         {views.map( view => (
           view.id === activeViewId ?
-            <SparqlViewListActive key={view.id} sparqlView={view} sparqlViewUpdateCallback={sparqlViewUpdate} handleDeleteCard={handleDeleteCard} handleCloneCard={handleCloneCard} handleSaveCard={handleSaveCard} /> :
+            <SparqlViewListActive key={view.id} sparqlView={view} sparqlViewUpdateCallback={sparqlViewUpdate} 
+              handleDeleteCard={handleDeleteCard} handleCloneCard={handleCloneCard} handleSaveCard={handleSaveCard} /> :
             <Card key={view.id} onClick={() => handleActiveCardChange( view.id )} className="shadow-sm mx-4">
               <Card.Header><h5>{view.name}</h5></Card.Header>
               <Card.Body>
@@ -90,7 +91,7 @@ export default function SparqlViewList() {
               </Card.Body>
             </Card>
         ) )}
-        <SparqlViewListAddControls addNewHandler={addNewHandler} />
+        <SparqlViewListAddControls addNewSparqlViews={addNewSparqlViews} />
       </Stack>
     </section>
   );

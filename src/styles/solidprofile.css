@@ -13,6 +13,14 @@
   font-weight: bold;
 }
 
+.image-profile {
+  border-radius: 50%;
+  height: 50px;
+  min-height: 50px;
+  width: 50px;
+  min-width: 50px;
+}
+
 .no-padding-in-children > * {
   padding: 0px;
 }

@@ -4,6 +4,7 @@
   border-bottom-left-radius: 0.9rem;
   border-bottom-right-radius: 0.9rem;
   margin-left: -1px;
+  margin-bottom: -1px;
 }
 .customIDPInputGroup {
   min-width: 250px;
@@ -14,4 +15,5 @@
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0.9rem;
   margin-right: -1px;
+  margin-bottom: -1px;
 }

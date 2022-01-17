@@ -90,6 +90,7 @@ export default class SparqlView {
   serializeToJsonld() {
     // copy this instance
     const jsonObj = { ...this };
+    delete jsonObj.id; // remove internal id
     // add JSON-LD context and type
     jsonObj['@context'] = {
       ...RDF_NAMESPACES,

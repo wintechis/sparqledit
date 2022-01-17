@@ -20,7 +20,7 @@ export default function AppNavbarSolidProfile({ webId }) {
     <CombinedDataProvider datasetUrl={webId} thingUrl={webId} loadingComponent={ProfilePlaceholder}>
       <div className="d-flex align-items-center">
         <div className="image-placeholder">
-          <Image property={imageProperty} width={50} className="image-placeholder" loadingComponent={null} />
+          <Image property={imageProperty} width={50} className="image-profile" loadingComponent={null} />
         </div>
         <div className="mx-3">
           <h5 className="my-0">

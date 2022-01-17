@@ -1,7 +1,7 @@
 import SparqlView from "./SparqlView";
 import { JsonLdParser } from "jsonld-streaming-parser";
 import { RDF_NAMESPACES } from './RdfNamespaces';
-import { DataFactory, Store } from 'n3';
+import { DataFactory, Store, Parser } from 'n3';
 
 const simpleExampleQuery = 'SELECT *\nWHERE {\n  ?s ?p ?o\n  FILTER( isLiteral(?o) )\n} LIMIT 25';
 const advancedExampleQuery = `
@@ -111,9 +111,14 @@ export default class SparqlViewFactory {
     throw new TypeError('Unable to create a SparqlView instance from ' + input);
   }
 
-  static async createFromRDF(rdf) {
+  static async createFromRDF(rdf, contentType) {
     const { namedNode } = DataFactory;
-    const quads = await this.parseJsonldToQuads(rdf);
+    let quads;
+    if (contentType.toLowerCase().includes('application/ld+json')) {
+      quads = await this.parseJsonldToQuads(rdf);
+    } else { // N3-Family
+      quads = this.parseN3Family(rdf);
+    }
     const store = new Store();
     store.addQuads(quads);
 
@@ -155,6 +160,11 @@ export default class SparqlViewFactory {
       myParser.write(jsonld);
       myParser.end();
     });
+  }
+
+  static parseN3Family(rdf) {
+    const parser = new Parser();
+    return parser.parse(rdf); // sync. parsing to Quad[] 
   }
 
   static clone(sparqlView) {
