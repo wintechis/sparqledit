@@ -32,6 +32,11 @@ export default class SparqlView {
     store.addQuads([
       quad(
         subjectBN,
+        namedNode(RDF_NAMESPACES.rdf + 'type'),
+        namedNode(RDF_NAMESPACES.spedit + 'SparqlView')
+      ),
+      quad(
+        subjectBN,
         namedNode(RDF_NAMESPACES.schema + 'name'),
         literal(this.name)
       ),
@@ -62,12 +67,12 @@ export default class SparqlView {
       ),
       quad(
         subjectBN,
-        namedNode(RDF_NAMESPACES.schema + 'query'),
+        namedNode(RDF_NAMESPACES.spedit + 'query'),
         literal(this.query)
       ),
       quad(
         subjectBN,
-        namedNode(RDF_NAMESPACES.schema + 'requiresBasicAuth'),
+        namedNode(RDF_NAMESPACES.spedit + 'requiresBasicAuth'),
         literal(this.requiresBasicAuth, namedNode(RDF_NAMESPACES.xsd + 'boolean'))
       )
     ]);
@@ -87,6 +92,7 @@ export default class SparqlView {
       });
     });
   }
+
   serializeToJsonld() {
     // copy this instance
     const jsonObj = { ...this };
@@ -124,7 +130,7 @@ export default class SparqlView {
       },
     };
     jsonObj['@type'] = 'spedit:SparqlView';
-    return JSON.stringify(jsonObj);
+    const jsonld = JSON.stringify(jsonObj);
+    return Promise.resolve(jsonld);
   }
-
 }

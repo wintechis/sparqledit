@@ -133,7 +133,8 @@ export default class SparqlViewFactory {
     const queryURL = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'queryURL'), null)[0]?.value || 'unknown queryURL';
     const updateURL = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'updateURL'), null)[0]?.value || 'unknown updateURL';
     const query = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'query'), null)[0]?.value || 'unknown query';
-    const requiresBasicAuth = Boolean(store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'requiresBasicAuth'), null)[0]?.value || false);
+    // eslint-disable-next-line
+    const requiresBasicAuth = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'requiresBasicAuth'), null)[0]?.value.toLowerCase() == 'true';
 
     return new SparqlView(
       this.generateUnsafeUuid(),

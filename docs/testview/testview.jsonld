@@ -1,0 +1,47 @@
+{
+  "name": "Test view",
+  "description": "This is a test SPARQL view.",
+  "creator": "Test User",
+  "dateCreated": "2022-01-18T11:05:10.345Z",
+  "queryURL": "http://localhost:3030/test/",
+  "updateURL": "http://localhost:3030/test/",
+  "query": "PREFIX schema: <http://schema.org/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT *\nWHERE {\n  ?s ?p ?o .\n  OPTIONAL {  \n    ?s rdfs:label ?label .\n  }\n  OPTIONAL {  \n    ?s schema:name ?name .\n  }\n}",
+  "requiresBasicAuth": false,
+  "@context": {
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "schema": "http://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "vcard": "http://www.w3.org/2006/vcard/ns#",
+    "spedit": "http://iis.fraunhofer.de/sparqledit/ontology#",
+    "name": {
+      "@id": "schema:name"
+    },
+    "description": {
+      "@id": "schema:description"
+    },
+    "creator": {
+      "@id": "schema:creator"
+    },
+    "dateCreated": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:dateTime"
+    },
+    "queryURL": {
+      "@id": "spedit:queryURL",
+      "@type": "xsd:anyURI"
+    },
+    "updateURL": {
+      "@id": "spedit:updateURL",
+      "@type": "xsd:anyURI"
+    },
+    "query": {
+      "@id": "spedit:query"
+    },
+    "requiresBasicAuth": {
+      "@id": "spedit:requiresBasicAuth",
+      "@type": "xsd:boolean"
+    }
+  },
+  "@type": "spedit:SparqlView"
+}

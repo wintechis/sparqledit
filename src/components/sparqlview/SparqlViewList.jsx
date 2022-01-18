@@ -56,9 +56,10 @@ export default function SparqlViewList() {
     setViews([...views]);
   }
 
-  function handleSaveCard(viewToSave) {
+  async function handleSaveCard(viewToSave) {
     const sparqlViewInstance = SparqlViewFactory.createFrom(viewToSave);
-    const jsonldStr = sparqlViewInstance.serializeToJsonld();
+    const jsonldStr = await sparqlViewInstance.serializeToJsonld();
+    console.log(await sparqlViewInstance.serializeToTurtle());
     const file = new Blob([jsonldStr], {type: 'application/ld+json'});
     // create link and program. click it
     const element = document.createElement('a');

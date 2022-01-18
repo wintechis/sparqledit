@@ -1,0 +1,9 @@
+_:b0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://iis.fraunhofer.de/sparqledit/ontology#SparqlView> .
+_:b0 <http://schema.org/name> "Test view" .
+_:b0 <http://schema.org/creator> "Test User" .
+_:b0 <http://schema.org/description> "This is a test SPARQL view." .
+_:b0 <http://schema.org/dateCreated> "2022-01-18T11:05:10.345Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+_:b0 <http://iis.fraunhofer.de/sparqledit/ontology#query> "PREFIX schema: <http://schema.org/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT *\nWHERE {\n  ?s ?p ?o .\n  OPTIONAL {  \n    ?s rdfs:label ?label .\n  }\n  OPTIONAL {  \n    ?s schema:name ?name .\n  }\n}" .
+_:b0 <http://iis.fraunhofer.de/sparqledit/ontology#queryURL> "http://localhost:3030/test/"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+_:b0 <http://iis.fraunhofer.de/sparqledit/ontology#updateURL> "http://localhost:3030/test/"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+_:b0 <http://iis.fraunhofer.de/sparqledit/ontology#requiresBasicAuth> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
