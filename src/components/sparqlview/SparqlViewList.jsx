@@ -6,6 +6,7 @@ import Card from 'react-bootstrap/Card';
 import Stack from 'react-bootstrap/Stack';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import Button from 'react-bootstrap/Button';
 
 import SparqlViewListActive from './SparqlViewListActive';
 import SparqlViewListAddControls from './SparqlViewListAddControls';
@@ -40,9 +41,27 @@ export default function SparqlViewList() {
     }
   }
 
+  // delete, restore, clean deleted views
   function handleDeleteCard(viewToDelete) {
-    setViews(views.filter( view => view.id !== viewToDelete.id));
+    // mark view as deleted so that it can be restored later
+    setViews(views.map( view => {
+      if (view.id === viewToDelete.id) {
+        view.deleted = true;
+      }
+      return view;
+    }));
   }
+  function handleRestoreDeletedCard(viewToRestore) {
+    delete viewToRestore.deleted;
+    setViews([...views]);
+    setActiveViewId(viewToRestore.id);
+  }
+  // trigger final removal of deleted views when active view changes
+  React.useEffect(()=>{
+    if (views.some( view => view.deleted )) {
+      setViews(views.filter( view => !view.deleted ))
+    }
+  }, [activeViewId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function handleCloneCard(viewToCopy) {
     const clonedView = SparqlViewFactory.createFrom(viewToCopy);
@@ -82,18 +101,34 @@ export default function SparqlViewList() {
       </Row>
       <Stack gap={4}>
         {views.map( view => (
+          view.deleted ? <SparqlViewListItemDeleted view={view} restoreDeletedView={handleRestoreDeletedCard} /> :
           view.id === activeViewId ?
             <SparqlViewListActive key={view.id} sparqlView={view} sparqlViewUpdateCallback={sparqlViewUpdate} 
               handleDeleteCard={handleDeleteCard} handleCloneCard={handleCloneCard} handleSaveCard={handleSaveCard} /> :
-            <Card key={view.id} onClick={() => handleActiveCardChange( view.id )} className="shadow-sm mx-4">
-              <Card.Header><h5>{view.name}</h5></Card.Header>
-              <Card.Body>
-                <Card.Text>{view.description}</Card.Text>
-              </Card.Body>
-            </Card>
+            <SparqlViewListItem view={view} handleActiveCardChange={handleActiveCardChange} />
         ) )}
         <SparqlViewListAddControls addNewSparqlViews={addNewSparqlViews} />
       </Stack>
     </section>
+  );
+}
+
+function SparqlViewListItem({ view, handleActiveCardChange }) {
+  return (
+    <Card key={view.id} onClick={() => handleActiveCardChange( view.id )} className="shadow-sm mx-4">
+      <Card.Header><h5>{view.name}</h5></Card.Header>
+      <Card.Body>
+        <Card.Text>{view.description}</Card.Text>
+      </Card.Body>
+    </Card>
+  );
+}
+
+function SparqlViewListItemDeleted({ view, restoreDeletedView }) {
+  return (
+    <div className="d-flex justify-content-center align-items-center">
+      <span>View "{view.name}" deleted.</span>
+      <Button variant='link' onClick={e => restoreDeletedView(view)}>Restore this view?</Button>
+    </div>
   );
 }
