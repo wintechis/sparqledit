@@ -6,11 +6,14 @@ import Button from 'react-bootstrap/Button';
 import { useSession } from '@inrupt/solid-ui-react';
 
 import SparqlViewListAddControlsSolidModal from './SparqlViewListAddControlsSolidModal';
+import SparqlViewListAddControlsErrorModal from './SparqlViewListAddControlsErrorModal';
 import SparqlViewFactory from '../../scripts/models/SparqlViewFactory';
+import { RDFProcessingError } from '../../scripts/CustomErrors';
 
 export default function SparqlViewListAddControls({ addNewSparqlViews }) {
   const { session } = useSession();
   const [solidModalShow, setSolidModalShow] = React.useState(false);
+  const [fileError, setFileError] = React.useState(null);
 
   function createBlankView() {
     const newView = SparqlViewFactory.createFrom();
@@ -20,28 +23,33 @@ export default function SparqlViewListAddControls({ addNewSparqlViews }) {
   // load local file
   const fileInputElement = React.useRef();
   const openConfigFileDialog = () => {
-      fileInputElement.current.value = null; // reset input
-      fileInputElement.current.click();
-    }
-    function fileSelectedHandler(e) {
-      Array.from(e.target.files).forEach(file => {
-      console.log(file.name);
+    fileInputElement.current.value = null; // reset input
+    fileInputElement.current.click();
+  }
+  function fileSelectedHandler( e ) {
+    Array.from( e.target.files ).forEach( file => {
+      console.log( file.name );
       const reader = new FileReader();
       reader.onload = async e => {
         const fileContent = reader.result;
         let newView;
         try {
-          newView = await SparqlViewFactory.createFromRDF(fileContent, 'application/ld+json');
-        } catch (error) {
-          alert(`Error parsing the JSON-LD config file '${file.name}'.`);
+          newView = await SparqlViewFactory.createFromRDF( fileContent, 'application/ld+json' );
+          console.log(newView);
+          // TODO: updating the state only works for the first file
+          // Possible solution: collect every new view and update the React state once
+          addNewSparqlViews( [ newView ] );
+        } catch ( error ) {
+          const customError = new RDFProcessingError(`Error parsing the JSON-LD config file '${file.name}': \n${error.name} - ${error.message}`);
+          setFileError(customError);
+          console.error( customError);
         }
-        // TODO: updating the state only works for the first file
-        // Possible solution: collect every new view and update the React state once
-        addNewSparqlViews([newView]);
       };
-      const errFnc = error => alert(`Error reading the file '${file.name}'\n${error.message}`);
+      const errFnc = error => setFileError(
+        new Error(`Error reading the file '${file.name}'\n${error.name} - ${error.message}`)
+      );
       reader.onerror = reader.onabort = errFnc;
-      reader.readAsText(file);
+      reader.readAsText( file );
     });
   }
 
@@ -65,6 +73,7 @@ export default function SparqlViewListAddControls({ addNewSparqlViews }) {
         </Button>
       </ButtonGroup>
       <SparqlViewListAddControlsSolidModal show={solidModalShow} onHide={() => setSolidModalShow(false)} addNewSparqlViews={addNewSparqlViews} />
+      <SparqlViewListAddControlsErrorModal show={fileError} onHide={() => setFileError(null)} error={fileError} />
     </>
   );
 }

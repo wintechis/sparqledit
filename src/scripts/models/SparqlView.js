@@ -1,4 +1,4 @@
-import { RDF_NAMESPACES } from './RdfNamespaces';
+import { SPARQLVIEW_NAMESPACES } from './RdfNamespaces';
 import { DataFactory, Store, Writer } from 'n3';
 const { quad, namedNode, literal } = DataFactory;
 
@@ -32,55 +32,55 @@ export default class SparqlView {
     store.addQuads([
       quad(
         subjectBN,
-        namedNode(RDF_NAMESPACES.rdf + 'type'),
-        namedNode(RDF_NAMESPACES.spedit + 'SparqlView')
+        namedNode(SPARQLVIEW_NAMESPACES.rdf + 'type'),
+        namedNode(SPARQLVIEW_NAMESPACES.spedit + 'SparqlView')
       ),
       quad(
         subjectBN,
-        namedNode(RDF_NAMESPACES.schema + 'name'),
+        namedNode(SPARQLVIEW_NAMESPACES.schema + 'name'),
         literal(this.name)
       ),
       quad(
         subjectBN,
-        namedNode(RDF_NAMESPACES.schema + 'description'),
+        namedNode(SPARQLVIEW_NAMESPACES.schema + 'description'),
         literal(this.description)
       ),
       quad(
         subjectBN,
-        namedNode(RDF_NAMESPACES.schema + 'creator'),
+        namedNode(SPARQLVIEW_NAMESPACES.schema + 'creator'),
         literal(this.creator)
       ),
       quad(
         subjectBN,
-        namedNode(RDF_NAMESPACES.schema + 'dateCreated'),
-        literal(this.dateCreated.toISOString(), namedNode(RDF_NAMESPACES.xsd + 'dateTime'))
+        namedNode(SPARQLVIEW_NAMESPACES.schema + 'dateCreated'),
+        literal(this.dateCreated.toISOString(), namedNode(SPARQLVIEW_NAMESPACES.xsd + 'dateTime'))
       ),
       quad(
         subjectBN,
-        namedNode(RDF_NAMESPACES.spedit + 'queryURL'),
-        literal(this.queryURL, namedNode(RDF_NAMESPACES.xsd + 'anyURI'))
+        namedNode(SPARQLVIEW_NAMESPACES.spedit + 'queryURL'),
+        literal(this.queryURL, namedNode(SPARQLVIEW_NAMESPACES.xsd + 'anyURI'))
       ),
       quad(
         subjectBN,
-        namedNode(RDF_NAMESPACES.spedit + 'updateURL'),
-        literal(this.updateURL, namedNode(RDF_NAMESPACES.xsd + 'anyURI'))
+        namedNode(SPARQLVIEW_NAMESPACES.spedit + 'updateURL'),
+        literal(this.updateURL, namedNode(SPARQLVIEW_NAMESPACES.xsd + 'anyURI'))
       ),
       quad(
         subjectBN,
-        namedNode(RDF_NAMESPACES.spedit + 'query'),
+        namedNode(SPARQLVIEW_NAMESPACES.spedit + 'query'),
         literal(this.query)
       ),
       quad(
         subjectBN,
-        namedNode(RDF_NAMESPACES.spedit + 'requiresBasicAuth'),
-        literal(this.requiresBasicAuth, namedNode(RDF_NAMESPACES.xsd + 'boolean'))
+        namedNode(SPARQLVIEW_NAMESPACES.spedit + 'requiresBasicAuth'),
+        literal(this.requiresBasicAuth, namedNode(SPARQLVIEW_NAMESPACES.xsd + 'boolean'))
       )
     ]);
     return store.getQuads();
   }
 
   serializeToTurtle() {
-    const writer = new Writer({ prefixes: RDF_NAMESPACES });
+    const writer = new Writer({ prefixes: SPARQLVIEW_NAMESPACES });
     return new Promise((resolve, reject) => {
       writer.addQuads(this.createRdfQuads());
       writer.end( (error, result) => {
@@ -99,7 +99,7 @@ export default class SparqlView {
     delete jsonObj.id; // remove internal id
     // add JSON-LD context and type
     jsonObj['@context'] = {
-      ...RDF_NAMESPACES,
+      ...SPARQLVIEW_NAMESPACES,
       name: {
         '@id': 'schema:name'
       },

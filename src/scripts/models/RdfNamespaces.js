@@ -6,3 +6,10 @@ export const RDF_NAMESPACES = {
   vcard: 'http://www.w3.org/2006/vcard/ns#',
   spedit: 'http://iis.fraunhofer.de/sparqledit/ontology#'
 }
+
+export const SPARQLVIEW_NAMESPACES = {
+  rdf: RDF_NAMESPACES.rdf,
+  schema: RDF_NAMESPACES.schema,
+  xsd: RDF_NAMESPACES.xsd,
+  spedit: RDF_NAMESPACES.spedit
+}

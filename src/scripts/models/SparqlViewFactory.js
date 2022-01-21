@@ -120,6 +120,9 @@ export default class SparqlViewFactory {
       } else { // N3-Family
         quads = this.parseN3Family(rdf);
       }
+      if (quads.length < 1) {
+        throw new RDFProcessingError('No RDF quads found.');
+      }
       return this.createSparqlViewFromRDFQuads(quads);
     } catch (error) {
       throw new RDFProcessingError(
