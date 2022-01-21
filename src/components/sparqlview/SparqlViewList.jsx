@@ -101,13 +101,13 @@ export default function SparqlViewList() {
       </Row>
       <Stack gap={4}>
         {views.map( view => (
-          view.deleted ? <SparqlViewListItemDeleted view={view} restoreDeletedView={handleRestoreDeletedCard} /> :
+          view.deleted ? <SparqlViewListItemDeleted key={view.id} view={view} restoreDeletedView={handleRestoreDeletedCard} /> :
           view.id === activeViewId ?
             <SparqlViewListActive key={view.id} sparqlView={view} sparqlViewUpdateCallback={sparqlViewUpdate} 
               handleDeleteCard={handleDeleteCard} handleCloneCard={handleCloneCard} handleSaveCard={handleSaveCard} /> :
-            <SparqlViewListItem view={view} handleActiveCardChange={handleActiveCardChange} />
+            <SparqlViewListItem key={view.id} view={view} handleActiveCardChange={handleActiveCardChange} />
         ) )}
-        <SparqlViewListAddControls addNewSparqlViews={addNewSparqlViews} />
+        <SparqlViewListAddControls key="addControlsKey" addNewSparqlViews={addNewSparqlViews} />
       </Stack>
     </section>
   );

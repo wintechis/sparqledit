@@ -20,3 +20,18 @@ export class BuildingError extends Error {
     this.name = "BuildingError";
   }
 }
+
+export class SolidError extends Error {
+  constructor(message, fileURL) {
+    super(message);
+    this.name = "SolidError";
+    this.fileURL = fileURL;
+  }
+}
+
+export class RDFProcessingError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "RDFProcessingError";
+  }
+}

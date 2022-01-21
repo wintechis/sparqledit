@@ -2,6 +2,7 @@ import SparqlView from "./SparqlView";
 import { JsonLdParser } from "jsonld-streaming-parser";
 import { RDF_NAMESPACES } from './RdfNamespaces';
 import { DataFactory, Store, Parser } from 'n3';
+import { RDFProcessingError } from "../CustomErrors";
 
 const simpleExampleQuery = 'SELECT *\nWHERE {\n  ?s ?p ?o\n  FILTER( isLiteral(?o) )\n} LIMIT 25';
 const advancedExampleQuery = `
@@ -112,13 +113,22 @@ export default class SparqlViewFactory {
   }
 
   static async createFromRDF(rdf, contentType) {
-    const { namedNode } = DataFactory;
     let quads;
-    if (contentType.toLowerCase().includes('application/ld+json')) {
-      quads = await this.parseJsonldToQuads(rdf);
-    } else { // N3-Family
-      quads = this.parseN3Family(rdf);
+    try {
+      if (contentType.toLowerCase().includes('application/ld+json')) {
+        quads = await this.parseJsonldToQuads(rdf);
+      } else { // N3-Family
+        quads = this.parseN3Family(rdf);
+      }
+      return this.createSparqlViewFromRDFQuads(quads);
+    } catch (error) {
+      throw new RDFProcessingError(
+        `RDF parsing error.\n${error.name} - ${error.message}`);
     }
+  }
+
+  static createSparqlViewFromRDFQuads(quads) {
+    const { namedNode } = DataFactory;
     const store = new Store();
     store.addQuads(quads);
 
@@ -133,8 +143,7 @@ export default class SparqlViewFactory {
     const queryURL = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'queryURL'), null)[0]?.value || 'unknown queryURL';
     const updateURL = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'updateURL'), null)[0]?.value || 'unknown updateURL';
     const query = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'query'), null)[0]?.value || 'unknown query';
-    // eslint-disable-next-line
-    const requiresBasicAuth = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'requiresBasicAuth'), null)[0]?.value.toLowerCase() == 'true';
+    const requiresBasicAuth = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'requiresBasicAuth'), null)[0]?.value.toLowerCase() == 'true'; // eslint-disable-line eqeqeq
 
     return new SparqlView(
       this.generateUnsafeUuid(),

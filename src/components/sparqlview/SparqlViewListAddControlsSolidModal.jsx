@@ -3,42 +3,28 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
 
-import { fetch } from '@inrupt/solid-client-authn-browser';
-import { getFile, isRawData, getContentType, getSourceUrl, } from "@inrupt/solid-client";
-import SparqlViewFactory from '../../scripts/models/SparqlViewFactory';
-//import { getSolidDataset, toRdfJsDataset } from "@inrupt/solid-client";
+import ErrorBox from '../common/ErrorBox';
+import useSparqlViewFromSolid from '../../hooks/useSparqlViewFromSolid';
+import useLocalStorage from '../../hooks/useLocalStorage';
 
-export default function QueryResultTableInputCellModal({ show, onHide, addNewSparqlViews }) {
-  const [fileUrl, setFileUrl] = React.useState('');
+export default function SparqlViewListAddControlsSolidModal({ show, onHide, addNewSparqlViews }) {
+  const [inputfileUrl, setInputFileUrl] = useLocalStorage('solidFileUrl', '');
+  const [submittedFileUrl, setSubmittedFileUrl] = React.useState({});
+  const { loading, error, view } = useSparqlViewFromSolid(submittedFileUrl);
+
+  // add new view to list and close modal if successful
+  React.useEffect(()=> {
+    if (view) {
+      addNewSparqlViews([view]);
+      onHide();
+    }
+  }, [view]); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function submitHandler(e) {
     e.preventDefault();
-    console.log('submit');
-
-    // // fetch SolidDataset
-    // const myDataset = await getSolidDataset(
-    //   fileUrl, {
-    //   fetch: fetch
-    // });
-    // console.log(myDataset); // not RDF/JS compatible
-    // const datasetCore = toRdfJsDataset(myDataset); // return weird DatasetCore
-    // console.log(datasetCore); // no idea what to do with it
-
-    // fetch raw file
-    const file = await getFile(fileUrl, { fetch: fetch });
-    console.log( `Fetched a ${getContentType(file)} file from ${getSourceUrl(file)}.`);
-    console.log(`The file is ${isRawData(file) ? "not " : ""}a dataset.`);
-    const fileContent = await file.text();
-    const contentType = getContentType(file);
-    
-    // parse and create new SparqlViews
-    const newSparqlView = await SparqlViewFactory.createFromRDF(fileContent, contentType);
-    console.log(newSparqlView);
-
-    // add to list and close modal if successful
-    addNewSparqlViews([newSparqlView]);
-    onHide();
+    setSubmittedFileUrl({ fileURL: inputfileUrl });
   }
 
   return (
@@ -51,10 +37,13 @@ export default function QueryResultTableInputCellModal({ show, onHide, addNewSpa
       <Modal.Body>
         <p>Please insert the <strong>URL to a "SPARQL view" config file</strong> on a Solid Pod you have access to:</p>
         <Form onSubmit={submitHandler}>
-          <FormControl type="url" className="my-2" onChange={( e ) => setFileUrl(e.target.value)} value={fileUrl} 
+          <FormControl type="url" className="my-2" onChange={( e ) => setInputFileUrl(e.target.value)} value={inputfileUrl} 
             placeholder="https://pod.example.org/private/sparqlviews/view1.ttl" />
-          <Button type="submit"><i className="bi bi-play-fill"></i> load from Pod</Button>
+          <Button variant="primary" type="submit" disabled={loading} className="mb-4">
+          { loading ? <><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="mx-2" /> loading … </> : <><i className="bi bi-play-fill"></i> load from Pod </>}
+          </Button>
         </Form>
+        {error ? <ErrorBox error={error} /> : null}
       </Modal.Body>
     </Modal>
   );

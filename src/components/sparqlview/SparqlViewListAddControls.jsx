@@ -24,7 +24,7 @@ export default function SparqlViewListAddControls({ addNewSparqlViews }) {
       fileInputElement.current.click();
     }
     function fileSelectedHandler(e) {
-    Array.from(e.target.files).forEach(file => {
+      Array.from(e.target.files).forEach(file => {
       console.log(file.name);
       const reader = new FileReader();
       reader.onload = async e => {
