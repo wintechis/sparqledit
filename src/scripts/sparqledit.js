@@ -1,20 +1,23 @@
-import sparqlClient from '../scripts/sparqlclient';
+import SparqlClient from '../scripts/SparqlClient';
 import { Parser as SparqlParser } from 'sparqljs';
 import { Generator as SparqlGenerator } from 'sparqljs';
 import { Wildcard } from 'sparqljs';
 
 export async function executeSelectOrUpdateQuery(querySubmission) {
+  const sparqlClient = new SparqlClient(querySubmission.credentials);
+
+  // TODO
   const queryType = sparqlClient.getQueryType(querySubmission.queryString);
   if (queryType === 'SELECT') {
-    return executeSelectQuery(querySubmission.endpointQuery, querySubmission.queryString);
+    return executeSelectWildcardQuery(sparqlClient, querySubmission);
   } else {
     return sparqlClient.submitUpdateQuery(querySubmission.endpointUpdate, querySubmission.queryString);
   }
 }
 
-export async function executeSelectQuery(sparqlUrl, queryStr) {
+async function executeSelectWildcardQuery(sparqlClient, querySubmission) {
   // parse query string into JS object
-  const queryObj = buildQueryObject(queryStr);
+  const queryObj = buildQueryObject(querySubmission.queryString);
 
   // check SPARQL SELECT variables
   const isWildcardVars = queryObj.variables[0] instanceof Wildcard;
@@ -27,7 +30,7 @@ export async function executeSelectQuery(sparqlUrl, queryStr) {
   
   // execute wildcard query
   const sparql_results = await sparqlClient.submitQuery(
-    sparqlUrl, stringifyQueryObject(queryObj));
+    querySubmission.endpointQuery, stringifyQueryObject(queryObj));
   
   // mark variables not included in original query
   sparql_results.forEach(bindingsRow => {

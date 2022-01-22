@@ -1,10 +1,11 @@
 import { buildQueryObject } from '../sparqledit';
 
 export class QuerySubmission {
-  constructor(endpointQuery, endpointUpdate, queryString) {
+  constructor(endpointQuery, endpointUpdate, queryString, credentials) {
     this.endpointQuery = endpointQuery;
     this.endpointUpdate = endpointUpdate;
     this.queryString = queryString;
+    this.credentials = credentials;
   }
   getQueryObject() {
     return buildQueryObject(this.queryString);

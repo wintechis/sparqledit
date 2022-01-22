@@ -26,10 +26,11 @@ export default function QueryResultTableInputCell({ refreshTableCallback, sparql
       const updateSubmission = new QuerySubmission(
         inputCellState.origSparqlSubmission.endpointQuery, 
         inputCellState.origSparqlSubmission.endpointUpdate, 
-        inputCellState.updateQuery);
+        inputCellState.updateQuery,
+        inputCellState.origSparqlSubmission.credentials);
       const updateResult = await executeSelectOrUpdateQuery(updateSubmission);
       if(updateResult === 'SUCCESS') {
-        // 1) signal successful update (drawback: no feedback if value actually changed)
+        // // 1) signal successful update (drawback: no feedback if value actually changed)
         // dispatch({
         //   type: "INPUTCELL_UPDATE_SUCCESS",
         //   result: updateResult,

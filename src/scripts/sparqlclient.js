@@ -1,40 +1,61 @@
 import { SparqlEndpointFetcher } from "fetch-sparql-endpoint";
 
-const sparqlFetcher = new SparqlEndpointFetcher();
+class SparqlClient {
 
-function getQueryType(queryStr) {
-  return sparqlFetcher.getQueryType(queryStr);
-}
+  constructor(credentials) {
+    // create SparqlEndpointFetcher
 
-async function submitQuery(sparqlUrl, queryStr) {
+    if (credentials) {
+      // if credentials are provided ... 
+      console.log(credentials);
+      // create a custom fetch handler that adds the Basic Auth header with credentials
+      function myfetch(url, options) {
+        const authStr = 'Basic ' + Buffer.from(credentials.username + ':' + credentials.password, 'utf8').toString('base64');
+        if (options.headers instanceof Headers) {
+          options.headers.set('Authorization', authStr);
+        } else { // type Object
+          options.headers['Authorization'] = authStr;
+        }
+        return fetch(url, options);
+      };
+      // and pass it into the new SparqlEndpointFetcher
+      this.sparqlFetcher = new SparqlEndpointFetcher({
+        fetch: myfetch
+      });      
+    } else {
+      this.sparqlFetcher = new SparqlEndpointFetcher();
+    }
 
-  const stream = await sparqlFetcher.fetchBindings(sparqlUrl, queryStr);
+  }
+
+  getQueryType(queryStr) {
+    return this.sparqlFetcher.getQueryType(queryStr);
+  }
   
-  return new Promise((resolve, reject) => {
-    let data = [];
-    stream.on('data', (bindings) => {
-      data.push(bindings);
+  async submitQuery(sparqlUrl, queryStr) {
+  
+    const stream = await this.sparqlFetcher.fetchBindings(sparqlUrl, queryStr);
+    
+    return new Promise((resolve, reject) => {
+      let data = [];
+      stream.on('data', (bindings) => {
+        data.push(bindings);
+      });
+      stream.on('end', () => {
+        resolve(data);
+      });
+      stream.on('error', err => {
+        console.error(err);
+        reject(err);
+      });
     });
-    stream.on('end', () => {
-      resolve(data);
-    });
-    stream.on('error', err => {
-      console.error(err);
-      reject(err);
-    });
-  });
+  }
+  
+  async submitUpdateQuery(sparqlUrl, queryStr) {
+    await this.sparqlFetcher.fetchUpdate(sparqlUrl, queryStr);
+    return 'SUCCESS';
+  }
+
 }
 
-async function submitUpdateQuery(sparqlUrl, queryStr) {
-  // update request doesn't return any data (server response '204 No content')
-  await sparqlFetcher.fetchUpdate(sparqlUrl, queryStr);
-  // return something instead of 'void'
-  return 'SUCCESS';
-}
-
-const client = {
-  getQueryType: getQueryType,
-  submitQuery: submitQuery,
-  submitUpdateQuery: submitUpdateQuery
-};
-export default client;
+export default SparqlClient;

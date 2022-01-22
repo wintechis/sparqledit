@@ -3,7 +3,6 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 
@@ -11,10 +10,9 @@ import Yasqe from '@triply/yasqe';
 import '@triply/yasqe/build/yasqe.min.css';
 import '../../styles/queryform.css';
 
-export default function SparqlViewDetailForm({ sparqlView, sparqlViewUpdateCallback, isLoading, submitQueryCallback }) {
+export default function SparqlViewDetailForm({ sparqlView, sparqlViewUpdateCallback, isLoading, submitQueryCallback, credentialsForm }) {
   const [yasqe, setYasqe] = React.useState(null);
-  const [credentials, setCredentials] = React.useState({ username: '', password: ''});
-
+  
   function handleSubmit(e) {
     e.preventDefault();
     handleYasqeSubmit();
@@ -27,12 +25,6 @@ export default function SparqlViewDetailForm({ sparqlView, sparqlViewUpdateCallb
     sparqlView[sparqlViewKey] = newValue;
     sparqlView['dateCreated'] = Date.now();
     sparqlViewUpdateCallback(sparqlView);
-  }
-  
-  function handleCredsChange(key, newValue) {
-    const newCredentials = {...credentials};
-    newCredentials[key] = newValue;
-    setCredentials(newCredentials);
   }
 
   // init and update YASQE
@@ -139,20 +131,7 @@ export default function SparqlViewDetailForm({ sparqlView, sparqlViewUpdateCallb
               <Form.Label column sm={3}>Basic Auth</Form.Label>
               <Col sm={9}>
                 <Form.Check type="switch" className="form-switch-md" size="lg" id="formBasicAuthSwitch" checked={sparqlView.requiresBasicAuth} onChange={e => handleFormChange('requiresBasicAuth', e.target.checked)} />
-                { sparqlView.requiresBasicAuth && 
-                  <Row>
-                    <Col>
-                      <FloatingLabel controlId="formCredentialsUsername" label="Username *">
-                        <Form.Control type="text" placeholder="username" autoComplete="username" value={credentials.username} onChange={e => handleCredsChange('username', e.target.value)} required />
-                      </FloatingLabel>
-                    </Col>
-                    <Col>
-                      <FloatingLabel controlId="formCredentialsPassword" label="Password *">
-                        <Form.Control type="password" placeholder="password" autoComplete="current-password" value={credentials.password} onChange={e => handleCredsChange('password', e.target.value)} required />
-                      </FloatingLabel>
-                    </Col>
-                  </Row>
-                }
+                { sparqlView.requiresBasicAuth ? credentialsForm : null }
               </Col>
             </Form.Group>
           </Col>

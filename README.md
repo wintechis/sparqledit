@@ -1,11 +1,14 @@
 # SPARQL_edit
 
 v0.2: **L**iteral **EDIT**ing with **SPARQL** (Ledit-SPARQL)
+v0.3: **SPARQLview** manager
+v0.4: **SPARQLview** manager + **Solid** integration
 
 ## SPARQL_edit is a Web app that facilitates the editing of RDF literal values in a Knowledge Graph
 
-SPARQL_edit executes user-defined [SPARQL SELECT query](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/) and shows the results in a table.
-The result table displays literals as editable input fields where the user can simply change the value. 
+SPARQL_edit manages so-called "SPARQL views", simple configuration objects that define how to load a table of values from a Knowledge Graph. For each view, SPARQL_edit allows you to edit literal values in the table.
+
+SPARQL_edit executes user-defined [SPARQL SELECT query](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/) and shows the results in a table. The result table displays literals as editable input fields where the user can simply change the value. 
 When the changes are saved, SPARQL_edit automatically creates a [SPARQL Update query](https://www.w3.org/TR/sparql11-update/) and executes it. 
 There are, however, some restrictions for the generation of the update query. This relates to the _database view update problem_.
 
@@ -145,31 +148,29 @@ Start upload script: `npm run solid-upload`
 ### TODOs
 
 * Algorithm
-  * support named graphs (FROM, FROM NAMED)
+  * advanced support for named graphs (FROM NAMED)
   * support for other [Graph Pattern](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#GraphPattern)
-  * check restrictions (restricted [SPARQL grammar](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#sparqlGrammar) -> paper)
-  * editable object URIs ?
+  * check restrictions (restricted [SPARQL grammar](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#sparqlGrammar))
+  * more features:
+    * editable object URIs
+    * insert missing statements (empty cells when using OPTIONAL)
+    * delete statements
 * React app
-  * endpoints with basic auth (-> own fetcher witch creds)
-  * Refactoring
-    * Provider pattern (React Context API) for SparqlView to simplify passing down the sparqlView object
-    * SparqlViewDetail edit mode
-  * special input components
-    * for different datatypes (e.g. xsd:time)
-    * textbox input for multiline xsd:string
   * form validation
     * SPARQL endpoint, query syntax + restrictions
     * input cell content
+  * load multiple view configs at the same time; save all current views
+  * Refactoring
+  * special input components
+    * for different datatypes (e.g. xsd:time)
   * support for changing the generated update query
 * SOLID app
-  * represent saved queries (+ metadata & endpoint URLs) with RDF
-  * load/store saved queries from/on SOLID POD
-  * alternative if not signed in: load/store from/in BrowserDB
+  * save view RDF to Solid Pod
+  * multiple spedit:SparqlView instances in RDF
 * Additional features/ideas
   * SPARQL_edit for RDF documents using an internal SPARQL engine
     * load local RDF files, SPARQL_edit and save as RDF file
     * GET, SPARQL_edit and PUT LDP documents 
-  * sub-graph visualization
 
 ### Important notes
 
