@@ -11,8 +11,8 @@ export default function QueryResult(props) {
   );
 
   return (
-    <>
-    { displayTable ? <QueryResultTable {...props} /> : <section><p>No results to display</p></section> }
-    </>
+    <section>
+    { displayTable ? <QueryResultTable {...props} /> : <p>No results to display</p> }
+    </section>
   );
 }

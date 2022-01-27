@@ -1,7 +1,9 @@
 # SPARQL_edit
 
 v0.2: **L**iteral **EDIT**ing with **SPARQL** (Ledit-SPARQL)
+
 v0.3: **SPARQLview** manager
+
 v0.4: **SPARQLview** manager + **Solid** integration
 
 ## SPARQL_edit is a Web app that facilitates the editing of RDF literal values in a Knowledge Graph

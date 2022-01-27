@@ -110,7 +110,7 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
   const tableBody = generateTableBody(sparqlResultBindingsForPage, tableColumns);
 
   return (
-    <section>
+    <>
       <TableUtilities resultNumbers={resultNumbers} searchString={searchString} searchChangeCallback={e => setSearchString(e.target.value)} />
       <Table hover size="sm" responsive>
         <thead>
@@ -121,7 +121,7 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
         </tbody>
       </Table>
       <PaginationControl numberOfPages={numberOfPages} page={page} setPage={setPage} />
-    </section>
+    </>
   );
 }
 

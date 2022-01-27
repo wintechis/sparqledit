@@ -6,6 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import Collapse from 'react-bootstrap/Collapse';
 
 import SparqlViewDetailForm from './SparqlViewDetailForm';
 import QueryResult from '../queryresult/QueryResult';
@@ -57,16 +58,21 @@ export default function SparqlViewDetail({ sparqlView, sparqlViewUpdateCallback,
             <dl className="row">
               <dt className="col-sm-2">Authentication</dt>
               <dd className="col-sm-5">{credFormJsx}</dd>
+              <dd className="col-sm-2"><p className="text-secondary">* required fields</p></dd>
             </dl> : null }
           <div className='mb-4'>
-            <Button variant="primary" type="submit" disabled={isLoading} className="px-2">
+            <Button variant="primary" type="submit" disabled={isLoading} className="col-sm-4 px-2">
             { isLoading ? <><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="mx-2" /> loading … </> : <><i className="bi bi-send"></i> load data table </>}
             </Button>
           </div>
         </Form>
       }
       {error ? <ErrorBox error={error} /> : null}
-      {sparqlResult ? <QueryResult refreshTableCallback={executeQuery} sparqlResult={sparqlResult} /> : null}
+      <Collapse in={sparqlResult} mountOnEnter={true} timeout={500}>
+        <div>
+          <QueryResult refreshTableCallback={executeQuery} sparqlResult={sparqlResult} />
+        </div>
+      </Collapse>
     </section>
   );
 }

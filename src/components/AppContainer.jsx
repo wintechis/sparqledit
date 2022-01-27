@@ -25,7 +25,7 @@ function AppFooter() {
     <footer className="footer">
       <hr className="customSeparatorLine" />
       <div className="d-flex justify-content-center">
-        <p className="text-secondary">SPARQL_edit (v{version}) by <a href="mailto:sascha.meckler@iis.fraunhofer.de" className="text-secondary">Sascha Meckler</a></p>
+        <p className="text-secondary">SPARQL_edit (v{version}) by <a href="mailto:sascha.meckler@iis.fraunhofer.de" className="text-secondary">S. Meckler</a></p>
       </div>
     </footer>
   );
