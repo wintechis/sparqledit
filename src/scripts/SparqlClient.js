@@ -7,7 +7,6 @@ class SparqlClient {
 
     if (credentials) {
       // if credentials are provided ... 
-      console.log(credentials);
       // create a custom fetch handler that adds the Basic Auth header with credentials
       function myfetch(url, options) {
         const authStr = 'Basic ' + Buffer.from(credentials.username + ':' + credentials.password, 'utf8').toString('base64');
@@ -25,7 +24,6 @@ class SparqlClient {
     } else {
       this.sparqlFetcher = new SparqlEndpointFetcher();
     }
-
   }
 
   getQueryType(queryStr) {

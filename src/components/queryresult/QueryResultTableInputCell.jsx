@@ -11,7 +11,7 @@ import { buildUpdateQueryForVariable, executeSelectOrUpdateQuery } from '../../s
 export default function QueryResultTableInputCell({ refreshTableCallback, sparqlSubmission, rowBinding, variable }) {
   const [modalShow, setModalShow] = React.useState(false);
 
-  const { value: origValue, inputType, inputStep } = getInputTypeForLiteral(rowBinding[variable]);
+  const { error: datatypeError, value: origValue, inputType, inputStep } = getInputTypeForLiteral(rowBinding[variable]);
   const initialState = initialInputCellState(sparqlSubmission, origValue);
 
   const [inputCellState, dispatch] = React.useReducer(inputCellStateReducer, initialState);
@@ -109,6 +109,7 @@ export default function QueryResultTableInputCell({ refreshTableCallback, sparql
           </div>
         </Collapse>
       </Form>
+      { datatypeError && <p className="text-warning" title={datatypeError.message}><i className="bi bi-exclamation-triangle"></i><small> RDF datatype error</small></p> }
       <QueryResultTableInputCellModal show={modalShow} onHide={() => setModalShow(false)} inputCellState={inputCellState} />
     </td>
   );

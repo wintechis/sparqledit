@@ -5,6 +5,7 @@ export default function getInputTypeForLiteral(binding) {
   let origValue = fromRdf(binding);
   let inputType = 'text'; // default
   let inputStep = null;
+  let error = null;
   switch (typeof(origValue)) {
     case 'string':
       const newlineRegex = /\r?\n|\r/gm;
@@ -22,20 +23,31 @@ export default function getInputTypeForLiteral(binding) {
     case 'object':
       if(origValue instanceof Date) {
         if (bindingDatatype.endsWith('#date')) {
-          origValue = origValue.toISOString().substring(0,10); // only date
-          inputType = 'date';
+          try {
+            origValue = origValue.toISOString().substring(0,10); // only date
+            inputType = 'date';
+          } catch (e) {
+            error = new Error(`Cannot convert '${binding.value}' to xsd:date.`);
+            origValue = binding.value; // fallback to raw value
+          }
         } else if (bindingDatatype.endsWith('#datetime')) {
-          const timezoneOffset = origValue.getTimezoneOffset() * 60000;
-          const correctedTime = new Date(origValue.getTime() - timezoneOffset);
-          origValue = correctedTime.toISOString().substring(0,19); // only date+time
-          inputType = 'datetime-local';
-          inputStep = 1;
+          try {
+            const timezoneOffset = origValue.getTimezoneOffset() * 60000;
+            const correctedTime = new Date(origValue.getTime() - timezoneOffset);
+            origValue = correctedTime.toISOString().substring(0,19); // only date+time
+            inputType = 'datetime-local';
+            inputStep = 1;
+          } catch (e) {
+            error = new Error(`Cannot convert '${binding.value}' to xsd:dateTime.`);
+            origValue = binding.value; // fallback to raw value
+          }
         }
       }
       break;
     default:
   }
   return {
+    error,
     value: origValue,
     inputType,
     inputStep

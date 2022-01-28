@@ -20,7 +20,36 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
   const sparqlResultBindingsRaw = sparqlResult.queryResult;
   const sparqlSubmission = sparqlResult.querySubmission;
 
-  // filter
+  // prepare insert feature
+  // skip if query w/o OPTIONAL; no problem if executed anyway
+  if (sparqlSubmission.queryString.toLowerCase().includes('optional')) { 
+    // collect variables and their datatypes
+    const variableDatatypeMap = new Map();
+    for (let i = 0; i < sparqlResultBindingsRaw.length; i++) {
+      Object.keys(sparqlResultBindingsRaw[i]).forEach(variableName => {
+        const binding = sparqlResultBindingsRaw[i][variableName];
+        if (binding.termType === "Literal" && binding.include === true && binding.datatype) {
+          variableDatatypeMap.set(variableName, binding.datatype);
+        }
+      });
+    }
+    // fill every missing binding with empty literals of the variable's datatype
+    for (let i = 0; i < sparqlResultBindingsRaw.length; i++) {
+      variableDatatypeMap.forEach((variableDatatype, variableName) => {
+        if (!sparqlResultBindingsRaw[i].hasOwnProperty(variableName)) {
+          sparqlResultBindingsRaw[i][variableName] = {
+            termType: 'Literal',
+            datatype: variableDatatype,
+            value: '',
+            include: true,
+            insertMode: true
+          };
+        }
+      });
+    }
+  }
+
+  // filter (text search)
   const sparqlResultBindings = sparqlResultBindingsRaw.filter(binding => Object.values(binding).some(spo => spo.value.toLowerCase().indexOf(searchString.toLowerCase()) > -1));
 
   // sorting
@@ -69,7 +98,7 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
   // collect all columns to display in result table
   const columnNames = new Set(sparqlResultBindings.flatMap(binding => 
     Object.keys(binding).filter(key => binding[key].include === true)));
-  const tableColumns = [...columnNames]; // transform to array
+  const tableColumns = [...columnNames]; // transform Set to Array
   // create table head
   const tableHead = <tr>{tableColumns.map(key => 
     <th key={key}>
@@ -99,6 +128,7 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
       if(binding.termType === 'Literal') { // editable
         const keyForInputCell = `${key}_${Math.random()}`; // always rerender input fields
         const rowBinding = sparqlResultBindingsForPage[rowIndex];
+        // TODO: insert mode -> pass boolean to InputCellComponent
         return <QueryResultTableInputCell key={keyForInputCell} refreshTableCallback={refreshTableCallback} sparqlSubmission={sparqlSubmission} rowBinding={rowBinding} variable={variable} />;
       } else { // not editable
         return <QueryResultTableCell key={key} rawUri={binding.value} prefixUri={shrink(binding.value)} />;
