@@ -47,12 +47,12 @@ async function executeSelectWildcardQuery(sparqlClient, querySubmission) {
   return sparql_results;
 }
 
-export function buildUpdateQueryForVariable(queryStr, variableRow) {
+export function buildUpdateQueryForVariable(queryStr, variableRow, insertOnly) {
   // parse query string into JS object
   const queryObj = buildQueryObject(queryStr);
 
   // SPARQLedit algorithm for creating a SPARQL update query object
-  const updateQueryObj = buildUpdateQueryObject(queryObj, variableRow);
+  const updateQueryObj = buildUpdateQueryObject(queryObj, variableRow, insertOnly);
 
   // return query string from JS query object
   const updateQuery = stringifyQueryObject(updateQueryObj);
@@ -75,7 +75,7 @@ function stringifyQueryObject(queryObject) {
 }
 
 // SPARQLedit algorithm
-function buildUpdateQueryObject(queryObject, bindingsRow) {
+function buildUpdateQueryObject(queryObject, bindingsRow, insertOnly) {
 
   // 0. clone original query object
   const modQuery = JSON.parse(JSON.stringify(queryObject));
@@ -83,7 +83,7 @@ function buildUpdateQueryObject(queryObject, bindingsRow) {
 
   // 1. find bgp line containing the edited variable (literal object)
   let editedVar;
-  let editedVarBgpTriple;
+  let editedVarBgpTripleRef;
 
   // 1.1 find edited variable
   // iterate over query result's variables
@@ -92,6 +92,7 @@ function buildUpdateQueryObject(queryObject, bindingsRow) {
       // save the name and new/edited value
       editedVar = {
         name: variable,
+        datatype: bindingsRow[variable].datatype, // NamedNode
         valueNew: bindingsRow[variable].valueNew
       };
       delete bindingsRow[variable].valueNew; // optional: remove to prevent later confusion
@@ -100,6 +101,12 @@ function buildUpdateQueryObject(queryObject, bindingsRow) {
   if (editedVar === 'undefined') {
     throw new Error('No edited variable found.');    
   }
+
+
+  // TODO
+  // find complete optional bgp with (inserted) variable
+  // copy, replace variables with blank nodes or values
+  // use as insert bgp
 
   // 1.2 collect bgp triples and find bgp triple with edited variable
   const bgpTriples = modQuery.where
@@ -114,7 +121,7 @@ function buildUpdateQueryObject(queryObject, bindingsRow) {
     .filter(triple => triple['object'].termType === 'Variable')
     .forEach(varTriple => {   
       if (varTriple['object'].value === editedVar.name) { // name match
-        editedVarBgpTriple = varTriple; // save the bgp triple reference
+        editedVarBgpTripleRef = varTriple; // save the bgp triple reference
       }
     });
 
@@ -152,7 +159,9 @@ function buildUpdateQueryObject(queryObject, bindingsRow) {
               // match -> replace with cell value from query (from bindingsRow)
               const rdfType = sparqlResultBindings[variable].termType;
               if (rdfType === 'NamedNode' || rdfType === 'Literal') {
-                bgpline[spo] = sparqlResultBindings[variable];
+                if (!sparqlResultBindings[variable].insertMode) { // dont replace with default values added for insert mode
+                  bgpline[spo] = sparqlResultBindings[variable];
+                }
               }
             }
           });
@@ -183,12 +192,16 @@ function buildUpdateQueryObject(queryObject, bindingsRow) {
   updateQueryObject.updates[0].where = modQuery.where; // only bgp, no filter
 
   // 3.3 construct 'insert' and 'delete part'
-  updateQueryObject.updates[0].delete.push({
-    type: 'bgp',
-    triples: [editedVarBgpTriple]
-  });
-  let insertCopy = JSON.parse(JSON.stringify(editedVarBgpTriple));
+  if (!insertOnly) {
+    updateQueryObject.updates[0].delete.push({
+      type: 'bgp',
+      triples: [editedVarBgpTripleRef]
+    });    
+  }
+  let insertCopy = JSON.parse(JSON.stringify(editedVarBgpTripleRef));
+  insertCopy.object.termType = 'Literal';
   insertCopy.object.value = editedVar.valueNew;
+  insertCopy.object.datatype = editedVar.datatype;
   updateQueryObject.updates[0].insert.push({
     type: 'bgp',
     triples: [insertCopy]

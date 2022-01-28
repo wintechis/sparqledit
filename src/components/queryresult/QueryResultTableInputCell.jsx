@@ -1,5 +1,6 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 import Collapse from 'react-bootstrap/Collapse';
 import QueryResultTableInputCellButtons from './QueryResultTableInputCellButtons';
 import QueryResultTableInputCellModal from './QueryResultTableInputCellModal';
@@ -8,9 +9,40 @@ import getInputTypeForLiteral from '../../scripts/component-scripts/inputCellDat
 import { QuerySubmission } from '../../scripts/models/QuerySubmission';
 import { buildUpdateQueryForVariable, executeSelectOrUpdateQuery } from '../../scripts/sparqledit';
 
-export default function QueryResultTableInputCell({ refreshTableCallback, sparqlSubmission, rowBinding, variable }) {
-  const [modalShow, setModalShow] = React.useState(false);
+export default function QueryResultTableInputCell({ refreshTableCallback, sparqlSubmission, rowBinding, variable, insertMode = false }) {
+  const [showInput, setShowInput] = React.useState(false);
+  
+  if (insertMode) {
+    return (
+      <td className="align-middle">
+        { !showInput && <Button variant="link" className="text-secondary" onClick={() => setShowInput(true)}><small>insert missing value</small></Button> }
+        { showInput &&
+          <QueryResultTableInputCellInput  
+            refreshTableCallback={refreshTableCallback} 
+            sparqlSubmission={sparqlSubmission} 
+            rowBinding={rowBinding} 
+            variable={variable} 
+            insertMode={true}
+            insertModeReset={() => setShowInput(false)} /> 
+        }
+      </td>
+    );
+  } else {
+    return (
+      <td className="align-middle">
+        <QueryResultTableInputCellInput 
+          refreshTableCallback={refreshTableCallback} 
+          sparqlSubmission={sparqlSubmission} 
+          rowBinding={rowBinding} 
+          variable={variable} 
+          insertMode={insertMode} />
+      </td>
+    );
+  }
+}
 
+function QueryResultTableInputCellInput({ refreshTableCallback, sparqlSubmission, rowBinding, variable, insertMode, insertModeReset }) {
+  const [modalShow, setModalShow] = React.useState(false);
   const { error: datatypeError, value: origValue, inputType, inputStep } = getInputTypeForLiteral(rowBinding[variable]);
   const initialState = initialInputCellState(sparqlSubmission, origValue);
 
@@ -62,7 +94,7 @@ export default function QueryResultTableInputCell({ refreshTableCallback, sparql
   const handleChange = (newValue) => {
     const buildUpdateQuery = () => {
       rowBinding[variable].valueNew = String(newValue);
-      const updateQu = buildUpdateQueryForVariable(sparqlSubmission.queryString, rowBinding);
+      const updateQu = buildUpdateQueryForVariable(sparqlSubmission.queryString, rowBinding, insertMode);
       return updateQu;
     }
     dispatch({
@@ -73,6 +105,9 @@ export default function QueryResultTableInputCell({ refreshTableCallback, sparql
   };
 
   const handleInputReset = (e) => {
+    if (typeof(insertModeReset) === 'function') { // insert mode reset
+      insertModeReset();
+    }
     inputRef.current.dataset.reset = true; // set flag for useEffect
     dispatch({
       type: "INPUTCELL_RESET"
@@ -89,12 +124,23 @@ export default function QueryResultTableInputCell({ refreshTableCallback, sparql
     }
   }, [inputCellState]);
 
+  React.useEffect( () => {
+    if (insertMode) {
+      const buildUpdateQuery = () => {
+        rowBinding[variable].valueNew = String(inputCellState.origCellValue);
+        const updateQu = buildUpdateQueryForVariable(sparqlSubmission.queryString, rowBinding, insertMode);
+        return updateQu;
+      }
+      dispatch({ type: "INPUTCELL_INSERT_INIT", buildUpdateQuery: buildUpdateQuery });
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const showButtons = (inputCellState.updateQuery || inputCellState.buildingError) ? true : false;
   const anyError = (inputCellState.buildingError || inputCellState.updateError) ? true : false;
-  const inputValue = inputCellState.currentCellValue ? inputCellState.currentCellValue : inputCellState.origCellValue;
+  const inputValue = (inputCellState.currentCellValue || inputCellState.currentCellValue === '') ? inputCellState.currentCellValue : inputCellState.origCellValue;
 
   return (
-    <td className="align-middle">
+    <div>
       <Form onSubmit={e => handleLiteralUpdate(e)}>
         {
           {
@@ -109,8 +155,8 @@ export default function QueryResultTableInputCell({ refreshTableCallback, sparql
           </div>
         </Collapse>
       </Form>
-      { datatypeError && <p className="text-warning" title={datatypeError.message}><i className="bi bi-exclamation-triangle"></i><small> RDF datatype error</small></p> }
+      { datatypeError && <div className="text-warning" title={datatypeError.message}><i className="bi bi-exclamation-triangle"></i><small> RDF datatype incorrect</small></div> }
       <QueryResultTableInputCellModal show={modalShow} onHide={() => setModalShow(false)} inputCellState={inputCellState} />
-    </td>
+    </div>
   );
 }

@@ -36,6 +36,23 @@ export function inputCellStateReducer(state, action) {
       }
       return newState;
 
+    case "INPUTCELL_INSERT_INIT":
+      const newInsertState = { 
+        origSparqlSubmission: state.origSparqlSubmission, 
+        origCellValue: state.origCellValue,
+        currentCellValue: state.origCellValue
+      };
+      try {
+        const updateQu = action.buildUpdateQuery();
+        newInsertState.updateQuery = updateQu;
+      } catch (error) {
+        const buildingError = new BuildingError(
+          `The update query building algorithm failed.\n${error.name} - ${error.message}`);
+        newInsertState.updateQuery = null;
+        newInsertState.buildingError = buildingError;
+      }
+      return newInsertState;
+
     case "INPUTCELL_RESET":
       return { 
         origSparqlSubmission: state.origSparqlSubmission, 

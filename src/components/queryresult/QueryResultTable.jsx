@@ -10,6 +10,8 @@ import prefixes from '@zazuko/rdf-vocabularies/prefixes';
 import { shrink } from '@zazuko/rdf-vocabularies/shrink';
 import { Col, Row } from 'react-bootstrap';
 
+import { getDefaultValueforBinding } from '../../scripts/component-scripts/inputCellDatatypeHelper';
+
 const ROWS_PER_PAGE = 10;
 
 export default function QueryResultTable({ refreshTableCallback, sparqlResult }) {
@@ -24,23 +26,23 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
   // skip if query w/o OPTIONAL; no problem if executed anyway
   if (sparqlSubmission.queryString.toLowerCase().includes('optional')) { 
     // collect variables and their datatypes
-    const variableDatatypeMap = new Map();
+    const variableLiteralMap = new Map();
     for (let i = 0; i < sparqlResultBindingsRaw.length; i++) {
       Object.keys(sparqlResultBindingsRaw[i]).forEach(variableName => {
         const binding = sparqlResultBindingsRaw[i][variableName];
         if (binding.termType === "Literal" && binding.include === true && binding.datatype) {
-          variableDatatypeMap.set(variableName, binding.datatype);
+          variableLiteralMap.set(variableName, binding);
         }
       });
     }
     // fill every missing binding with empty literals of the variable's datatype
     for (let i = 0; i < sparqlResultBindingsRaw.length; i++) {
-      variableDatatypeMap.forEach((variableDatatype, variableName) => {
+      variableLiteralMap.forEach((variableLiteral, variableName) => {
         if (!sparqlResultBindingsRaw[i].hasOwnProperty(variableName)) {
           sparqlResultBindingsRaw[i][variableName] = {
-            termType: 'Literal',
-            datatype: variableDatatype,
-            value: '',
+            termType: variableLiteral.termType, // 'Literal'
+            datatype: variableLiteral.datatype,
+            value: getDefaultValueforBinding(variableLiteral),
             include: true,
             insertMode: true
           };
@@ -128,8 +130,15 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
       if(binding.termType === 'Literal') { // editable
         const keyForInputCell = `${key}_${Math.random()}`; // always rerender input fields
         const rowBinding = sparqlResultBindingsForPage[rowIndex];
-        // TODO: insert mode -> pass boolean to InputCellComponent
-        return <QueryResultTableInputCell key={keyForInputCell} refreshTableCallback={refreshTableCallback} sparqlSubmission={sparqlSubmission} rowBinding={rowBinding} variable={variable} />;
+        return (
+          <QueryResultTableInputCell 
+            key={keyForInputCell} 
+            refreshTableCallback={refreshTableCallback} 
+            sparqlSubmission={sparqlSubmission} 
+            rowBinding={rowBinding} 
+            variable={variable} 
+            insertMode={!!binding.insertMode} />
+        );
       } else { // not editable
         return <QueryResultTableCell key={key} rawUri={binding.value} prefixUri={shrink(binding.value)} />;
       }      
