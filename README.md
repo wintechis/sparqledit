@@ -155,7 +155,6 @@ Start upload script: `npm run solid-upload`
   * check restrictions (restricted [SPARQL grammar](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#sparqlGrammar))
   * more features:
     * editable object URIs
-    * insert missing statements (empty cells when using OPTIONAL)
     * delete statements
 * React app
   * form validation
