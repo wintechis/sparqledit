@@ -20,7 +20,7 @@
 
 <patient/2> a schema:Patient, foaf:Person ;
   foaf:name "Emily Example" ;
-  schema:birthDate "1980-01-05"^^xsd:date ;
+  schema:birthDate "May 1st 1980"^^xsd:date ;
   schema:weight [
     a schema:QuantitativeValue ;
     schema:value "62"^^xsd:decimal ;
@@ -60,9 +60,4 @@
   foaf:name "Max Power" ;
   foaf:familyName "Simpson" ;
   foaf:mbox <mailto:home.j@simpson.com> ;
-  schema:weight [
-    a schema:QuantitativeValue ;
-    schema:value "125"^^xsd:decimal ;
-    schema:unitCode om2:kilogram
-  ] ;
   schema:memberOf <medicaloffice/drhibbert> .

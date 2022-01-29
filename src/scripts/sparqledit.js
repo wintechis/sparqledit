@@ -102,12 +102,6 @@ function buildUpdateQueryObject(queryObject, bindingsRow, insertOnly) {
     throw new Error('No edited variable found.');    
   }
 
-
-  // TODO
-  // find complete optional bgp with (inserted) variable
-  // copy, replace variables with blank nodes or values
-  // use as insert bgp
-
   // 1.2 collect bgp triples and find bgp triple with edited variable
   const bgpTriples = modQuery.where
     .filter(whereObj => whereObj.type === 'bgp')
@@ -124,7 +118,23 @@ function buildUpdateQueryObject(queryObject, bindingsRow, insertOnly) {
         editedVarBgpTripleRef = varTriple; // save the bgp triple reference
       }
     });
-
+  
+  // 1.3 insert mode - find complete optional bgp with (inserted) variable
+  let editedOptionalBgpRef;
+  if (insertOnly) {
+    modQuery.where
+      .filter(whereObj => whereObj.type === 'optional')
+      .forEach(whereObj => {
+        const triples = whereObj.patterns[0].triples; // TODO: more than one patterns
+        const foundMatch = triples
+          .map(triple => triple['object'])
+          .filter(tripleObj => tripleObj.termType === 'Variable')
+          .some(tripleObj => tripleObj.value === editedVar.name);
+        if (foundMatch) {
+          editedOptionalBgpRef = whereObj.patterns[0];
+        }
+      });
+  }
 
   // 2. replace all (named) variables in bgp triples with NamedNodes or Literals from query results 
   for (let i = modQuery.where.length - 1; i >= 0; i--) {
@@ -189,23 +199,48 @@ function buildUpdateQueryObject(queryObject, bindingsRow, insertOnly) {
   updateQueryObject.prefixes = modQuery.prefixes;
 
   // 3.2 copy modified 'where' part
-  updateQueryObject.updates[0].where = modQuery.where; // only bgp, no filter
+  updateQueryObject.updates[0].where = insertOnly ? 
+    modQuery.where.filter(whereObj => whereObj.type === 'bgp') : // only normal bgp
+    modQuery.where; // bgp + optional
 
   // 3.3 construct 'insert' and 'delete part'
-  if (!insertOnly) {
+  if (insertOnly) {
+    // insert missing value
+    let insertTriplesCopy = JSON.parse(JSON.stringify(editedOptionalBgpRef.triples));
+    insertTriplesCopy.forEach(triple => {
+      // insert new value
+      const tripleObj = triple['object'];
+      if (tripleObj.termType === 'Variable' && tripleObj.value === editedVar.name) {
+        tripleObj.termType = 'Literal';
+        tripleObj.value = editedVar.valueNew;
+        tripleObj.datatype = editedVar.datatype;
+      }
+      // variable -> blank node
+      for (const spo of ['subject', 'predicate', 'object']) {
+        if (triple[spo].termType === 'Variable') {
+          triple[spo].termType = 'BlankNode';
+        }
+      }
+    });
+    updateQueryObject.updates[0].insert.push({
+      type: 'bgp',
+      triples: insertTriplesCopy
+    });
+  } else {
+    // normal value update
     updateQueryObject.updates[0].delete.push({
       type: 'bgp',
       triples: [editedVarBgpTripleRef]
     });    
+    let insertCopy = JSON.parse(JSON.stringify(editedVarBgpTripleRef));
+    insertCopy.object.termType = 'Literal';
+    insertCopy.object.value = editedVar.valueNew;
+    insertCopy.object.datatype = editedVar.datatype;
+    updateQueryObject.updates[0].insert.push({
+      type: 'bgp',
+      triples: [insertCopy]
+    });
   }
-  let insertCopy = JSON.parse(JSON.stringify(editedVarBgpTripleRef));
-  insertCopy.object.termType = 'Literal';
-  insertCopy.object.value = editedVar.valueNew;
-  insertCopy.object.datatype = editedVar.datatype;
-  updateQueryObject.updates[0].insert.push({
-    type: 'bgp',
-    triples: [insertCopy]
-  });
 
   // 3.4 copy default graph name
   if (modQuery?.from?.default[0]) { // if FROM present

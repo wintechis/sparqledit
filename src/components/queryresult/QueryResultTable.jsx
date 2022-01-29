@@ -1,16 +1,20 @@
 import React from 'react';
+
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 import Table from 'react-bootstrap/Table';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
 import Pagination from 'react-bootstrap/Pagination';
+
 import QueryResultTableCell from './QueryResultTableCell';
 import QueryResultTableInputCell from './QueryResultTableInputCell';
+
 import prefixes from '@zazuko/rdf-vocabularies/prefixes';
 import { shrink } from '@zazuko/rdf-vocabularies/shrink';
-import { Col, Row } from 'react-bootstrap';
 
-import { getDefaultValueforBinding } from '../../scripts/component-scripts/inputCellDatatypeHelper';
+import { addInsertModeLiteralsToQueryResultBindings } from '../../scripts/component-scripts/resultTableHelper';
 
 const ROWS_PER_PAGE = 10;
 
@@ -23,32 +27,9 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
   const sparqlSubmission = sparqlResult.querySubmission;
 
   // prepare insert feature
-  // skip if query w/o OPTIONAL; no problem if executed anyway
   if (sparqlSubmission.queryString.toLowerCase().includes('optional')) { 
-    // collect variables and their datatypes
-    const variableLiteralMap = new Map();
-    for (let i = 0; i < sparqlResultBindingsRaw.length; i++) {
-      Object.keys(sparqlResultBindingsRaw[i]).forEach(variableName => {
-        const binding = sparqlResultBindingsRaw[i][variableName];
-        if (binding.termType === "Literal" && binding.include === true && binding.datatype) {
-          variableLiteralMap.set(variableName, binding);
-        }
-      });
-    }
-    // fill every missing binding with empty literals of the variable's datatype
-    for (let i = 0; i < sparqlResultBindingsRaw.length; i++) {
-      variableLiteralMap.forEach((variableLiteral, variableName) => {
-        if (!sparqlResultBindingsRaw[i].hasOwnProperty(variableName)) {
-          sparqlResultBindingsRaw[i][variableName] = {
-            termType: variableLiteral.termType, // 'Literal'
-            datatype: variableLiteral.datatype,
-            value: getDefaultValueforBinding(variableLiteral),
-            include: true,
-            insertMode: true
-          };
-        }
-      });
-    }
+    // skip if query w/o OPTIONAL; no problem if executed anyway
+    addInsertModeLiteralsToQueryResultBindings(sparqlResultBindingsRaw);
   }
 
   // filter (text search)

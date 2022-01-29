@@ -15,7 +15,11 @@ export default function QueryResultTableInputCell({ refreshTableCallback, sparql
   if (insertMode) {
     return (
       <td className="align-middle">
-        { !showInput && <Button variant="link" className="text-secondary" onClick={() => setShowInput(true)}><small>insert missing value</small></Button> }
+        { !showInput && 
+          <Button variant="link" className="text-secondary" onClick={() => setShowInput(true)}>
+            <small>insert missing value</small>
+          </Button>
+        }
         { showInput &&
           <QueryResultTableInputCellInput  
             refreshTableCallback={refreshTableCallback} 
@@ -124,6 +128,7 @@ function QueryResultTableInputCellInput({ refreshTableCallback, sparqlSubmission
     }
   }, [inputCellState]);
 
+  // show buttons from start without value change
   React.useEffect( () => {
     if (insertMode) {
       const buildUpdateQuery = () => {
@@ -132,6 +137,7 @@ function QueryResultTableInputCellInput({ refreshTableCallback, sparqlSubmission
         return updateQu;
       }
       dispatch({ type: "INPUTCELL_INSERT_INIT", buildUpdateQuery: buildUpdateQuery });
+      inputRef.current.dataset.reset = true; // set flag for focus
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

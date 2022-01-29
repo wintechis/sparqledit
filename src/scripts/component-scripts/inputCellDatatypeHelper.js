@@ -14,7 +14,12 @@ export default function getInputTypeForLiteral(binding) {
       }
       break;
     case 'number':
-      inputType = 'number';
+      if (isNaN(origValue)) {
+        error = new Error(`Cannot convert '${binding.value}' to a number.`);
+        origValue = binding.value; // fallback to raw value
+      } else {
+        inputType = 'number';
+      }
       break;
     case 'boolean':
       inputType = 'checkbox';
@@ -52,32 +57,4 @@ export default function getInputTypeForLiteral(binding) {
     inputType,
     inputStep
   };
-}
-
-export function getDefaultValueforBinding(binding) {
-  let defaultValue = '';
-  const bindingDatatype = binding.datatype.value.toLowerCase();
-  let castedValue = fromRdf(binding);
-  switch (typeof(castedValue)) {
-    case 'string':
-      defaultValue = '';
-      break;
-    case 'number':
-      defaultValue = 0.0;
-      break;
-    case 'boolean':
-      defaultValue = false;
-      break;
-    case 'object':
-      if(castedValue instanceof Date) {
-        if (bindingDatatype.endsWith('#date')) {
-          defaultValue = '1970-01-01';
-        } else if (bindingDatatype.endsWith('#datetime')) {
-          defaultValue = '1970-01-01T00:00:00';
-        }
-      }
-      break;
-    default:
-  }
-  return defaultValue;
 }
