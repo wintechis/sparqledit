@@ -18,6 +18,7 @@ export function addInsertModeLiteralsToQueryResultBindings(sparqlResultBindingsR
         sparqlResultBindingsRaw[i][variableName] = {
           termType: variableLiteral.termType, // 'Literal'
           datatype: variableLiteral.datatype,
+          language: variableLiteral.language,
           value: getDefaultValueforBinding(variableLiteral),
           include: true,
           insertMode: true

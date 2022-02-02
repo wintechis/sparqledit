@@ -34,6 +34,8 @@ SPARQL_edit supports simple ['SELECT' queries](https://www.w3.org/TR/2013/REC-sp
 
 ### Usage tips
 
+There are performance issues when loading more than 100000 results. Use the SPARQL LIMIT sequence modifier (e.g. 'LIMIT 1000') to limit the number of result rows.
+
 Shortcuts for the SPARQL editor
 | | |
 |---|---|
@@ -157,6 +159,8 @@ Start upload script: `npm run solid-upload`
     * editable object URIs
     * delete statements
 * React app
+  * draggable modals
+  * support for changing the generated update query
   * form validation
     * SPARQL endpoint, query syntax + restrictions
     * input cell content
@@ -164,7 +168,7 @@ Start upload script: `npm run solid-upload`
   * Refactoring
   * special input components
     * for different datatypes (e.g. xsd:time)
-  * support for changing the generated update query
+  * save result table as CSV
 * SOLID app
   * save view RDF to Solid Pod
   * multiple spedit:SparqlView instances in RDF

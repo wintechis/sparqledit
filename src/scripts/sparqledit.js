@@ -93,6 +93,7 @@ function buildUpdateQueryObject(queryObject, bindingsRow, insertOnly) {
       editedVar = {
         name: variable,
         datatype: bindingsRow[variable].datatype, // NamedNode
+        language: bindingsRow[variable].language, // lang string, e.g. 'en'
         valueNew: bindingsRow[variable].valueNew
       };
       delete bindingsRow[variable].valueNew; // optional: remove to prevent later confusion
@@ -109,6 +110,7 @@ function buildUpdateQueryObject(queryObject, bindingsRow, insertOnly) {
   const optTriples = modQuery.where
     .filter(whereObj => whereObj.type === 'optional')
     .flatMap(optObj => optObj.patterns)
+    .filter(patternsObj => patternsObj.type === 'bgp')
     .flatMap(bgpObj => bgpObj.triples);
   // iterate over bgp triples and compare variable names
   bgpTriples.concat(optTriples)
@@ -119,21 +121,30 @@ function buildUpdateQueryObject(queryObject, bindingsRow, insertOnly) {
       }
     });
   
-  // 1.3 insert mode - find complete optional bgp with (inserted) variable
-  let editedOptionalBgpRef;
-  if (insertOnly) {
-    modQuery.where
-      .filter(whereObj => whereObj.type === 'optional')
-      .forEach(whereObj => {
-        const triples = whereObj.patterns[0].triples; // TODO: more than one patterns
-        const foundMatch = triples
-          .map(triple => triple['object'])
-          .filter(tripleObj => tripleObj.termType === 'Variable')
-          .some(tripleObj => tripleObj.value === editedVar.name);
-        if (foundMatch) {
-          editedOptionalBgpRef = whereObj.patterns[0];
-        }
-      });
+  // 1.3 check if edited/inserted variable in optional bgp
+  //let editedOptionalRef;
+  let editedOptionalTriples;
+  modQuery.where
+    .filter(whereObj => whereObj.type === 'optional')
+    .forEach(whereObj => {
+      const triples = whereObj.patterns
+        .filter(patternsObj => patternsObj.type === 'bgp')
+        .flatMap(bgpObj => bgpObj.triples);
+      const foundMatch = triples
+        .map(triple => triple['object'])
+        .filter(tripleObj => tripleObj.termType === 'Variable')
+        .some(tripleObj => tripleObj.value === editedVar.name);
+      if (foundMatch) {
+        editedOptionalTriples = triples;
+        //editedOptionalRef = whereObj;
+      }
+    });
+  // if NOT insert mode: copy optional bgp as normal bgp to query's where array
+  if (!insertOnly && editedOptionalTriples) {
+    modQuery.where.push({
+      type: 'bgp',
+      triples: editedOptionalTriples
+    });
   }
 
   // 2. replace all (named) variables in bgp triples with NamedNodes or Literals from query results 
@@ -144,15 +155,9 @@ function buildUpdateQueryObject(queryObject, bindingsRow, insertOnly) {
       // replace all (named) variables
       replaceAllNamedVariables(whereElement.triples, bindingsRow);
     }
-    // OPTIONAL
-    else if (whereElement.type === 'optional') {
-      // replace all (named) variables
-      // only first sub-level; TODO: nested OPTIONAL
-      replaceAllNamedVariables(whereElement.patterns[0].triples, bindingsRow);
-    } 
-    // FILTER, ...
+    // OPTIONAL, FILTER, ...
     else {
-      modQuery.where.splice(i, 1); // remove unsupported where elements, e.g. filter 
+      modQuery.where.splice(i, 1); // remove unnecessary and unsupported where elements, e.g. filter 
     }
   }
   //console.dir(modQuery, { depth: null })
@@ -199,14 +204,13 @@ function buildUpdateQueryObject(queryObject, bindingsRow, insertOnly) {
   updateQueryObject.prefixes = modQuery.prefixes;
 
   // 3.2 copy modified 'where' part
-  updateQueryObject.updates[0].where = insertOnly ? 
-    modQuery.where.filter(whereObj => whereObj.type === 'bgp') : // only normal bgp
-    modQuery.where; // bgp + optional
+  updateQueryObject.updates[0].where = 
+    modQuery.where.filter(whereObj => whereObj.type === 'bgp');
 
   // 3.3 construct 'insert' and 'delete part'
   if (insertOnly) {
     // insert missing value
-    let insertTriplesCopy = JSON.parse(JSON.stringify(editedOptionalBgpRef.triples));
+    let insertTriplesCopy = JSON.parse(JSON.stringify(editedOptionalTriples));
     insertTriplesCopy.forEach(triple => {
       // insert new value
       const tripleObj = triple['object'];
@@ -214,11 +218,27 @@ function buildUpdateQueryObject(queryObject, bindingsRow, insertOnly) {
         tripleObj.termType = 'Literal';
         tripleObj.value = editedVar.valueNew;
         tripleObj.datatype = editedVar.datatype;
+        tripleObj.language = editedVar.language;
       }
-      // variable -> blank node
+      // variable -> value
       for (const spo of ['subject', 'predicate', 'object']) {
         if (triple[spo].termType === 'Variable') {
-          triple[spo].termType = 'BlankNode';
+          // iterate over variables list
+          Object.keys(bindingsRow).forEach(variable => {
+            if (triple[spo].value === variable) {
+              // match -> replace with cell value from query (from bindingsRow)
+              const rdfType = bindingsRow[variable].termType;
+              if (rdfType === 'NamedNode' || rdfType === 'Literal') {
+                if (!bindingsRow[variable].insertMode) { // dont replace with default values added for insert mode
+                  triple[spo] = bindingsRow[variable];
+                }
+              }
+            }
+          });
+          // if still variable = no value found in bindingRow -> set to blankNode
+          if (triple[spo].termType === 'Variable') { 
+            triple[spo].termType = 'BlankNode';
+          }
         }
       }
     });
