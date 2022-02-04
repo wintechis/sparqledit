@@ -12,7 +12,7 @@ async function generateSparqlViewFromSolidFile(file) {
   return newSparqlView;
 }
 
-export default function useSparqlViewFromSolid({ fileURL }) {
+export default function useSparqlViewFromSolid(fileURL) {
   const fetchState = useFileFromSolid(fileURL);
   const initialState = {
     loading: fetchState.loading,

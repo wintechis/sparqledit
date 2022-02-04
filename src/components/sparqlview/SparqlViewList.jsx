@@ -21,6 +21,7 @@ export default function SparqlViewList() {
     SparqlViewFactory.createFrom('advanced')
   ];
   const [views, setViews] = useLocalStorage('sparqlViews', initialViews);
+  const viewCount = views.filter(view => view.deleted !== true).length;
   const initialActiveViewId = views[0]?.id || ''; // first view's id
   const [activeViewId, setActiveViewId] = React.useState(initialActiveViewId);
 
@@ -93,7 +94,7 @@ export default function SparqlViewList() {
     <section>
       <Row className="justify-content-center mb-2">
         <Col lg="6">
-          <h3 className="text-center">{views.length + ' SPARQL views'}</h3>
+          <h3 className="text-center">{viewCount + ' SPARQL views'}</h3>
           <p className="infoText px-2">
             A "SPARQL view" is a simple configuration object. It defines how to load a table of values from a Knowledge Graph. SPARQL_edit allows you to edit literal values in the table.
           </p>

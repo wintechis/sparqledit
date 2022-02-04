@@ -11,7 +11,7 @@ import useLocalStorage from '../../hooks/useLocalStorage';
 
 export default function SparqlViewListAddControlsSolidModal({ show, onHide, addNewSparqlViews }) {
   const [inputfileUrl, setInputFileUrl] = useLocalStorage('solidFileUrl', '');
-  const [submittedFileUrl, setSubmittedFileUrl] = React.useState({});
+  const [submittedFileUrl, setSubmittedFileUrl] = React.useState('');
   const { loading, error, view } = useSparqlViewFromSolid(submittedFileUrl);
 
   // add new view to list and close modal if successful
@@ -24,7 +24,10 @@ export default function SparqlViewListAddControlsSolidModal({ show, onHide, addN
 
   async function submitHandler(e) {
     e.preventDefault();
-    setSubmittedFileUrl({ fileURL: inputfileUrl });
+    if (submittedFileUrl === inputfileUrl) {
+      setSubmittedFileUrl(''); // reset url
+    }
+    setTimeout(() => setSubmittedFileUrl(inputfileUrl),30);
   }
 
   return (

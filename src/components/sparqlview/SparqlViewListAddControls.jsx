@@ -72,7 +72,7 @@ export default function SparqlViewListAddControls({ addNewSparqlViews }) {
           <p className="text-wrap mb-1 fw-bolder">load config from Solid Pod</p>
         </Button>
       </ButtonGroup>
-      <SparqlViewListAddControlsSolidModal show={solidModalShow} onHide={() => setSolidModalShow(false)} addNewSparqlViews={addNewSparqlViews} />
+      <SparqlViewListAddControlsSolidModal key={Math.random()} show={solidModalShow} onHide={() => setSolidModalShow(false)} addNewSparqlViews={addNewSparqlViews} />
       <SparqlViewListAddControlsErrorModal show={fileError} onHide={() => setFileError(null)} error={fileError} />
     </>
   );
