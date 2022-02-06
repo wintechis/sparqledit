@@ -9,11 +9,11 @@ export class QuerySubmission {
   endpointUpdate: string;
   queryString: string;
   credentials: Credentials;
-  getQueryObject(): SparqlQuery;
 }
 
 export class QuerySubmissionResult {
-  constructor(querySubmission: QuerySubmission, queryResult: Array<IBindings>|string);
+  constructor(querySubmission: QuerySubmission, queryResult: Array<IBindings>|string, queryObject: SparqlQuery);
   querySubmission: QuerySubmission;
   queryResult: Array<IBindings>|string;
+  queryObject: SparqlQuery;
 }

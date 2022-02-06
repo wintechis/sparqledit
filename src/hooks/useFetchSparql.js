@@ -1,7 +1,6 @@
 import React from 'react';
 import { QueryError } from '../scripts/CustomErrors';
 import { QuerySubmissionResult } from '../scripts/models/QuerySubmission';
-import { executeSelectOrUpdateQuery } from '../scripts/sparqledit';
 
 const defaultInitialFetchState = {
   loading: false,
@@ -29,11 +28,16 @@ function useFetchSparql(querySubmission, initialFetchState = defaultInitialFetch
     async function fetchResult() {
       dispatch({ type: "FETCH_START" });
       try {
-        const queryResult = await executeSelectOrUpdateQuery(querySubmission);
+        // dyn. load sparqledit module
+        const SparqlEdit = await import('../scripts/sparqledit');
+        // execute query, build SPARQL JS object
+        const queryResult = await SparqlEdit.executeSelectOrUpdateQuery(querySubmission);
         console.log("QueryResult", queryResult);
+        const queryObj = SparqlEdit.buildQueryObject(querySubmission.queryString);
+        // success: return Result object
         dispatch({
           type: "FETCH_SUCCESS",
-          result: new QuerySubmissionResult(querySubmission, queryResult)
+          result: new QuerySubmissionResult(querySubmission, queryResult, queryObj)
         });
       } catch (error) {
         const customError = new QueryError(

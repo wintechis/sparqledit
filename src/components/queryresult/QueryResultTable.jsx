@@ -75,8 +75,9 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
   }
 
   // add prefixes from query (overrides default prefixes)
-  const queryObj = sparqlSubmission.getQueryObject();
-  Object.entries(queryObj.prefixes).forEach(([pref, uri]) => prefixes[pref] = uri);
+  console.log(sparqlResult.queryObject)
+  Object.entries(sparqlResult.queryObject.prefixes)
+    .forEach(([pref, uri]) => prefixes[pref] = uri);
 
   // collect all columns to display in result table
   const columnNames = new Set(sparqlResultBindings.flatMap(binding => 
