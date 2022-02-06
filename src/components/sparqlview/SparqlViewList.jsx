@@ -1,6 +1,6 @@
 import React from 'react';
 
-import '../../styles/sparqlviewlist.css';
+import '../../styles/component-styles/SparqlViewList.css';
 
 import Card from 'react-bootstrap/Card';
 import Stack from 'react-bootstrap/Stack';
@@ -30,16 +30,16 @@ export default function SparqlViewList() {
       setViews([...views]);
     }
   }
-
-  function handleActiveCardChange(id) {
-    setActiveViewId(id);
-  }
-
+  
   function addNewSparqlViews(viewsToAdd) {
     if (viewsToAdd && viewsToAdd.length > 0) {
       setViews([...views, ...viewsToAdd]);
       setActiveViewId(viewsToAdd[0].id);
     }
+  }
+
+  function handleActiveCardChange(id) {
+    setActiveViewId(id);
   }
 
   // delete, restore, clean deleted views
@@ -90,23 +90,35 @@ export default function SparqlViewList() {
     element.remove(); // cleanup
   }
 
+  // bundle all card operations
+  const cardHandler = {
+    activate: handleActiveCardChange,
+    delete: handleDeleteCard,
+    restore: handleRestoreDeletedCard,
+    clone: handleCloneCard,
+    save: handleSaveCard
+  }
+
   return (
     <section>
       <Row className="justify-content-center mb-2">
         <Col lg="6">
           <h3 className="text-center">{viewCount + ' SPARQL views'}</h3>
           <p className="infoText px-2">
-            A "SPARQL view" is a simple configuration object. It defines how to load a table of values from a Knowledge Graph. SPARQL_edit allows you to edit literal values in the table.
+            {
+              'A "SPARQL view" is a simple configuration object. ' +
+              'It defines how to load a table of values from a Knowledge Graph. ' +
+              'SPARQL_edit allows you to edit literal values in the table.'
+            }
           </p>
         </Col>
       </Row>
       <Stack gap={4}>
         {views.map( view => (
-          view.deleted ? <SparqlViewListItemDeleted key={view.id} view={view} restoreDeletedView={handleRestoreDeletedCard} /> :
-          view.id === activeViewId ?
-            <SparqlViewListActive key={view.id} sparqlView={view} sparqlViewUpdateCallback={sparqlViewUpdate} 
-              handleDeleteCard={handleDeleteCard} handleCloneCard={handleCloneCard} handleSaveCard={handleSaveCard} /> :
-            <SparqlViewListItem key={view.id} view={view} handleActiveCardChange={handleActiveCardChange} />
+          view.deleted ? <SparqlViewListItemDeleted key={view.id} view={view} cardHandler={cardHandler} /> :
+            view.id === activeViewId ?
+              <SparqlViewListActive key={view.id} view={view} viewUpdateCallback={sparqlViewUpdate} cardHandler={cardHandler} /> :
+              <SparqlViewListItem key={view.id} view={view} cardHandler={cardHandler} />
         ) )}
         <SparqlViewListAddControls key="addControlsKey" addNewSparqlViews={addNewSparqlViews} />
       </Stack>
@@ -114,9 +126,9 @@ export default function SparqlViewList() {
   );
 }
 
-function SparqlViewListItem({ view, handleActiveCardChange }) {
+function SparqlViewListItem({ view, cardHandler }) {
   return (
-    <Card key={view.id} onClick={() => handleActiveCardChange( view.id )} className="shadow-sm mx-4">
+    <Card key={view.id} onClick={() => cardHandler.activate(view.id)} className="shadow-sm mx-4">
       <Card.Header><h5>{view.name}</h5></Card.Header>
       <Card.Body>
         <Card.Text>{view.description}</Card.Text>
@@ -125,11 +137,11 @@ function SparqlViewListItem({ view, handleActiveCardChange }) {
   );
 }
 
-function SparqlViewListItemDeleted({ view, restoreDeletedView }) {
+function SparqlViewListItemDeleted({ view, cardHandler }) {
   return (
     <div className="d-flex justify-content-center align-items-center">
       <span>View "{view.name}" deleted.</span>
-      <Button variant='link' onClick={e => restoreDeletedView(view)}>Restore this view?</Button>
+      <Button variant='link' onClick={e => cardHandler.restore(view)}>Restore this view?</Button>
     </div>
   );
 }

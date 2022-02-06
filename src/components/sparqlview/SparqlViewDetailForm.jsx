@@ -1,14 +1,15 @@
 import React from 'react';
 
+import '../../styles/component-styles/SparqlViewDetailForm.css';
+
+import Yasqe from '@triply/yasqe';
+import '@triply/yasqe/build/yasqe.min.css';
+
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
-
-import Yasqe from '@triply/yasqe';
-import '@triply/yasqe/build/yasqe.min.css';
-import '../../styles/queryform.css';
 
 export default function SparqlViewDetailForm({ sparqlView, sparqlViewUpdateCallback, isLoading, submitQueryCallback, credentialsForm }) {
   const [yasqe, setYasqe] = React.useState(null);

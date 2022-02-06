@@ -1,9 +1,12 @@
 import React from 'react';
+
+import '../../styles/component-styles/QueryResultTableInputCellModal.css';
+
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Alert from 'react-bootstrap/Alert';
+
 import possibleErrorCauses from '../../scripts/component-scripts/possibleErrorCauses';
-import '../../styles/inputcellmodal.css';
 
 const TEXTAREA_ROWS_MIN = 4;
 const TEXTAREA_ROWS_MAX = 12;

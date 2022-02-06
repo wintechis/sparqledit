@@ -13,11 +13,7 @@
 	text-align-last: center;
 }
 
-/* bootstrap icon margins */
-.bi {
-  margin-right: 3px;
-  margin-left: 3px;
-}
+/* bootstrap icon margins for view card tabs */
 .bi-cardTab {
   margin-right: 5px;
   margin-left: 5px;

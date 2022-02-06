@@ -8,3 +8,9 @@ body {
   margin-left: 30%;
   margin-right: 30%;
 }
+
+/* bootstrap icon margins */
+.bi {
+  margin-right: 3px;
+  margin-left: 3px;
+}

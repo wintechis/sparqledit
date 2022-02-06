@@ -1,12 +1,13 @@
 import React from 'react';
+
+import '../../styles/component-styles/AppNavbarSolidProfile.css';
+
 import { 
   CombinedDataProvider, 
   Image, Text 
 } from "@inrupt/solid-ui-react";
 
-import { RDF_NAMESPACES } from '../scripts/models/RdfNamespaces';
-
-import '../styles/solidprofile.css';
+import { RDF_NAMESPACES } from '../../scripts/models/RdfNamespaces';
 
 export default function AppNavbarSolidProfile({ webId }) {
   const imageProperty = RDF_NAMESPACES.vcard + 'hasPhoto';
