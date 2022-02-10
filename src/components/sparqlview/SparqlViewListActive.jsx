@@ -4,10 +4,16 @@ import Card from 'react-bootstrap/Card';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
+import { useSession } from '@inrupt/solid-ui-react';
+
 import SparqlViewDetail from './SparqlViewDetail';
+import SparqlViewListActiveSolidModal from './SparqlViewListActiveSolidModal';
 
 export default function SparqlViewListActive({ view, viewUpdateCallback, cardHandler }) {
   const [activeTabKey, setActiveTabKey] = React.useState('view');
+  const [solidModalShow, setSolidModalShow] = React.useState(false);
+  const { session } = useSession();
+  const isLoggedIn = session.info.isLoggedIn;
 
   return (
     <Card className="shadow">
@@ -22,12 +28,17 @@ export default function SparqlViewListActive({ view, viewUpdateCallback, cardHan
             <Nav.Link eventKey="edit"><i className="bi bi-cardTab bi-pencil-square"></i> Edit</Nav.Link>
           </Nav.Item>
           <NavDropdown title={<><i className="bi bi-cardTab bi-wrench"></i> Manage</>} id="nav-dropdown" align="end" className="viewCardTab">
-            <NavDropdown.Item onClick={() => cardHandler.clone(view)}>Duplicate view</NavDropdown.Item>
-            <NavDropdown.Item onClick={() => cardHandler.save(view)}>Save view config</NavDropdown.Item>
+            <NavDropdown.Item onClick={() => cardHandler.clone(view)}><i className="bi bi-front"></i> Duplicate view</NavDropdown.Item>
+            <NavDropdown.Item onClick={() => cardHandler.save(view)}><i className="bi bi-file-earmark-arrow-down"></i> Save config file</NavDropdown.Item>
+            <NavDropdown.Item onClick={() => setSolidModalShow(true)} 
+              disabled={!isLoggedIn} title={!isLoggedIn ? 'login with Solid to use this feature' : ''} style={{pointerEvents: 'auto'}}>
+              <img alt="Solid" src="solid_bw.svg" height="20" style={!isLoggedIn ? {opacity:0.33} : {}} />  Upload to Pod
+            </NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item className="text-danger" onClick={() => cardHandler.delete(view)}><i className="bi bi-trash"></i> Delete</NavDropdown.Item>
           </NavDropdown>
         </Nav>
+        <SparqlViewListActiveSolidModal key={Math.random()} show={solidModalShow} onHide={() => setSolidModalShow(false)} sparqlView={view} />
         </div>
       </Card.Header>
       <Card.Body>

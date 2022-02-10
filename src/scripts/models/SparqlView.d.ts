@@ -19,7 +19,7 @@ export default class SparqlView {
   updateURL: string;
   query: string;
   requiresBasicAuth: boolean;
-  serializeToTurtle(): string;
-  serializeToJsonld(): string;
+  serializeToTurtle(): Promise<string>;
+  serializeToJsonld(): Promise<string>;
 }
 
