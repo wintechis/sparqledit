@@ -159,7 +159,6 @@ Start upload script: `npm run solid-upload`
     * editable object URIs
     * delete statements
 * React app
-  * [draggable modals](https://www.npmjs.com/package/react-draggable)
   * form validation
     * SPARQL endpoint, query syntax + restrictions
     * input cell content
@@ -169,7 +168,6 @@ Start upload script: `npm run solid-upload`
   * support for changing the generated update query
   * save result table as CSV
 * SOLID app
-  * ~~save view RDF to Solid Pod~~ (TODO: error hints)
   * multiple spedit:SparqlView instances in RDF
 * Additional features/ideas
   * SPARQL_edit for RDF documents using an internal SPARQL engine

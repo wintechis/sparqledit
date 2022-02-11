@@ -103,7 +103,7 @@ export default function SparqlViewList() {
     <section>
       <Row className="justify-content-center mb-2">
         <Col lg="6">
-          <h3 className="text-center">{viewCount + ' SPARQL views'}</h3>
+          <h3 className="text-center">{viewCount === 1 ? '1 SPARQL view' : `${viewCount} SPARQL views`}</h3>
           <p className="infoText px-2">
             {
               'A "SPARQL view" is a simple configuration object. ' +

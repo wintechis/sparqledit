@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
 
+import ErrorBox from '../common/ErrorBox';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { createDowloadFileName } from '../../scripts/utilities';
 import { SolidError } from '../../scripts/CustomErrors';
@@ -66,35 +67,28 @@ export default function SparqlViewListActiveSolidModal({ show, onHide, sparqlVie
         <p>Please insert the <strong>URL to a Solid container</strong> for which you have 'write' permissions:</p>
         <Form onSubmit={submitHandler}>
           <FormControl type="url" className="my-2" onChange={( e ) => setContainerUrl(e.target.value)} value={containerUrl} 
-            placeholder="https://pod.example.org/private/sparqlviews/" />
+            placeholder="https://pod.example.org/private/sparqlviews/" required />
           <Button variant="primary" type="submit" disabled={loading} className="col-sm-6 mb-4">
           { loading ? <><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="mx-2" /> loading … </> : <><i className="bi bi-cloud-arrow-up"></i> upload to Pod </>}
           </Button>
         </Form>
         {error && <ErrorBox error={error} /> }
-        {successObj && <SuccessBox successObj={successObj} />}
+        {successObj && <UploadSuccessBox successObj={successObj} />}
       </Modal.Body>
     </Modal>
   );
 }
 
-function SuccessBox({ successObj }) {
-  return (
-    <Alert variant="success">
+function UploadSuccessBox({ successObj }) {
+  const [show, setShow] = React.useState(true);
+  const alert = (
+    <Alert variant="success" onClose={() => setShow(false)} dismissible>
       <Alert.Heading>Successfully uploaded!</Alert.Heading>
       <p>The SPARQL view has been successfully uploaded to the Solid Pod.</p>
       <p><a href={successObj.fileUrl} target="_blank" rel="noreferrer">{successObj.fileUrl}</a></p>
     </Alert>
   );
-}
-
-function ErrorBox({ error }) {
-  return (
-    <Alert variant="danger">
-      <Alert.Heading>{error.name}</Alert.Heading>
-      <p>{error.message}</p>
-    </Alert>
-  );
+  return show ? alert : null;
 }
 
 const defaultInitialState = {

@@ -41,12 +41,12 @@ export default function SparqlViewListAddControlsSolidModal({ show, onHide, addN
         <p>Please insert the <strong>URL to a "SPARQL view" config file</strong> on a Solid Pod you have access to:</p>
         <Form onSubmit={submitHandler}>
           <FormControl type="url" className="my-2" onChange={( e ) => setInputFileUrl(e.target.value)} value={inputfileUrl} 
-            placeholder="https://pod.example.org/private/sparqlviews/view1.ttl" />
+            placeholder="https://pod.example.org/private/sparqlviews/view1.ttl" required />
           <Button variant="primary" type="submit" disabled={loading} className="col-sm-6 mb-4">
           { loading ? <><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="mx-2" /> loading … </> : <><i className="bi bi-cloud-arrow-down"></i> load from Pod </>}
           </Button>
         </Form>
-        {error ? <ErrorBox error={error} /> : null}
+        {error && <ErrorBox error={error} />}
       </Modal.Body>
     </Modal>
   );

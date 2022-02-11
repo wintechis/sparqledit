@@ -1,4 +1,9 @@
-import { QueryError, BuildingError, UpdateError } from '../CustomErrors';
+import { 
+  QueryError, 
+  BuildingError, 
+  UpdateError, 
+  SolidError 
+} from '../CustomErrors';
 
 export default function possibleErrorCauses(error) {
   let causeNotices = [];
@@ -51,6 +56,15 @@ export default function possibleErrorCauses(error) {
 
   if (error instanceof BuildingError) {
     causeNotices.push('An unsupported SPARQL language feature was used in the original query');
+  }
+
+  if (error instanceof SolidError) {
+    if (error.message.includes('403')) {
+      causeNotices.push('You have insufficient rights for this operation on the Solid Pod');
+    }
+    if (error.message.includes('404')) {
+      causeNotices.push('The is no file/container with the given URL on the Solid Pod');
+    }
   }
 
   return causeNotices;
