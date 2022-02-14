@@ -47,7 +47,7 @@ export default function QueryResultTableInputCell({ refreshTableCallback, sparql
 
 function QueryResultTableInputCellInput({ refreshTableCallback, sparqlSubmission, rowBinding, variable, insertMode, insertModeReset }) {
   const [modalShow, setModalShow] = React.useState(false);
-  const { error: datatypeError, value: origValue, inputType, inputStep } = getInputTypeForLiteral(rowBinding[variable]);
+  const { error: datatypeError, value: origValue, inputType, inputStep, language } = getInputTypeForLiteral(rowBinding[variable]);
   const initialState = initialInputCellState(sparqlSubmission, origValue);
 
   const [inputCellState, dispatch] = React.useReducer(inputCellStateReducer, initialState);
@@ -151,9 +151,9 @@ function QueryResultTableInputCellInput({ refreshTableCallback, sparqlSubmission
         {
           {
             'checkbox': <Form.Check type="checkbox" onChange={e => handleCheckboxChange(e)} label={inputValue} ref={inputRef} checked={inputValue === 'true' ? true : false} isInvalid={anyError} />,
-            'textarea': <Form.Control as='textarea' onChange={e => handleInputChange(e)} ref={inputRef} value={inputValue} isInvalid={anyError} isValid={inputCellState.updateResult ? true : null} />
+            'textarea': <Form.Control as='textarea' onChange={e => handleInputChange(e)} ref={inputRef} value={inputValue} lang={language} isInvalid={anyError} isValid={inputCellState.updateResult ? true : null} />
           }[inputType] ||
-          <Form.Control type={inputType} onChange={e => handleInputChange(e)} isInvalid={anyError} ref={inputRef} value={inputValue} step={inputStep} isValid={inputCellState.updateResult ? true : null} />
+          <Form.Control type={inputType} onChange={e => handleInputChange(e)} isInvalid={anyError} ref={inputRef} value={inputValue} lang={language} step={inputStep} isValid={inputCellState.updateResult ? true : null} />
         }
         <Collapse in={showButtons} mountOnEnter={true} unmountOnExit={true}>
           <div>

@@ -75,7 +75,6 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
   }
 
   // add prefixes from query (overrides default prefixes)
-  console.log(sparqlResult.queryObject)
   Object.entries(sparqlResult.queryObject.prefixes)
     .forEach(([pref, uri]) => prefixes[pref] = uri);
 

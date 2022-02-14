@@ -1,0 +1,62 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex: <http://example.org/> .
+
+@base <http://example.org/> .
+
+# https://www.w3.org/TR/rdf11-concepts/#xsd-datatypes
+
+<test/coretypes/explicit> a ex:Test ;
+  ex:stringProperty " my test\nstring"^^xsd:string ;
+  ex:booleanProperty "true"^^xsd:boolean ;
+  ex:decimalProperty "3.14156"^^xsd:decimal ;
+  ex:integerProperty "9000"^^xsd:integer .
+
+<test/coretypes/implicit> a ex:Test ;
+  ex:stringProperty "test string" ;
+  ex:stringProperty "Test-Zeichenfolge"@de ;
+  ex:booleanProperty true ;
+  ex:decimalProperty 3.14156 ;
+  ex:integerProperty 9000 .
+
+<test/floatingpointnumbers> a ex:Test ;
+  ex:doubleProperty "1.2345"^^xsd:double ;
+  ex:floatProperty "1.2e6"^^xsd:float .
+
+<test/floatingpointnumbers/specialcases> a ex:Test ;
+  ex:doubleProperty "NaN"^^xsd:double ;
+  ex:floatProperty "-0"^^xsd:float .
+
+<test/timeanddate> a ex:Test ;
+  ex:dateProperty "1987-04-22"^^xsd:date ;
+  ex:dateTimeProperty "1987-04-22T12:00:01.100"^^xsd:dateTime ;
+  ex:dateTimeProperty "1987-04-22T12:00:00Z"^^xsd:dateTime ;
+  ex:dateTimeStampProperty "1987-04-22T12:00:00-05:00"^^xsd:dateTimeStamp ;
+  ex:timeProperty "12:30:55.123"^^xsd:time ;
+  ex:timeProperty "12:30:55.000Z"^^xsd:time .
+
+<test/timeanddate/recurringandpartial> a ex:Test ;
+  ex:yearProperty "2018"^^xsd:gYear ;
+  ex:monthProperty "08"^^xsd:gMonth ;
+  ex:dayProperty "24"^^xsd:gDay ;
+  ex:yearMonthProperty "2018-08"^^xsd:gYearMonth ;
+  ex:durationProperty "P1Y2M3DT5H20M30.123S"^^xsd:duration ;
+  ex:dayTimeDurationProperty "PT2M10S"^^xsd:dayTimeDuration .
+
+<test/limitedrangeintegernumbers> a ex:Test ;
+  ex:byteProperty "-128"^^xsd:byte ;
+  ex:intProperty "32767"^^xsd:int ;
+  ex:unsignedShortProperty "65535"^^xsd:unsignedShort ;
+  ex:positiveIntegerProperty "12345"^^xsd:positiveInteger ;
+  ex:nonNegativeIntegerProperty "0"^^xsd:nonNegativeInteger .
+
+<test/encodedbinarydata> a ex:Test ;
+  ex:hexBinaryProperty "0FB7"^^xsd:hexBinary ;
+  ex:base64BinaryProperty "aGVyb25neWFuZy5jb20="^^xsd:base64Binary .
+
+<test/encodedbinarydata> a ex:Test ;
+  ex:anyURIProperty "git://github.com/rails/rails.git"^^xsd:anyURI ;
+  ex:languageProperty "en"^^xsd:language ;
+  ex:normalizedStringProperty "test string"^^xsd:normalizedString ;
+  ex:tokenProperty "test string"^^xsd:token .

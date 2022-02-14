@@ -163,12 +163,12 @@ Start upload script: `npm run solid-upload`
     * SPARQL endpoint, query syntax + restrictions
     * input cell content
   * load multiple view configs at the same time; save all current views
-  * special input components
-    * for different datatypes (e.g. xsd:time)
+  * special input component for dateTime (with time zone)
   * support for changing the generated update query
   * save result table as CSV
 * SOLID app
   * multiple spedit:SparqlView instances in RDF
+  * better UI for up-/downloading views to/from Solid Pod
 * Additional features/ideas
   * SPARQL_edit for RDF documents using an internal SPARQL engine
     * load local RDF files, SPARQL_edit and save as RDF file
