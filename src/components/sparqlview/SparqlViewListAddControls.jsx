@@ -17,6 +17,9 @@ export default function SparqlViewListAddControls({ addNewSparqlViews }) {
 
   function createBlankView() {
     const newView = SparqlViewFactory.createFrom();
+    if (session.info.webId) {
+      newView.creator = session.info.webId;
+    }
     addNewSparqlViews([newView]);
   }
 
