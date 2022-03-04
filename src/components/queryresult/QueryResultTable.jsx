@@ -14,7 +14,12 @@ import QueryResultTableInputCell from './QueryResultTableInputCell';
 import prefixes from '@zazuko/rdf-vocabularies/prefixes';
 import { shrink } from '@zazuko/rdf-vocabularies/shrink';
 
-import { addInsertModeLiteralsToQueryResultBindings } from '../../scripts/component-scripts/resultTableHelper';
+import { downloadCSV } from '../../scripts/utilities';
+import { 
+  addInsertModeLiteralsToQueryResultBindings, 
+  getTableColumnsFromResultBindings,
+  createCSVStringFromResultBindings
+} from '../../scripts/component-scripts/resultTableHelper';
 
 const ROWS_PER_PAGE = 10;
 
@@ -78,11 +83,8 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
   Object.entries(sparqlResult.queryObject.prefixes)
     .forEach(([pref, uri]) => prefixes[pref] = uri);
 
-  // collect all columns to display in result table
-  const columnNames = new Set(sparqlResultBindings.flatMap(binding => 
-    Object.keys(binding).filter(key => binding[key].include === true)));
-  const tableColumns = [...columnNames]; // transform Set to Array
   // create table head
+  const tableColumns = getTableColumnsFromResultBindings(sparqlResultBindings);
   const tableHead = <tr>{tableColumns.map(key => 
     <th key={key}>
       <div className="d-flex justify-content-between">
@@ -129,9 +131,17 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
   };
   const tableBody = generateTableBody(sparqlResultBindingsForPage, tableColumns);
 
+  // CSV download
+  function downloadFilteredSortedTableAsCSV() {
+    // create CSV
+    const csvStr = createCSVStringFromResultBindings(sparqlResultBindings);
+    // download
+    downloadCSV(csvStr, 'sparqledit.csv');
+  }
+
   return (
     <>
-      <TableUtilities resultNumbers={resultNumbers} searchString={searchString} searchChangeCallback={e => setSearchString(e.target.value)} />
+      <TableUtilities resultNumbers={resultNumbers} searchString={searchString} searchChangeCallback={e => setSearchString( e.target.value )} />
       <Table hover size="sm" responsive>
         <thead>
           {tableHead}
@@ -140,7 +150,14 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
           {tableBody}
         </tbody>
       </Table>
-      <PaginationControl numberOfPages={numberOfPages} page={page} setPage={setPage} />
+      <Row>
+        <Col>
+          <Button variant="link" className="link-secondary" onClick={() => downloadFilteredSortedTableAsCSV()}>Save table as CSV</Button>
+        </Col>
+        <Col xs="auto">
+          <PaginationControl numberOfPages={numberOfPages} page={page} setPage={setPage} />
+        </Col>
+      </Row>
     </>
   );
 }

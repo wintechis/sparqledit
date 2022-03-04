@@ -55,3 +55,37 @@ export function getDefaultValueforBinding(binding) {
   }
   return defaultValue;
 }
+
+export function getTableColumnsFromResultBindings(sparqlResultBindings) {
+  const columnNames = new Set(
+    sparqlResultBindings.flatMap( binding => 
+      Object.keys(binding)
+        .filter(key => binding[key].include === true)
+    )
+  );
+  return [...columnNames]; // transform Set to Array
+}
+
+export function createCSVStringFromResultBindings(sparqlResultBindings) {
+  // get the table columns
+  const tableColumns = getTableColumnsFromResultBindings(sparqlResultBindings);
+
+  // create data array for CSV
+  const csvData = [[...tableColumns]];
+  sparqlResultBindings.forEach((bindingsRow,i) => {
+    csvData.push(
+      tableColumns.map(columnName => sparqlResultBindings[i][columnName]?.value || '')
+    );
+  });
+
+  // transform data array to CSV string
+  const CSV_DELIMITER = ',';
+  let csvString = ''; // maybe add heading line
+  csvData.forEach(row => {
+    csvString += row
+      .map(cell => cell.includes(CSV_DELIMITER) ? `"${cell}"` : cell)
+      .join(CSV_DELIMITER) + '\n';
+  });
+
+  return csvString;
+};

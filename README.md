@@ -165,14 +165,19 @@ Start upload script: `npm run solid-upload`
   * load multiple view configs at the same time; save all current views
   * special input component for dateTime (with time zone)
   * support for changing the generated update query
-  * save result table as CSV
 * SOLID app
   * multiple spedit:SparqlView instances in RDF
   * better UI for up-/downloading views to/from Solid Pod
-* Additional features/ideas
-  * SPARQL_edit for RDF documents using an internal SPARQL engine
-    * load local RDF files, SPARQL_edit and save as RDF file
-    * GET, SPARQL_edit and PUT LDP documents 
+
+__Additional features/ideas__
+* SPARQL_edit change log
+  * reapply manual changes after the KG building pipeline recreated the KG
+  * replay changes based on log of changes/deltas executed with SPARQL_edit
+  * save changes as RDF in named graph of the edited KG
+  * difficulty: transactional execution for update query and change logging
+* SPARQL_edit for RDF/Solid documents 
+  * using an internal SPARQL engine
+  * for local RDF files or Solid/LDP documents 
 
 ### Important notes
 

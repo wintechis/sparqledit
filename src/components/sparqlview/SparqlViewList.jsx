@@ -13,7 +13,7 @@ import SparqlViewListAddControls from './SparqlViewListAddControls';
 
 import SparqlViewFactory from '../../scripts/models/SparqlViewFactory';
 import useLocalStorage from '../../hooks/useLocalStorage';
-import { createDowloadFileName } from '../../scripts/utilities';
+import { createDowloadFileName, downloadJsonld } from '../../scripts/utilities';
 
 export default function SparqlViewList() {
   const initialViews = [
@@ -77,17 +77,13 @@ export default function SparqlViewList() {
   }
 
   async function handleSaveCard(viewToSave) {
+    // create JSON-LD for view
     const sparqlViewInstance = SparqlViewFactory.createFrom(viewToSave);
     const jsonldStr = await sparqlViewInstance.serializeToJsonld();
     console.log(await sparqlViewInstance.serializeToTurtle());
-    const file = new Blob([jsonldStr], {type: 'application/ld+json'});
-    // create link and program. click it
-    const element = document.createElement('a');
-    element.href = URL.createObjectURL(file);
-    element.download = `sparqledit_${createDowloadFileName(sparqlViewInstance.name)}.jsonld`;
-    document.body.appendChild(element); // required for FireFox
-    element.click();
-    element.remove(); // cleanup
+    // download
+    const fileName = `sparqledit_${createDowloadFileName(sparqlViewInstance.name)}.jsonld`;
+    downloadJsonld(jsonldStr, fileName);
   }
 
   // bundle all card operations
