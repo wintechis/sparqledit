@@ -5,18 +5,19 @@ class SparqlClient {
   constructor(credentials) {
     // create SparqlEndpointFetcher
 
+    // create a custom fetch handler with Basic Auth header
+    function myfetch(url, options) {
+      const authStr = 'Basic ' + Buffer.from(credentials.username + ':' + credentials.password, 'utf8').toString('base64');
+      if (options.headers instanceof Headers) {
+        options.headers.set('Authorization', authStr);
+      } else { // type Object
+        options.headers['Authorization'] = authStr;
+      }
+      return fetch(url, options);
+    };
+
     if (credentials) {
-      // if credentials are provided ... 
-      // create a custom fetch handler that adds the Basic Auth header with credentials
-      function myfetch(url, options) {
-        const authStr = 'Basic ' + Buffer.from(credentials.username + ':' + credentials.password, 'utf8').toString('base64');
-        if (options.headers instanceof Headers) {
-          options.headers.set('Authorization', authStr);
-        } else { // type Object
-          options.headers['Authorization'] = authStr;
-        }
-        return fetch(url, options);
-      };
+      // if credentials are provided, use custom fetch handler
       // and pass it into the new SparqlEndpointFetcher
       this.sparqlFetcher = new SparqlEndpointFetcher({
         fetch: myfetch

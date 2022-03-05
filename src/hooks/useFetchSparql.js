@@ -29,7 +29,7 @@ function useFetchSparql(querySubmission, initialFetchState = defaultInitialFetch
       dispatch({ type: "FETCH_START" });
       try {
         // dyn. load sparqledit module
-        const SparqlEdit = await import('../scripts/sparqledit');
+        const SparqlEdit = await import('../scripts/sparqledit/sparqledit');
         // execute query, build SPARQL JS object
         const queryResult = await SparqlEdit.executeSelectOrUpdateQuery(querySubmission);
         console.log("QueryResult", queryResult);

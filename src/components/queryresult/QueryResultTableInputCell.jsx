@@ -7,7 +7,7 @@ import QueryResultTableInputCellModal from './QueryResultTableInputCellModal';
 import { initialInputCellState, inputCellStateReducer } from '../../scripts/component-scripts/inputCellStateReducer';
 import getInputTypeForLiteral from '../../scripts/component-scripts/inputCellDatatypeHelper';
 import { QuerySubmission } from '../../scripts/models/QuerySubmission';
-import { buildUpdateQueryForVariable, executeSelectOrUpdateQuery } from '../../scripts/sparqledit';
+import { buildUpdateQueryForVariable, executeSelectOrUpdateQuery } from '../../scripts/sparqledit/sparqledit';
 
 export default function QueryResultTableInputCell({ refreshTableCallback, sparqlSubmission, rowBinding, variable, insertMode = false }) {
   const [showInput, setShowInput] = React.useState(false);
