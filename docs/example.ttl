@@ -19,6 +19,13 @@
   schema:memberOf <medicaloffice/drschwartz> .
 
 <patient/2> a schema:Patient, foaf:Person ;
+  foaf:name "Jane S. Doe" ;
+  foaf:mbox <mailto:jane.s.doe@outlook.com> ;
+  schema:email "mailto:jane.s.doe@outlook.com" ;
+  schema:birthDate "1992-03-31"^^xsd:date ;
+  schema:memberOf <medicaloffice/drschwartz> .
+
+<patient/3> a schema:Patient, foaf:Person ;
   foaf:name "Emily Example" ;
   schema:birthDate "May 1st 1980"^^xsd:date ;
   schema:weight [
@@ -27,6 +34,17 @@
     schema:unitCode om2:kilogram
   ] ;
   schema:memberOf <medicaloffice/drschwartz>, <medicaloffice/drheilmann> .
+
+<medicaloffice/drheilmann> a schema:Physician ;
+  schema:openingHours "Mo,We,Fr 09:00-12:00" ;
+  schema:telephone "(09131) 6789876" ;
+  schema:isAcceptingNewPatients false ;
+  schema:address [
+    a schema:PostalAddress ;
+    schema:addressCountry "DE";
+    schema:streetAddress "Krankenstraße 6\nHaus B" ;
+    schema:postalCode 87654
+  ] .
 
 <medicaloffice/drschwartz> a schema:Physician ;
   schema:openingHours "Mo,Tu,We,Th 08:00-17:00" ;
@@ -44,20 +62,3 @@
   schema:url "https://www.drmedschwartz.com/"^^xsd:anyURI ;
   schema:datePublished "2019-10-26T14:30:00"^^xsd:dateTime ;
   schema:dateModified "2021-11-30T08:22:50"^^xsd:dateTime  .
-
-<medicaloffice/drheilmann> a schema:Physician ;
-  schema:openingHours "Mo,We,Fr 09:00-12:00" ;
-  schema:telephone "(09131) 6789876" ;
-  schema:isAcceptingNewPatients false ;
-  schema:address [
-    a schema:PostalAddress ;
-    schema:addressCountry "DE";
-    schema:streetAddress "Krankenstraße 6\nHaus B" ;
-    schema:postalCode 87654
-  ] .
-
-<patient/123> a schema:Patient, foaf:Person ;
-  foaf:name "Max Power" ;
-  foaf:familyName "Simpson" ;
-  foaf:mbox <mailto:home.j@simpson.com> ;
-  schema:memberOf <medicaloffice/drhibbert> .

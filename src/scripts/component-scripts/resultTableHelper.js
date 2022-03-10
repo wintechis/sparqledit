@@ -74,16 +74,21 @@ export function createCSVStringFromResultBindings(sparqlResultBindings) {
   const csvData = [[...tableColumns]];
   sparqlResultBindings.forEach((bindingsRow,i) => {
     csvData.push(
-      tableColumns.map(columnName => sparqlResultBindings[i][columnName]?.value || '')
+      tableColumns.map(columnName => {
+        const value = sparqlResultBindings[i][columnName]?.value;
+        const insertMode = sparqlResultBindings[i][columnName]?.insertMode;
+        return (value && !insertMode) ? value : '';
+      })
     );
   });
 
   // transform data array to CSV string
   const CSV_DELIMITER = ',';
+  const invalidCharsRegex = new RegExp(`[${CSV_DELIMITER}\n]`);
   let csvString = ''; // maybe add heading line
   csvData.forEach(row => {
     csvString += row
-      .map(cell => cell.includes(CSV_DELIMITER) ? `"${cell}"` : cell)
+      .map(cell => invalidCharsRegex.test(cell) ? `"${cell}"` : cell)
       .join(CSV_DELIMITER) + '\n';
   });
 
