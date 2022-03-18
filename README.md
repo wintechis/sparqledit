@@ -175,6 +175,9 @@ __Additional features/ideas__
   * replay changes based on log of changes/deltas executed with SPARQL_edit
   * save changes as RDF in named graph of the edited KG
   * difficulty: transactional execution for update query and change logging
+* HTML Widgets (https://triply.cc/docs/yasgui)
+* Graph visualization of query triple patterns
+  * show edited table cell as leaf node in graph
 * SPARQL_edit for RDF/Solid documents 
   * using an internal SPARQL engine
   * for local RDF files or Solid/LDP documents 
