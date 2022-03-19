@@ -133,6 +133,16 @@ Build the app for production to the `build` folder: `npm run build`
 
 Test the build: `serve -s build`
 
+**Install sparqledit-algorithm library**
+
+.npmrc:
+```
+@scs-grp-tech:registry=https://git01.iis.fhg.de/api/v4/projects/9473/packages/npm/
+//git01.iis.fhg.de/api/v4/projects/9473/packages/npm/:_authToken=LxPr2aezwWyxGFeaXjLA
+```
+
+`npm i @scs-grp-tech/sparqledit-algorithm`
+
 #### Docker
 
 Build Docker image: `docker build -f Dockerfile.prod -t sparqledit .`

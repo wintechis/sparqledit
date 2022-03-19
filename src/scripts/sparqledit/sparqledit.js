@@ -1,5 +1,5 @@
 import SparqlClient from './SparqlClient';
-import { buildUpdateQueryObject } from './sparqleditalgorithm';
+import { buildUpdateQueryObject } from '@scs-grp-tech/sparqledit-algorithm';
 import { Parser as SparqlParser } from 'sparqljs';
 import { Generator as SparqlGenerator } from 'sparqljs';
 import { Wildcard } from 'sparqljs';
@@ -53,7 +53,7 @@ export function buildUpdateQueryForVariable(queryStr, variableRow, insertOnly) {
   const queryObj = buildQueryObject(queryStr);
 
   // SPARQLedit algorithm for creating a SPARQL update query object
-  const updateQueryObj = buildUpdateQueryObject(queryObj, variableRow, insertOnly);
+  const updateQueryObj = buildUpdateQueryObject(queryObj, variableRow);
 
   // return query string from JS query object
   const updateQuery = stringifyQueryObject(updateQueryObj);

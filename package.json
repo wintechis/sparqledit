@@ -1,9 +1,10 @@
 {
   "name": "sparqledit",
-  "version": "0.4.4",
+  "version": "0.4.6",
   "private": true,
   "dependencies": {
     "@inrupt/solid-ui-react": "^2.6.1",
+    "@scs-grp-tech/sparqledit-algorithm": "^0.6.1",
     "@triply/yasqe": "^4.2.20",
     "@zazuko/rdf-vocabularies": "^2021.9.22-3",
     "bootstrap": "^5.1.3",
