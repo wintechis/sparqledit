@@ -13,7 +13,7 @@
 
 # ontology
 
-obuger: a owl:Ontology ;
+spedit: a owl:Ontology ;
   owl:versionInfo "0.1.0" ;
   rdfs:comment "This ontology describes HCPs and HCOs." .
   dct:title "SPARQL_edit ontology" ;

@@ -1,0 +1,13 @@
+@prefix schema: <http://schema.org/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix spedit: <http://iis.fraunhofer.de/sparqledit/ontology#>.
+
+_:b0 a spedit:SparqlView;
+  schema:name "Test view";
+  schema:description "This is a test SPARQL view.";
+  schema:creator "Test User";
+  schema:dateCreated "2022-01-18T11:05:10.345Z"^^xsd:dateTime;
+  spedit:queryURL "http://localhost:3030/test/"^^xsd:anyURI;
+  spedit:updateURL "http://localhost:3030/test/"^^xsd:anyURI;
+  spedit:query "PREFIX schema: <http://schema.org/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT *\nWHERE {\n  ?s ?p ?o .\n  OPTIONAL {  \n    ?s rdfs:label ?label .\n  }\n  OPTIONAL {  \n    ?s schema:name ?name .\n  }\n}";
+  spedit:requiresBasicAuth false.

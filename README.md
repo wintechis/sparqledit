@@ -169,6 +169,7 @@ Start upload script: `npm run solid-upload`
     * editable object URIs
     * delete statements
 * React app
+  * turtle escape "<" and ">" with "&lt;" and "&gt;" ([link](https://www.w3.org/TR/turtle/#h3_sec-escapes))
   * form validation
     * SPARQL endpoint, query syntax + restrictions
     * input cell content
@@ -183,7 +184,7 @@ __Additional features/ideas__
 * SPARQL_edit change log
   * reapply manual changes after the KG building pipeline recreated the KG
   * replay changes based on log of changes/deltas executed with SPARQL_edit
-  * save changes as RDF in named graph of the edited KG
+  * save changes as RDF in named graph of the edited KG (PROV-O for modeling)
   * difficulty: transactional execution for update query and change logging
 * HTML Widgets (https://triply.cc/docs/yasgui)
 * Graph visualization of query triple patterns
