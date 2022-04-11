@@ -1,0 +1,48 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+# prefixes for update log
+PREFIX prov:   <http://www.w3.org/ns/prov#>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+PREFIX spedit: <http://iis.fraunhofer.de/sparqledit/ontology#>
+
+DELETE { <http://example.org/tester/1> rdfs:label "Tester-1". }
+INSERT { 
+  <http://example.org/tester/1> rdfs:label "Tester One".
+  # triples for update log
+  GRAPH <http://localhost:3030/test/graph/updatelog> { 
+    _:testSparqlView 
+      a spedit:SparqlView ;
+      schema:name "Test view" ;
+      schema:description "This is a test SPARQL view." ;
+      schema:creator "Test User" ;
+      schema:dateCreated "2022-01-18T11:05:10.345Z"^^xsd:dateTime ;
+      spedit:queryURL "http://localhost:3030/test/"^^xsd:anyURI ;
+      spedit:updateURL "http://localhost:3030/test/"^^xsd:anyURI ;
+      spedit:query "PREFIX schema: <http://schema.org/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT *\nWHERE {\n  ?s ?p ?o .\n  OPTIONAL {  \n    ?s rdfs:label ?label .\n  }\n  OPTIONAL {  \n    ?s schema:name ?name .\n  }\n}" ;
+      spedit:requiresBasicAuth false ;
+      spedit:updateLogGraph <http://localhost:3030/test/graph/updatelog> ;
+    .
+    _:updateQuery1
+      a prov:Entity ;
+      rdfs:label "generated update query #1" ;
+      prov:wasDerivedFrom _:testSparqlView ;
+      prov:generatedAtTime "2022-04-14T01:01:01Z"^^xsd:dateTime ;
+      spedit:updateQuery "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nDELETE { <http://example.org/tester/1> rdfs:label \"Tester-1\". }\nINSERT { <http://example.org/tester/1> rdfs:label \"Tester One\". }\nWHERE {\n  <http://example.org/tester/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person>.\n  <http://example.org/tester/1> rdfs:label \"Tester-1\".\n}" ;
+    .
+    <http://iis.fraunhofer.de/sparqledit/updateActivity/1> 
+      a prov:Activity ;
+      rdfs:label "SPARQL_edit update activity #1" ;
+      prov:used _:testSparqlView, _:updateQuery1 ;
+      prov:wasAssociatedWith <http://iis.fraunhofer.de/sparqledit/app> ;
+      prov:wasAssociatedWith <https://smeckler.solidcommunity.net/profile/card#me> ;
+      prov:startedAtTime "2022-04-14T01:01:01Z"^^xsd:dateTime;
+      prov:endedAtTime ?SPARQLedit_UpdateExecutionTime ;
+    .
+  }
+}
+WHERE {
+  <http://example.org/tester/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person>.
+  <http://example.org/tester/1> rdfs:label "Tester-1".
+  # time for update log
+  BIND(NOW() AS ?SPARQLedit_UpdateExecutionTime)
+}

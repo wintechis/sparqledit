@@ -1,0 +1,52 @@
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX schema: <http://schema.org/>
+# prefixes for update log
+PREFIX prov:   <http://www.w3.org/ns/prov#>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+PREFIX spedit: <http://iis.fraunhofer.de/sparqledit/ontology#>
+
+DELETE { ?g_14 schema:value "80.5"^^<http://www.w3.org/2001/XMLSchema#decimal>. }
+INSERT { 
+  ?g_14 schema:value "85.5"^^<http://www.w3.org/2001/XMLSchema#decimal>.
+  # triples for update log
+  GRAPH <http://localhost:3030/test/graph/updatelog> { 
+    _:testSparqlView 
+      a spedit:SparqlView ;
+      schema:name "Test view" ;
+      schema:description "This is a test SPARQL view." ;
+      schema:creator "Test User" ;
+      schema:dateCreated "2022-01-18T11:05:10.345Z"^^xsd:dateTime ;
+      spedit:queryURL "http://localhost:3030/test/"^^xsd:anyURI ;
+      spedit:updateURL "http://localhost:3030/test/"^^xsd:anyURI ;
+      spedit:query "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX schema: <http://schema.org/>\nSELECT ?name ?family ?birthdate ?weight ?medoffice ?medoffice_street ?medoffice_zip\nWHERE {\n  ?patient a schema:Patient ;\n    foaf:name ?name .\n  OPTIONAL {  \n    ?patient foaf:familyName ?family . \n  }\n  ?patient schema:birthDate ?birthdate .\n  OPTIONAL {\n    ?patient schema:weight [\n      schema:value ?weight\n    ] .\n  }\n  OPTIONAL {\n    ?patient schema:memberOf ?medoffice .\n    ?medoffice schema:address [\n      schema:streetAddress ?medoffice_street ;\n      schema:postalCode ?medoffice_zip  \n    ] .\n  }\n}";
+      spedit:requiresBasicAuth false ;
+      spedit:updateLogGraph <http://localhost:3030/test/graph/updatelog> ;
+    .
+    _:updateQuery1
+      a prov:Entity ;
+      rdfs:label "generated update query #1" ;
+      prov:wasDerivedFrom _:testSparqlView ;
+      prov:generatedAtTime "2022-04-14T01:01:01Z"^^xsd:dateTime ;
+      spedit:updateQuery "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX schema: <http://schema.org/>\nDELETE { ?g_62 schema:value \"80.5\"^^<http://www.w3.org/2001/XMLSchema#decimal>. }\nINSERT { ?g_62 schema:value \"85.5\"^^<http://www.w3.org/2001/XMLSchema#decimal>. }\nWHERE {\n  <http://example.org/patient/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> schema:Patient;\n    foaf:name \"John Doe\".\n  <http://example.org/patient/1> schema:birthDate \"1990-10-22\"^^<http://www.w3.org/2001/XMLSchema#date>.\n  <http://example.org/patient/1> schema:weight ?g_62.\n  ?g_62 schema:value \"80.5\"^^<http://www.w3.org/2001/XMLSchema#decimal>.\n}" ;
+    .
+    <http://iis.fraunhofer.de/sparqledit/updateActivity/1> 
+      a prov:Activity ;
+      rdfs:label "SPARQL_edit update activity #1" ;
+      prov:used _:testSparqlView, _:updateQuery1 ;
+      prov:wasAssociatedWith <http://iis.fraunhofer.de/sparqledit/app> ;
+      prov:wasAssociatedWith <https://smeckler.solidcommunity.net/profile/card#me> ;
+      prov:startedAtTime "2022-04-14T01:01:01Z"^^xsd:dateTime;
+      prov:endedAtTime ?SPARQLedit_UpdateExecutionTime ;
+    .
+  }
+}
+WHERE {
+  <http://example.org/patient/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> schema:Patient;
+    foaf:name "John Doe".
+  <http://example.org/patient/1> schema:birthDate "1990-10-22"^^<http://www.w3.org/2001/XMLSchema#date>.
+  <http://example.org/patient/1> schema:weight ?g_14.
+  ?g_14 schema:value "80.5"^^<http://www.w3.org/2001/XMLSchema#decimal>.
+  # time for update log
+  BIND(NOW() AS ?SPARQLedit_UpdateExecutionTime)
+}
