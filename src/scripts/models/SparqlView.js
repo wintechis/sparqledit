@@ -12,7 +12,8 @@ export default class SparqlView {
     queryURL,
     updateURL,
     query,
-    requiresBasicAuth
+    requiresBasicAuth,
+    updateLogGraph
   ) {
     this.id = id;
     this.name = name;
@@ -24,6 +25,7 @@ export default class SparqlView {
     this.updateURL = updateURL && updateURL.length > 1 ? updateURL : queryURL;
     this.query = query;
     this.requiresBasicAuth = requiresBasicAuth;
+    this.updateLogGraph = updateLogGraph;
   }
 
   createRdfQuads() {
@@ -74,6 +76,11 @@ export default class SparqlView {
         subjectBN,
         namedNode(SPARQLVIEW_NAMESPACES.spedit + 'requiresBasicAuth'),
         literal(this.requiresBasicAuth, namedNode(SPARQLVIEW_NAMESPACES.xsd + 'boolean'))
+      ),
+      quad(
+        subjectBN,
+        namedNode(SPARQLVIEW_NAMESPACES.spedit + 'updateLogGraph'),
+        literal(this.updateLogGraph, namedNode(SPARQLVIEW_NAMESPACES.xsd + 'anyURI'))
       )
     ]);
     return store.getQuads();
@@ -128,6 +135,10 @@ export default class SparqlView {
         '@id': 'spedit:requiresBasicAuth',
         '@type': 'xsd:boolean'
       },
+      updateLogGraph: {
+        '@id': 'spedit:updateLogGraph',
+        '@type': 'xsd:anyURI'
+      }
     };
     jsonObj['@type'] = 'spedit:SparqlView';
     const jsonld = JSON.stringify(jsonObj);

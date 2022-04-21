@@ -8,7 +8,8 @@ export default class SparqlView {
     queryURL: string,
     updateURL: string,
     query: string,
-    requiresBasicAuth: boolean
+    requiresBasicAuth: boolean,
+    updateLogGraph: string
   );
   id: string;
   name: string;
@@ -19,6 +20,7 @@ export default class SparqlView {
   updateURL: string;
   query: string;
   requiresBasicAuth: boolean;
+  updateLogGraph: string
   serializeToTurtle(): Promise<string>;
   serializeToJsonld(): Promise<string>;
 }

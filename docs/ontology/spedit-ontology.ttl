@@ -18,7 +18,7 @@ spedit: a owl:Ontology ;
   rdfs:comment "This ontology describes HCPs and HCOs." .
   dct:title "SPARQL_edit ontology" ;
   dct:created "2022-03-03"^^xsd:date ;
-  dct:modified "2022-03-03"^^xsd:date ;
+  dct:modified "2022-04-21"^^xsd:date ;
   dct:type <http://purl.org/adms/assettype/Ontology> ;
   dct:creator [
     foaf:name "Sascha Meckler" ;
@@ -90,6 +90,12 @@ spedit:requiresBasicAuth a owl:DatatypeProperty ;
   rdfs:comment "A flag indicating if the SPARQL endpoint requires HTTP BasicAuth." ;
   rdfs:domain spedit:SparqlView ;
   rdfs:range xsd:boolean .
+
+spedit:updateLogGraph a owl:DatatypeProperty ;
+  rdfs:label "update log graph name" ;
+  rdfs:comment "The name of the graph where the update logs are saved. Logging is enabled if the graph name is defined." ;
+  rdfs:domain spedit:SparqlView ;
+  rdfs:range xsd:anyURI .
 
 
 # object properties and annotation properties
