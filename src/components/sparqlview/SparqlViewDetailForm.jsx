@@ -10,6 +10,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 export default function SparqlViewDetailForm({ sparqlView, sparqlViewUpdateCallback, isLoading, submitQueryCallback, credentialsForm }) {
   const [yasqe, setYasqe] = React.useState(null);
@@ -135,6 +136,12 @@ export default function SparqlViewDetailForm({ sparqlView, sparqlViewUpdateCallb
                 { sparqlView.requiresBasicAuth ? credentialsForm : null }
               </Col>
             </Form.Group>
+            <Form.Group as={Row} className="mb-3" controlId="formUpdateLogGraph">
+              <Form.Label column sm={3}>Update logging</Form.Label>
+              <Col sm={9}>
+                <UpdateLogGraphForm sparqlView={sparqlView} handleGraphNameChange={graphName => handleFormChange('updateLogGraph', graphName)} />
+              </Col>
+            </Form.Group>
           </Col>
           <Col lg="2"></Col>
         </Row>
@@ -153,5 +160,30 @@ export default function SparqlViewDetailForm({ sparqlView, sparqlViewUpdateCallb
           </Col>
         </Row>    
     </section>
+  );
+}
+
+function UpdateLogGraphForm({ sparqlView, handleGraphNameChange }) {
+  const [isUpdateLog, setIsUpdateLog] = React.useState(typeof sparqlView.updateLogGraph === 'string' || false);
+
+  function handleSwitchChange(newCheckState) {
+    if (newCheckState === true) {
+      setIsUpdateLog(true);
+      handleGraphNameChange('');
+    } else {
+      setIsUpdateLog(false);
+      handleGraphNameChange(undefined);
+    }
+  }
+
+  return (
+    <>
+      <Form.Check type="switch" className="form-switch-md" size="lg" id="formUpdateLogGraphSwitch" checked={isUpdateLog} onChange={e => handleSwitchChange(e.target.checked)} />
+      { isUpdateLog &&   
+        <FloatingLabel controlId="formUpdateLogGraphName" label="Named Graph for update logs *">
+          <Form.Control type="text" placeholder="http://example.org/graph/updatelogs" autoComplete="graph-name" value={sparqlView.updateLogGraph} onChange={e => handleGraphNameChange(e.target.value)} required />
+        </FloatingLabel>
+      }
+    </>
   );
 }

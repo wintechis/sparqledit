@@ -23,7 +23,7 @@ import {
 
 const ROWS_PER_PAGE = 10;
 
-export default function QueryResultTable({ refreshTableCallback, sparqlResult }) {
+export default function QueryResultTable({ refreshTableCallback, sparqlResult, sparqlView }) {
   const [page, setPage] = React.useState(0);
   const [searchString, setSearchString] = React.useState("");
   const [sortColumnName, setSortColumnName] = React.useState("");
@@ -120,7 +120,8 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult })
             sparqlSubmission={sparqlSubmission} 
             rowBinding={rowBinding} 
             variable={variable} 
-            insertMode={!!binding.insertMode} />
+            insertMode={!!binding.insertMode}
+            sparqlView={sparqlView} />
         );
       } else { // not editable
         return <QueryResultTableCell key={key} rawUri={binding.value} prefixUri={shrink(binding.value)} />;

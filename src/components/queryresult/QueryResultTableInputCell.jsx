@@ -7,9 +7,13 @@ import QueryResultTableInputCellModal from './QueryResultTableInputCellModal';
 import { initialInputCellState, inputCellStateReducer } from '../../scripts/component-scripts/inputCellStateReducer';
 import getInputTypeForLiteral from '../../scripts/component-scripts/inputCellDatatypeHelper';
 import { QuerySubmission } from '../../scripts/models/QuerySubmission';
-import { buildUpdateQueryForVariable, executeSelectOrUpdateQuery } from '../../scripts/sparqledit/sparqledit';
+import { 
+  buildUpdateQueryForVariable, 
+  buildUpdateLogQueryForVariable, 
+  executeSelectOrUpdateQuery 
+} from '../../scripts/sparqledit/sparqledit';
 
-export default function QueryResultTableInputCell({ refreshTableCallback, sparqlSubmission, rowBinding, variable, insertMode = false }) {
+export default function QueryResultTableInputCell({ refreshTableCallback, sparqlSubmission, rowBinding, variable, insertMode = false, sparqlView }) {
   const [showInput, setShowInput] = React.useState(false);
   
   if (insertMode) {
@@ -27,7 +31,8 @@ export default function QueryResultTableInputCell({ refreshTableCallback, sparql
             rowBinding={rowBinding} 
             variable={variable} 
             insertMode={true}
-            insertModeReset={() => setShowInput(false)} /> 
+            insertModeReset={() => setShowInput(false)}
+            sparqlView={sparqlView} /> 
         }
       </td>
     );
@@ -39,13 +44,14 @@ export default function QueryResultTableInputCell({ refreshTableCallback, sparql
           sparqlSubmission={sparqlSubmission} 
           rowBinding={rowBinding} 
           variable={variable} 
-          insertMode={insertMode} />
+          insertMode={insertMode}
+          sparqlView={sparqlView} />
       </td>
     );
   }
 }
 
-function QueryResultTableInputCellInput({ refreshTableCallback, sparqlSubmission, rowBinding, variable, insertMode, insertModeReset }) {
+function QueryResultTableInputCellInput({ refreshTableCallback, sparqlSubmission, rowBinding, variable, insertMode, insertModeReset, sparqlView }) {
   const [modalShow, setModalShow] = React.useState(false);
   const { error: datatypeError, value: origValue, inputType, inputStep, language } = getInputTypeForLiteral(rowBinding[variable]);
   const initialState = initialInputCellState(sparqlSubmission, origValue);
@@ -98,7 +104,9 @@ function QueryResultTableInputCellInput({ refreshTableCallback, sparqlSubmission
   const handleChange = (newValue) => {
     const buildUpdateQuery = () => {
       rowBinding[variable].valueNew = String(newValue);
-      const updateQu = buildUpdateQueryForVariable(sparqlSubmission.queryString, rowBinding, insertMode);
+      // build the update query
+      const updateQu = sparqlView.updateLogGraph?.length > 1 ? 
+        buildUpdateLogQueryForVariable(sparqlSubmission.queryString, rowBinding, sparqlView) : buildUpdateQueryForVariable(sparqlSubmission.queryString, rowBinding);
       return updateQu;
     }
     dispatch({
