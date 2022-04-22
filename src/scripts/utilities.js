@@ -35,3 +35,20 @@ function downloadBlob(contentStr, contentType, fileName) {
   element.click();
   element.remove(); // cleanup
 }
+
+export function toISODateWithTimezone(date) {
+  const timezoneOffset = -date.getTimezoneOffset();
+  const timezoneOffsetHours = Math.floor(Math.abs(timezoneOffset) / 60);
+  const timezoneOffsetMinutes = Math.abs(timezoneOffset) % 60;
+  const sign = timezoneOffset >= 0 ? '+' : '-';
+  const padZero = (number) => ('0' + number).slice(-2);
+
+  return date.getFullYear() +
+    '-' + padZero(date.getMonth() + 1) +
+    '-' + padZero(date.getDate()) +
+    'T' + padZero(date.getHours()) +
+    ':' + padZero(date.getMinutes()) +
+    ':' + padZero(date.getSeconds()) +
+    sign + padZero(timezoneOffsetHours) +
+    ':' + padZero(timezoneOffsetMinutes);
+}
