@@ -76,13 +76,17 @@ export default class SparqlView {
         subjectBN,
         namedNode(SPARQLVIEW_NAMESPACES.spedit + 'requiresBasicAuth'),
         literal(this.requiresBasicAuth, namedNode(SPARQLVIEW_NAMESPACES.xsd + 'boolean'))
-      ),
-      quad(
-        subjectBN,
-        namedNode(SPARQLVIEW_NAMESPACES.spedit + 'updateLogGraph'),
-        literal(this.updateLogGraph, namedNode(SPARQLVIEW_NAMESPACES.xsd + 'anyURI'))
       )
     ]);
+    if (this.updateLogGraph) {
+      store.addQuad(      
+        quad(
+          subjectBN,
+          namedNode(SPARQLVIEW_NAMESPACES.spedit + 'updateLogGraph'),
+          literal(this.updateLogGraph, namedNode(SPARQLVIEW_NAMESPACES.xsd + 'anyURI'))
+        )
+      );
+    }
     return store.getQuads();
   }
 

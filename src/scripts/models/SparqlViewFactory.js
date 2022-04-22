@@ -93,7 +93,8 @@ export default class SparqlViewFactory {
         object.queryURL,
         object.updateURL,
         object.query,
-        object.requiresBasicAuth
+        object.requiresBasicAuth,
+        object.updateLogGraph
       );      
     }
     throw new TypeError('Cannot create a SparqlView instance from this object.');
@@ -147,11 +148,13 @@ export default class SparqlViewFactory {
     const updateURL = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'updateURL'), null)[0]?.value || 'unknown updateURL';
     const query = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'query'), null)[0]?.value || 'unknown query';
     const requiresBasicAuth = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'requiresBasicAuth'), null)[0]?.value.toLowerCase() == 'true'; // eslint-disable-line eqeqeq
+    const updateLogGraph = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'updateLogGraph'), null)[0]?.value;
 
     return new SparqlView(
       this.generateUnsafeUuid(),
       name, description, creator, dateCreated,
-      queryURL, updateURL, query, requiresBasicAuth
+      queryURL, updateURL, query, requiresBasicAuth,
+      updateLogGraph
     );
   }
 

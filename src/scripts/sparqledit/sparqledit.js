@@ -98,6 +98,7 @@ function addUpdateLogComponentsToUpdateQuery( updateQueryObj, updateLogGraphName
   const updateQueryStr = stringifyQueryObject(updateQueryObj);
 
   // 1. add prefixes
+  updateQueryObj.prefixes.rdf = RDF_NAMESPACES.rdf;
   updateQueryObj.prefixes.rdfs = RDF_NAMESPACES.rdfs;
   updateQueryObj.prefixes.xsd = RDF_NAMESPACES.xsd;
   updateQueryObj.prefixes.prov = RDF_NAMESPACES.prov;

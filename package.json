@@ -1,6 +1,6 @@
 {
   "name": "sparqledit",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "private": true,
   "dependencies": {
     "@inrupt/solid-ui-react": "^2.6.1",
