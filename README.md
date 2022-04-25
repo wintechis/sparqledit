@@ -159,6 +159,12 @@ Export SOLID credentials as environment variables: `export SOLID_USERNAME=myuser
 
 Start upload script: `npm run solid-upload`
 
+#### Replay updates
+
+install node-fetch library: `npm i -g node-fetch`
+
+run the NodeJS script: `node .\docs\updatelog\replay-sparql-updates.mjs`
+
 ### TODOs
 
 * Algorithm
@@ -181,7 +187,7 @@ Start upload script: `npm run solid-upload`
   * better UI for up-/downloading views to/from Solid Pod
 
 __Additional features/ideas__
-* SPARQL_edit change log
+* SPARQL_edit change log [DONE]
   * reapply manual changes after the KG building pipeline recreated the KG
   * replay changes based on log of changes/deltas executed with SPARQL_edit
   * save changes as RDF in named graph of the edited KG (PROV-O for modeling)
