@@ -192,6 +192,10 @@ __Additional features/ideas__
   * replay changes based on log of changes/deltas executed with SPARQL_edit
   * save changes as RDF in named graph of the edited KG (PROV-O for modeling)
   * difficulty: transactional execution for update query and change logging
+* View uppdate permissions/restrictions
+  * define variables where updates are (not) permitted
+  * integration in SPARQL view RDF model
+  * HTML input controls are redndered read-only
 * HTML Widgets (https://triply.cc/docs/yasgui)
 * Graph visualization of query triple patterns
   * show edited table cell as leaf node in graph
