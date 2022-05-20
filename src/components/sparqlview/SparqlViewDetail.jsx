@@ -70,7 +70,7 @@ export default function SparqlViewDetail({ sparqlView, sparqlViewUpdateCallback,
       {error ? <ErrorBox error={error} /> : null}
       <Collapse in={sparqlResult ? true : false} mountOnEnter={true} timeout={500}>
         <div>
-          <QueryResult refreshTableCallback={executeQuery} sparqlResult={sparqlResult} sparqlView={sparqlView} />
+          <QueryResult refreshTableCallback={executeQuery} isRefreshing={isLoading} sparqlResult={sparqlResult} sparqlView={sparqlView} />
         </div>
       </Collapse>
     </section>

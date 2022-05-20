@@ -1,5 +1,7 @@
 import React from 'react';
 
+import '../../styles/component-styles/QueryResultTable.css';
+
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Table from 'react-bootstrap/Table';
@@ -23,7 +25,7 @@ import {
 
 const ROWS_PER_PAGE = 10;
 
-export default function QueryResultTable({ refreshTableCallback, sparqlResult, sparqlView }) {
+export default function QueryResultTable({ refreshTableCallback, isRefreshing, sparqlResult, sparqlView }) {
   const [page, setPage] = React.useState(0);
   const [searchString, setSearchString] = React.useState("");
   const [sortColumnName, setSortColumnName] = React.useState("");
@@ -117,6 +119,7 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult, s
           <QueryResultTableInputCell 
             key={keyForInputCell} 
             refreshTableCallback={refreshTableCallback} 
+            isRefreshing={isRefreshing}
             sparqlSubmission={sparqlSubmission} 
             rowBinding={rowBinding} 
             variable={variable} 
@@ -142,7 +145,7 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult, s
 
   return (
     <>
-      <TableUtilities resultNumbers={resultNumbers} searchString={searchString} searchChangeCallback={e => setSearchString( e.target.value )} />
+      <TableUtilities isDisabled={isRefreshing} resultNumbers={resultNumbers} searchString={searchString} searchChangeCallback={e => setSearchString( e.target.value )} />
       <Table hover size="sm" responsive>
         <thead>
           {tableHead}
@@ -153,17 +156,17 @@ export default function QueryResultTable({ refreshTableCallback, sparqlResult, s
       </Table>
       <Row>
         <Col>
-          <Button variant="link" className="link-secondary" onClick={() => downloadFilteredSortedTableAsCSV()}>Save table as CSV</Button>
+          <Button variant="link" className="link-secondary" onClick={() => downloadFilteredSortedTableAsCSV()} disabled={isRefreshing}>Save table as CSV</Button>
         </Col>
         <Col xs="auto">
-          <PaginationControl numberOfPages={numberOfPages} page={page} setPage={setPage} />
+          <PaginationControl isDisabled={isRefreshing} numberOfPages={numberOfPages} page={page} setPage={setPage} />
         </Col>
       </Row>
     </>
   );
 }
 
-function TableUtilities({ resultNumbers, searchString, searchChangeCallback }) {
+function TableUtilities({ isDisabled, resultNumbers, searchString, searchChangeCallback }) {
   return (
     <Row>
       <Col>
@@ -175,7 +178,7 @@ function TableUtilities({ resultNumbers, searchString, searchChangeCallback }) {
       <Col xs="auto">
         <InputGroup className="mb-3">
           <FormControl placeholder="search ..." aria-label="full-text search" aria-describedby="search-field"
-            value={searchString} onChange={searchChangeCallback} />
+            value={searchString} onChange={searchChangeCallback} readOnly={isDisabled} />
           <InputGroup.Text id="search-field"><i className="bi bi-search"></i></InputGroup.Text>
         </InputGroup>
       </Col>
@@ -183,7 +186,7 @@ function TableUtilities({ resultNumbers, searchString, searchChangeCallback }) {
   );
 }
 
-function PaginationControl({ numberOfPages, page, setPage }) {
+function PaginationControl({ isDisabled, numberOfPages, page, setPage }) {
   if(numberOfPages <= 1) return null;
 
   const MAX_PAGES = 10;
@@ -196,7 +199,7 @@ function PaginationControl({ numberOfPages, page, setPage }) {
 
     return [...Array(numberOfPages).keys()] // 0,1,2,..,numberOfPages
       .filter( i => showPageControls(i) )
-      .map( i => <Pagination.Item key={i} onClick={ ()=>setPage(i) } active={ i===page ? true : false}>{i+1}</Pagination.Item> );
+      .map( i => <Pagination.Item key={i} onClick={ ()=>setPage(i) } active={ i===page ? true : false} disabled={isDisabled}>{i+1}</Pagination.Item> );
   }
 
   return (

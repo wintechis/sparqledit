@@ -13,20 +13,21 @@ import {
   executeSelectOrUpdateQuery 
 } from '../../scripts/sparqledit/sparqledit';
 
-export default function QueryResultTableInputCell({ refreshTableCallback, sparqlSubmission, rowBinding, variable, insertMode = false, sparqlView }) {
+export default function QueryResultTableInputCell({ refreshTableCallback, isRefreshing, sparqlSubmission, rowBinding, variable, insertMode = false, sparqlView }) {
   const [showInput, setShowInput] = React.useState(false);
   
   if (insertMode) {
     return (
       <td className="align-middle">
         { !showInput && 
-          <Button variant="link" className="text-secondary" onClick={() => setShowInput(true)}>
+          <Button variant="link" className="text-secondary" onClick={() => setShowInput(true)} disabled={isRefreshing}>
             <small>insert missing value</small>
           </Button>
         }
         { showInput &&
           <QueryResultTableInputCellInput  
             refreshTableCallback={refreshTableCallback} 
+            isRefreshing={isRefreshing}
             sparqlSubmission={sparqlSubmission} 
             rowBinding={rowBinding} 
             variable={variable} 
@@ -41,6 +42,7 @@ export default function QueryResultTableInputCell({ refreshTableCallback, sparql
       <td className="align-middle">
         <QueryResultTableInputCellInput 
           refreshTableCallback={refreshTableCallback} 
+          isRefreshing={isRefreshing}
           sparqlSubmission={sparqlSubmission} 
           rowBinding={rowBinding} 
           variable={variable} 
@@ -51,7 +53,7 @@ export default function QueryResultTableInputCell({ refreshTableCallback, sparql
   }
 }
 
-function QueryResultTableInputCellInput({ refreshTableCallback, sparqlSubmission, rowBinding, variable, insertMode, insertModeReset, sparqlView }) {
+function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sparqlSubmission, rowBinding, variable, insertMode, insertModeReset, sparqlView }) {
   const [modalShow, setModalShow] = React.useState(false);
   const { error: datatypeError, value: origValue, inputType, inputStep, language } = getInputTypeForLiteral(rowBinding[variable]);
   const initialState = initialInputCellState(sparqlSubmission, origValue);
@@ -78,7 +80,7 @@ function QueryResultTableInputCellInput({ refreshTableCallback, sparqlSubmission
         //   result: updateResult,
         // });
         // 2) redo query and reload complete table (drawback: no success indication)
-        refreshTableCallback(inputCellState.origSparqlSubmission);
+        refreshTableCallback();
       } else {
         dispatch({
           type: "INPUTCELL_UPDATE_FAIL",
@@ -149,6 +151,7 @@ function QueryResultTableInputCellInput({ refreshTableCallback, sparqlSubmission
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const isReadOnlyInput = inputCellState.isExecutingQuery || isRefreshing; // disable input when updating the value and refreshing the table
   const showButtons = (inputCellState.updateQuery || inputCellState.buildingError) ? true : false;
   const anyError = (inputCellState.buildingError || inputCellState.updateError) ? true : false;
   const inputValue = (inputCellState.currentCellValue || inputCellState.currentCellValue === '') ? inputCellState.currentCellValue : inputCellState.origCellValue;
@@ -158,10 +161,10 @@ function QueryResultTableInputCellInput({ refreshTableCallback, sparqlSubmission
       <Form onSubmit={e => handleLiteralUpdate(e)}>
         {
           {
-            'checkbox': <Form.Check type="checkbox" onChange={e => handleCheckboxChange(e)} label={inputValue} ref={inputRef} checked={inputValue === 'true' ? true : false} isInvalid={anyError} />,
-            'textarea': <Form.Control as='textarea' onChange={e => handleInputChange(e)} ref={inputRef} value={inputValue} lang={language} isInvalid={anyError} isValid={inputCellState.updateResult ? true : null} />
+            'checkbox': <Form.Check type="checkbox" onChange={e => handleCheckboxChange(e)} label={inputValue} ref={inputRef} checked={inputValue === 'true' ? true : false} isInvalid={anyError} readOnly={isReadOnlyInput} />,
+            'textarea': <Form.Control as='textarea' onChange={e => handleInputChange(e)} ref={inputRef} value={inputValue} lang={language} isInvalid={anyError} isValid={inputCellState.updateResult ? true : null} readOnly={isReadOnlyInput} />
           }[inputType] ||
-          <Form.Control type={inputType} onChange={e => handleInputChange(e)} isInvalid={anyError} ref={inputRef} value={inputValue} lang={language} step={inputStep} isValid={inputCellState.updateResult ? true : null} />
+          <Form.Control type={inputType} onChange={e => handleInputChange(e)} isInvalid={anyError} ref={inputRef} value={inputValue} lang={language} step={inputStep} isValid={inputCellState.updateResult ? true : null} readOnly={isReadOnlyInput} />
         }
         <Collapse in={showButtons} mountOnEnter={true} unmountOnExit={true}>
           <div>

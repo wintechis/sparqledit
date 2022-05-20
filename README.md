@@ -167,6 +167,8 @@ run the NodeJS script: `node .\docs\updatelog\replay-sparql-updates.mjs`
 
 ### TODOs
 
+* General
+  * Licenses, e.g. https://solidproject.org/license
 * Algorithm
   * advanced support for named graphs (FROM NAMED)
   * support for other [Graph Pattern](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#GraphPattern)
