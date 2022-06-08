@@ -167,7 +167,9 @@ run the NodeJS script: `node .\docs\updatelog\replay-sparql-updates.mjs`
 
 ### TODOs
 
-* General
+* Publication
+  * "Legal notice" page (owner, cookies, licenses)
+  * `license-checker --production --summary > docs/license-check.txt`
   * Licenses, e.g. https://solidproject.org/license
 * Algorithm
   * advanced support for named graphs (FROM NAMED)
