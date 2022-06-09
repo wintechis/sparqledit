@@ -6,6 +6,8 @@ v0.3: **SPARQLview** manager
 
 v0.4: **SPARQLview** manager + **Solid** integration
 
+v0.5: **Update log** feature
+
 ## SPARQL_edit is a Web app that facilitates the editing of RDF literal values in a Knowledge Graph
 
 SPARQL_edit manages so-called "SPARQL views", simple configuration objects that define how to load a table of values from a Knowledge Graph. For each view, SPARQL_edit allows you to edit literal values in the table.
@@ -170,7 +172,6 @@ run the NodeJS script: `node .\docs\updatelog\replay-sparql-updates.mjs`
 * Publication
   * "Legal notice" page (owner, cookies, licenses)
   * `license-checker --production --summary > docs/license-check.txt`
-  * Licenses, e.g. https://solidproject.org/license
 * Algorithm
   * advanced support for named graphs (FROM NAMED)
   * support for other [Graph Pattern](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#GraphPattern)
