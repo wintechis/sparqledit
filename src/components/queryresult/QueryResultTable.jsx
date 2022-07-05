@@ -81,7 +81,9 @@ export default function QueryResultTable({ refreshTableCallback, isRefreshing, s
     total: sparqlResultBindingsRaw.length
   }
 
-  // add prefixes from query (overrides default prefixes)
+  // add prefixes
+  prefixes['ex'] = 'http://example.org/'; // for demo cases
+  // prefixes from query (override default prefixes)
   Object.entries(sparqlResult.queryObject.prefixes)
     .forEach(([pref, uri]) => prefixes[pref] = uri);
 

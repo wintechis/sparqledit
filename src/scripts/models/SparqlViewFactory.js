@@ -82,7 +82,9 @@ export default class SparqlViewFactory {
   static newSparqlViewFromObject(object) {
     if (
       object instanceof SparqlView || 
-      Object.keys(new SparqlView()).every(key => object.hasOwnProperty(key)) 
+      Object.keys(this.newBlankSparqlView())
+        .filter(key => key !== 'updateLogGraph')
+        .every(key => object.hasOwnProperty(key)) 
     ) {
       return new SparqlView(
         this.generateUnsafeUuid(),
