@@ -23,7 +23,7 @@ SPARQL_edit supports simple ['SELECT' queries](https://www.w3.org/TR/2013/REC-sp
 * 'FILTER' statements
 * solution sequence modifier ('ORDER','LIMIT','OFFSET')
 
-### Restrictions
+#### Restrictions
 * only queries with all or specific selected variables
 * edited SPARQL variable only once in object position
 * only literal values (object position) can be edited
@@ -33,6 +33,8 @@ SPARQL_edit supports simple ['SELECT' queries](https://www.w3.org/TR/2013/REC-sp
 * blank node problems
   * no RDF containers and collections
 * no sub-queries
+
+Grammar definitions that differ from the [original SPARQL 1.1 grammar](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#sparqlGrammar): [/docs/sparql_grammar_diff.html](/docs/sparql_grammar_diff.html)
 
 ### Usage tips
 

@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "sass": "^1.45.0",
+    "solid-auth-cli": "^1.0.15",
     "solid-file-client": "^2.1.0"
   }
 }
