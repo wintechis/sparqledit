@@ -34,7 +34,7 @@ export default function possibleErrorCauses(error) {
       causeNotices.push('The given URL is not a valid SPARQL endpoint');
     }
     if (error.message.toLowerCase().includes('parse error')) {
-      causeNotices.push('The submitted SPARQL query contains a syntax error. Please check if there is a red hint in the query box.');
+      causeNotices.push('The submitted SPARQL query contains a syntax/grammar error. Please check if there is a red hint in the query box.');
       causeNotices.push('A grammar mistake in the SPARQL query');
     }
   }

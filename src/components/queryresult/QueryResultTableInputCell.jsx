@@ -104,11 +104,15 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
     handleChange(newValue);
   }
   const handleChange = (newValue) => {
+    // define the function that the reducer will use for generating the update query
     const buildUpdateQuery = () => {
-      rowBinding[variable].valueNew = String(newValue);
+       // deep copy orig rowBinding to keep it clean (e.g. in case of reset)
+      const rowBindingWithNewValue = JSON.parse(JSON.stringify(rowBinding));
+      // add the new value; valueNew prop is later used by the algo to indentify the modified variable
+      rowBindingWithNewValue[variable].valueNew = String(newValue);
       // build the update query
       const updateQu = sparqlView.updateLogGraph?.length > 1 ? 
-        buildUpdateLogQueryForVariable(sparqlSubmission.queryString, rowBinding, sparqlView) : buildUpdateQueryForVariable(sparqlSubmission.queryString, rowBinding);
+        buildUpdateLogQueryForVariable(sparqlSubmission.queryString, rowBindingWithNewValue, sparqlView) : buildUpdateQueryForVariable(sparqlSubmission.queryString, rowBindingWithNewValue);
       return updateQu;
     }
     dispatch({

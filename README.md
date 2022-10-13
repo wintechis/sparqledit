@@ -224,8 +224,16 @@ SPARQL_edit can only send and receive requests if the SPARQL server supports [Cr
 
 If the app is served over _HTTPS_ the browser blocks _HTTP_ requests to other websites. ([Firefox docu](https://support.mozilla.org/en-US/kb/mixed-content-blocking-firefox))
 
-| SPARQL access | Chrome | Firefox |
+|  | SPARQL URL | Allowed ? |
 |---|---|---|
-| HTTPS | https://wikidata.org/sparql | https://wikidata.org/sparql |
-| HTTP | X | http://ux1637:3030/test/ *if allowed by the user |
-| localhost | http://localhost:3030/test/ | http://localhost:3030/test/ |
+| HTTPS | https://data.nobelprize.org/store/sparql | Yes |
+| HTTP  | http://ux1637:3030/nobelprizes | No (only if explicitly allowed, see below) |
+| localhost | http://localhost:3030/nobelprizes | Yes |
+
+Disable 'Mixed Content' blocking for a certain web page:
+* Chrome
+  * click on lock symbol next to URL -> show website information
+  * website settings -> allow "unsafe content"
+* Firefox
+  * click on lock symbol next to URL -> "Firefox has blocked parts of this page that are not secure" 
+  * click on "Connection secure" -> "Disable protection for now"

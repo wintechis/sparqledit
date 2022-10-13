@@ -25,8 +25,7 @@ export function inputCellStateReducer(state, action) {
       if (action.currentCellValue != state.origCellValue) {
         newState.currentCellValue = action.currentCellValue
         try {
-          const updateQu = action.buildUpdateQuery();
-          newState.updateQuery = updateQu;
+          newState.updateQuery = action.buildUpdateQuery();
         } catch (error) {
           const buildingError = new BuildingError(
             `The update query building algorithm failed.\n${error.name} - ${error.message}`);
@@ -43,8 +42,7 @@ export function inputCellStateReducer(state, action) {
         currentCellValue: state.origCellValue
       };
       try {
-        const updateQu = action.buildUpdateQuery();
-        newInsertState.updateQuery = updateQu;
+        newInsertState.updateQuery = action.buildUpdateQuery();
       } catch (error) {
         const buildingError = new BuildingError(
           `The update query building algorithm failed.\n${error.name} - ${error.message}`);
