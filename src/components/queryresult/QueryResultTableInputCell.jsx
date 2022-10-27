@@ -112,7 +112,8 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
       rowBindingWithNewValue[variable].valueNew = String(newValue);
       // build the update query
       const updateQu = sparqlView.updateLogGraph?.length > 1 ? 
-        buildUpdateLogQueryForVariable(sparqlSubmission.queryString, rowBindingWithNewValue, sparqlView) : buildUpdateQueryForVariable(sparqlSubmission.queryString, rowBindingWithNewValue);
+        buildUpdateLogQueryForVariable(sparqlSubmission.queryString, rowBindingWithNewValue, sparqlView) : 
+        buildUpdateQueryForVariable(sparqlSubmission.queryString, rowBindingWithNewValue);
       return updateQu;
     }
     dispatch({

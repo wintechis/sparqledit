@@ -12,8 +12,8 @@ v0.5: **Update log** feature
 
 SPARQL_edit manages so-called "SPARQL views", simple configuration objects that define how to load a table of values from a Knowledge Graph. For each view, SPARQL_edit allows you to edit literal values in the table.
 
-SPARQL_edit executes user-defined [SPARQL SELECT query](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/) and shows the results in a table. The result table displays literals as editable input fields where the user can simply change the value. 
-When the changes are saved, SPARQL_edit automatically creates a [SPARQL Update query](https://www.w3.org/TR/sparql11-update/) and executes it. 
+SPARQL_edit executes user-defined [SPARQL/Select query](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/) and shows the results in a table. The result table displays literals as editable input fields where the user can simply change the value. 
+When the changes are saved, SPARQL_edit automatically creates a [SPARQL/Update query](https://www.w3.org/TR/sparql11-update/) and executes it. 
 There are, however, some restrictions for the generation of the update query. This relates to the _database view update problem_.
 
 SPARQL_edit supports simple ['SELECT' queries](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#select) on the [default graph](https://www.w3.org/TR/sparql11-query/#specifyingDataset) with a [basic graph pattern (BGP)](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#BasicGraphPatterns) that may contain 
