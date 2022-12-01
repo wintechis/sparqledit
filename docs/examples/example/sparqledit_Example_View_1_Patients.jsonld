@@ -1,0 +1,49 @@
+{
+  "name": "Example View 1 - Patients",
+  "description": "Example view for the RDF example dataset. Table of patients' names, birthdates and weights.",
+  "creator": "Admin",
+  "dateCreated": "2022-12-01T16:21:17.660Z",
+  "queryURL": "http://ux1637:3030/sparqledit-example/query",
+  "updateURL": "http://ux1637:3030/sparqledit-example/update",
+  "query": "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX schema: <http://schema.org/>\n\nSELECT ?name ?birthdate ?weight\nWHERE {\n  ?patient a schema:Patient ;\n    foaf:name ?name ;\n    schema:birthDate ?birthdate .\n  ?patient schema:weight [\n    schema:value ?weight\n  ]\n}",
+  "requiresBasicAuth": false,
+  "@context": {
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "schema": "http://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "spedit": "http://iis.fraunhofer.de/sparqledit/ontology#",
+    "name": {
+      "@id": "schema:name"
+    },
+    "description": {
+      "@id": "schema:description"
+    },
+    "creator": {
+      "@id": "schema:creator"
+    },
+    "dateCreated": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:dateTime"
+    },
+    "queryURL": {
+      "@id": "spedit:queryURL",
+      "@type": "xsd:anyURI"
+    },
+    "updateURL": {
+      "@id": "spedit:updateURL",
+      "@type": "xsd:anyURI"
+    },
+    "query": {
+      "@id": "spedit:query"
+    },
+    "requiresBasicAuth": {
+      "@id": "spedit:requiresBasicAuth",
+      "@type": "xsd:boolean"
+    },
+    "updateLogGraph": {
+      "@id": "spedit:updateLogGraph",
+      "@type": "xsd:anyURI"
+    }
+  },
+  "@type": "spedit:SparqlView"
+}

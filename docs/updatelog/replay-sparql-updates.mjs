@@ -6,7 +6,7 @@ import fetch from 'node-fetch';
 // Very simple script for reapplying changes to a dataset that have been done 
 // exclusively with SPARQL_edit.
 // Procedure: fetch SPARQL_edit update log from the SPARQL endpoint with a 
-// SPARQL Select query, iterate over the list of updates and chronologically 
+// SPARQL/Select query, iterate over the list of updates and chronologically 
 // replay each update query.
 //
 //--- user input -------------------------------------------------------------

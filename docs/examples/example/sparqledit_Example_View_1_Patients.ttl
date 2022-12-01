@@ -1,0 +1,14 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix schema: <http://schema.org/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix spedit: <http://iis.fraunhofer.de/sparqledit/ontology#>.
+
+_:b0 a spedit:SparqlView;
+    schema:name "Example View 1 - Patients";
+    schema:description "Example view for the RDF example dataset. Table of patients' names, birthdates and weights.";
+    schema:creator "Admin";
+    schema:dateCreated "2022-12-01T16:21:17.660Z"^^xsd:dateTime;
+    spedit:queryURL "http://ux1637:3030/sparqledit-example/query"^^xsd:anyURI;
+    spedit:updateURL "http://ux1637:3030/sparqledit-example/update"^^xsd:anyURI;
+    spedit:query "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX schema: <http://schema.org/>\n\nSELECT ?name ?birthdate ?weight\nWHERE {\n  ?patient a schema:Patient ;\n    foaf:name ?name ;\n    schema:birthDate ?birthdate .\n  ?patient schema:weight [\n    schema:value ?weight\n  ]\n}";
+    spedit:requiresBasicAuth false.

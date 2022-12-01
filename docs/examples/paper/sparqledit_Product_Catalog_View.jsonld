@@ -1,18 +1,16 @@
 {
-  "name": "Test view",
-  "description": "This is a test SPARQL view.",
-  "creator": "Test User",
-  "dateCreated": "2022-01-18T11:05:10.345Z",
-  "queryURL": "http://localhost:3030/test/",
-  "updateURL": "http://localhost:3030/test/",
-  "query": "PREFIX schema: <http://schema.org/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT *\nWHERE {\n  ?s ?p ?o .\n  OPTIONAL {  \n    ?s rdfs:label ?label .\n  }\n  OPTIONAL {  \n    ?s schema:name ?name .\n  }\n}",
+  "name": "Product Catalog View",
+  "description": "Product catalog view for all products from department C3.",
+  "creator": "Alice A.",
+  "dateCreated": "2022-12-01T15:58:05.356Z",
+  "queryURL": "http://ux1637:3030/sparqledit-examplepaper/query",
+  "updateURL": "http://ux1637:3030/sparqledit-examplepaper/update",
+  "query": "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX schema: <http://schema.org/>\n\nSELECT ?product ?name ?gtin ?weight\nWHERE {\n  ?product rdf:type schema:Product ;\n    schema:name ?name ;\n    schema:gtin ?gtin ;\n    schema:weight [\n      schema:value ?weight\n    ]\n  FILTER (lang(?name) = 'en')\n}",
   "requiresBasicAuth": false,
   "@context": {
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
     "schema": "http://schema.org/",
     "xsd": "http://www.w3.org/2001/XMLSchema#",
-    "foaf": "http://xmlns.com/foaf/0.1/",
-    "vcard": "http://www.w3.org/2006/vcard/ns#",
     "spedit": "http://iis.fraunhofer.de/sparqledit/ontology#",
     "name": {
       "@id": "schema:name"
@@ -41,6 +39,10 @@
     "requiresBasicAuth": {
       "@id": "spedit:requiresBasicAuth",
       "@type": "xsd:boolean"
+    },
+    "updateLogGraph": {
+      "@id": "spedit:updateLogGraph",
+      "@type": "xsd:anyURI"
     }
   },
   "@type": "spedit:SparqlView"

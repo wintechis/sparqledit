@@ -1,0 +1,68 @@
+@prefix schema: <http://schema.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix om2: <http://www.ontology-of-units-of-measure.org/resource/om-2/> .
+
+<http://example.org/product/98765> a schema:Product ;
+  schema:name "Metal cover ABC123 Type 2" ;
+  schema:countryOfOrigin <http://www.wikidata.org/entity/Q30> ;
+  schema:gtin 624141007349 ;
+  schema:productionDate "2022-06-30T08:22:50"^^xsd:dateTime ;
+  schema:width "1.50 m" ;
+  schema:depth "1.20 m" ;
+  schema:weight [
+    a schema:QuantitativeValue ;
+    schema:value "10.5"^^xsd:decimal ;
+    schema:unitCode om2:kilogram
+  ] .
+
+<http://example.org/product/98777> a schema:Product ;
+  schema:name "Metal cover ABC444" ;
+  schema:countryOfOrigin <http://www.wikidata.org/entity/Q30> ;
+  schema:gtin 624141007783 ;
+  schema:productionDate "2022-05-22T06:34:00"^^xsd:dateTime ;
+  schema:width "1.50 m" ;
+  schema:depth "1.00 m" ;
+  schema:weight [
+    a schema:QuantitativeValue ;
+    schema:value "7.5"^^xsd:decimal ;
+    schema:unitCode om2:kilogram
+  ] .
+
+<http://example.org/product/12765> a schema:Product ;
+  schema:name "Cover mount for ABC123-312" ;
+  schema:countryOfOrigin <http://www.wikidata.org/entity/Q30> ;
+  schema:gtin 624143456490 ;
+  schema:width "0.30 m" ;
+  schema:height "0.25 m" ;
+  schema:weight [
+    a schema:QuantitativeValue ;
+    schema:value "0.55"^^xsd:decimal ;
+    schema:unitCode om2:kilogram
+  ] .
+
+<http://example.org/product/00346354> a schema:Product ;
+  schema:name "Screw set X5432" ;
+  schema:countryOfOrigin <http://www.wikidata.org/entity/Q148> ;
+  schema:productionDate "2021-10-10T00:00:00"^^xsd:dateTime ;
+  schema:weight [
+    a schema:QuantitativeValue ;
+    schema:value "0.22"^^xsd:decimal ;
+    schema:unitCode om2:kilogram
+  ] .
+
+<http://example.org/product/00346355> a schema:Product ;
+  schema:name "Screw set X5454" ;
+  schema:countryOfOrigin <http://www.wikidata.org/entity/Q148> ;
+  schema:productionDate "2021-10-10T00:00:00"^^xsd:dateTime ;
+  schema:weight [
+    a schema:QuantitativeValue ;
+    schema:value "0.20"^^xsd:decimal ;
+    schema:unitCode om2:kilogram
+  ] .
+
+<http://example.org/product/23457356> a schema:Product ;
+  schema:name "Seal replacement kit" ;
+  schema:countryOfOrigin <http://www.wikidata.org/entity/Q148> ;
+  schema:gtin 578141007349 ;
+  schema:productionDate "2022-02-12T15:20:33"^^xsd:dateTime ;
+  schema:width "200 cm" .
