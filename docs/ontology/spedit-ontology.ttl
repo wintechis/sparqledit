@@ -14,11 +14,11 @@
 # ontology
 
 spedit: a owl:Ontology ;
-  owl:versionInfo "0.1.0" ;
-  rdfs:comment "This ontology describes HCPs and HCOs." .
+  owl:versionInfo "0.1.1" ;
+  rdfs:comment "This ontology is used to describe a SPARQL view for the SPARQL_edit app." ;
   dct:title "SPARQL_edit ontology" ;
   dct:created "2022-03-03"^^xsd:date ;
-  dct:modified "2022-04-21"^^xsd:date ;
+  dct:modified "2022-12-01"^^xsd:date ;
   dct:type <http://purl.org/adms/assettype/Ontology> ;
   dct:creator [
     foaf:name "Sascha Meckler" ;
