@@ -85,7 +85,7 @@ function UploadSuccessBox({ successObj }) {
     <Alert variant="success" onClose={() => setShow(false)} dismissible>
       <Alert.Heading>Successfully uploaded!</Alert.Heading>
       <p>The SPARQL view has been successfully uploaded to the Solid Pod.</p>
-      <p><a href={successObj.fileUrl} target="_blank" rel="noreferrer">{successObj.fileUrl}</a></p>
+      <p><a href={successObj.fileUrl} target="_blank" rel="noreferrer" className="text-break">{successObj.fileUrl}</a></p>
     </Alert>
   );
   return show ? alert : null;
