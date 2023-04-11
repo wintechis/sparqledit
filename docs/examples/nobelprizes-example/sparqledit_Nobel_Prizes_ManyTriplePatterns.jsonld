@@ -1,0 +1,49 @@
+{
+  "name": "Nobel Prizes - Many Triple Patterns",
+  "description": "This is a test view for the 'Nobel Prizes as Linked Data' dataset with many triple patterns.",
+  "creator": "Sascha",
+  "dateCreated": "2022-12-01T16:34:42.053Z",
+  "queryURL": "http://ux1637:3030/sparqledit-nobelprizes/query",
+  "updateURL": "http://ux1637:3030/sparqledit-nobelprizes/update",
+  "query": "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX nobel: <http://data.nobelprize.org/terms/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX dbo: <http://dbpedia.org/ontology/>\nPREFIX dbp: <http://dbpedia.org/property/>\nPREFIX dcterms: <http://purl.org/dc/terms/>\n\nSELECT *\nWHERE {\n  ?laureate rdf:type nobel:Laureate .\n  ?laureate rdfs:label ?label .\n  ?laureate owl:sameAs ?sameAs .\n  ?laureate foaf:name ?name .\n  ?laureate foaf:familyName ?familyName .\n  ?laureate foaf:givenName ?givenName .\n  ?laureate foaf:birthday ?birthday .\n  ?laureate foaf:gender ?gender .\n  ?laureate dbp:dateOfBirth ?dateOfBirth .\n  ?laureate dbp:dateOfDeath ?dateOfDeath .\n  ?laureate dbo:birthPlace ?birthPlace .\n  ?laureate dbo:deathPlace ?deathPlace .\n  ?laureate dbo:affiliation ?affiliation .\n  ?laureate nobel:nobelPrize ?nobelPrize .\n  ?laureate nobel:laureateAward ?laureateAward .\n\n  ?nobelPrize rdf:type nobel:NobelPrize .\n  ?nobelPrize rdfs:label ?label2 .\n  ?nobelPrize nobel:category ?category .\n  ?nobelPrize nobel:categoryOrder ?categoryOrder .\n  ?nobelPrize dcterms:hasPart ?hasPart .\n\n  ?laureateAward rdf:type nobel:LaureateAward .\n  ?laureateAward rdfs:label ?label3 .\n  ?laureateAward nobel:category ?category2 .\n  ?laureateAward nobel:motivation ?motivation .\n  ?laureateAward nobel:sortOrder ?sortOrder .\n  ?laureateAward nobel:share ?share .\n  ?laureateAward nobel:year ?year2 .\n\n  ?affiliation rdf:type dbo:University .\n  ?affiliation rdfs:label ?label4 .\n  ?affiliation dbo:city ?city .\n  ?affiliation dbo:country ?country .\n  \n  ?city rdfs:label ?label5 .\n  ?city owl:sameAs ?city2 .\n}\nLIMIT 20",
+  "requiresBasicAuth": false,
+  "@context": {
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "schema": "http://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "spedit": "http://iis.fraunhofer.de/sparqledit/ontology#",
+    "name": {
+      "@id": "schema:name"
+    },
+    "description": {
+      "@id": "schema:description"
+    },
+    "creator": {
+      "@id": "schema:creator"
+    },
+    "dateCreated": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:dateTime"
+    },
+    "queryURL": {
+      "@id": "spedit:queryURL",
+      "@type": "xsd:anyURI"
+    },
+    "updateURL": {
+      "@id": "spedit:updateURL",
+      "@type": "xsd:anyURI"
+    },
+    "query": {
+      "@id": "spedit:query"
+    },
+    "requiresBasicAuth": {
+      "@id": "spedit:requiresBasicAuth",
+      "@type": "xsd:boolean"
+    },
+    "updateLogGraph": {
+      "@id": "spedit:updateLogGraph",
+      "@type": "xsd:anyURI"
+    }
+  },
+  "@type": "spedit:SparqlView"
+}

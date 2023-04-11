@@ -1,0 +1,113 @@
+# own prefix
+@prefix spedit:   <http://iis.fraunhofer.de/sparqledit/ontology#> .
+# other prefixes
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix dct:     <http://purl.org/dc/terms/> .
+@prefix vann:    <http://purl.org/vocab/vann/> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix schema:  <http://schema.org/> .
+
+
+# ontology
+
+spedit: a owl:Ontology ;
+  owl:versionInfo "0.1.1" ;
+  rdfs:comment "This ontology is used to describe a SPARQL view for the SPARQL_edit app." ;
+  dct:title "SPARQL_edit ontology" ;
+  dct:created "2022-03-03"^^xsd:date ;
+  dct:modified "2022-12-01"^^xsd:date ;
+  dct:type <http://purl.org/adms/assettype/Ontology> ;
+  dct:creator [
+    foaf:name "Sascha Meckler" ;
+    foaf:mbox <mailto:sascha.meckler@iis.fraunhofer.de> 
+  ] ;
+  vann:preferredNamespaceUri "http://iis.fraunhofer.de/sparqledit/ontology#" ;
+  vann:preferredNamespacePrefix "spedit" ;
+  foaf:homepage <https://iis.fraunhofer.de> .
+
+
+# classes
+
+spedit:SparqlView a rdfs:Class ;
+  rdfs:label "Sparql view" ;
+  rdfs:comment "A SPARQL_edit configuration object that defines how to load a table of values from a Knowledge Graph." ;
+  rdfs:subClassOf schema:CreativeWork . # maybe schema:SearchAction
+
+
+# datatype properties
+
+schema:name a rdf:Property ;
+  rdfs:label "name" ;
+  rdfs:comment "The name of the item." ;
+  rdfs:subPropertyOf rdfs:label ;
+  schema:domainIncludes schema:Thing ;
+  schema:rangeIncludes schema:Text ;
+  owl:equivalentProperty dc:title .
+
+schema:description a rdf:Property ;
+  rdfs:label "description" ;
+  rdfs:comment "A description of the item." ;
+  schema:domainIncludes schema:Thing ;
+  schema:rangeIncludes schema:Text ;
+  owl:equivalentProperty dc:description .
+
+schema:creator a rdf:Property ;
+  rdfs:label "creator" ;
+  rdfs:comment "The creator/author of this CreativeWork. This is the same as the Author property for CreativeWork." ;
+  schema:domainIncludes schema:CreativeWork, schema:UserComments ;
+  schema:rangeIncludes schema:Organization, schema:Person .
+
+schema:dateCreated a rdf:Property ;
+  rdfs:label "dateCreated" ;
+  rdfs:comment "The date on which the CreativeWork was created or the item was added to a DataFeed." ;
+  schema:domainIncludes schema:CreativeWork, schema:DataFeedItem ;
+  schema:rangeIncludes schema:Date, schema:DateTime .
+
+spedit:query a owl:DatatypeProperty ;
+  rdfs:label "query" ;
+  rdfs:comment "The SPARQL query string." ;
+  rdfs:domain spedit:SparqlView ;
+  rdfs:range xsd:string .
+  # maybe rdfs:subPropertyOf schema:query
+
+spedit:queryURL a owl:DatatypeProperty ;
+  rdfs:label "query URL" ;
+  rdfs:comment "The query URL of the SPARQL endpoint." ;
+  rdfs:domain spedit:SparqlView ;
+  rdfs:range xsd:anyURI .
+
+spedit:updateURL a owl:DatatypeProperty ;
+  rdfs:label "update URL" ;
+  rdfs:comment "The update URL of the SPARQL endpoint." ;
+  rdfs:domain spedit:SparqlView ;
+  rdfs:range xsd:anyURI .
+
+spedit:requiresBasicAuth a owl:DatatypeProperty ;
+  rdfs:label "requires BasicAuth" ;
+  rdfs:comment "A flag indicating if the SPARQL endpoint requires HTTP BasicAuth." ;
+  rdfs:domain spedit:SparqlView ;
+  rdfs:range xsd:boolean .
+
+spedit:updateLogGraph a owl:DatatypeProperty ;
+  rdfs:label "update log graph name" ;
+  rdfs:comment "The name of the graph where the update logs are saved. Logging is enabled if the graph name is defined." ;
+  rdfs:domain spedit:SparqlView ;
+  rdfs:range xsd:anyURI .
+
+
+# object properties and annotation properties
+
+rdfs:domain a owl:ObjectProperty .
+
+rdfs:range a owl:ObjectProperty .
+
+rdfs:label a owl:AnnotationProperty .
+
+rdfs:comment a owl:AnnotationProperty .
+
+schema:domainIncludes a owl:AnnotationProperty .
+
+schema:rangeIncludes a owl:AnnotationProperty .

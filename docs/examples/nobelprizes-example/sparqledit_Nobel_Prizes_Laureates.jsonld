@@ -1,0 +1,49 @@
+{
+  "name": "Nobel Prizes - Laureates",
+  "description": "This is a test view for the 'Nobel Prizes as Linked Data' dataset. It lists information about laureates.",
+  "creator": "Alice A.",
+  "dateCreated": "2023-02-01T15:45:17.746Z",
+  "queryURL": "http://localhost:3030/nobelprizes/query",
+  "updateURL": "http://localhost:3030/nobelprizes/update",
+  "query": "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX dbo: <http://dbpedia.org/ontology/>\nPREFIX dbp: <http://dbpedia.org/property/>\nPREFIX nobel: <http://data.nobelprize.org/terms/>\n#PREFIX nobelres: <http://data.nobelprize.org/resource/> #shorten URIs\n\nSELECT ?familyName ?givenName ?birthday ?gender ?dateOfBirth ?dateOfDeath ?birthPlace ?deathPlace ?affiliation\nWHERE {\n  ?laureate rdf:type nobel:Laureate .\n  ?laureate rdfs:label ?label .\n  ?laureate foaf:name ?name .\n  ?laureate foaf:familyName ?familyName .\n  ?laureate foaf:givenName ?givenName .\n  ?laureate foaf:birthday ?birthday .\n  ?laureate foaf:gender ?gender .\n  ?laureate dbp:dateOfBirth ?dateOfBirth .\n  ?laureate dbp:dateOfDeath ?dateOfDeath .\n  ?laureate dbo:birthPlace ?birthPlaceURI .\n  ?birthPlaceURI a dbo:Country .\n  ?birthPlaceURI rdfs:label ?birthPlace .\n  FILTER (lang(?birthPlace) = 'en')\n  ?laureate dbo:deathPlace ?deathPlaceURI .\n  ?deathPlaceURI a dbo:Country .\n  ?deathPlaceURI rdfs:label ?deathPlace .\n  FILTER (lang(?deathPlace) = 'en')\n  ?laureate dbo:affiliation ?affiliationURI .\n  ?affiliationURI rdfs:label ?affiliation .\n  FILTER (lang(?affiliation) = 'en')\n}",
+  "requiresBasicAuth": false,
+  "@context": {
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "schema": "http://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "spedit": "http://iis.fraunhofer.de/sparqledit/ontology#",
+    "name": {
+      "@id": "schema:name"
+    },
+    "description": {
+      "@id": "schema:description"
+    },
+    "creator": {
+      "@id": "schema:creator"
+    },
+    "dateCreated": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:dateTime"
+    },
+    "queryURL": {
+      "@id": "spedit:queryURL",
+      "@type": "xsd:anyURI"
+    },
+    "updateURL": {
+      "@id": "spedit:updateURL",
+      "@type": "xsd:anyURI"
+    },
+    "query": {
+      "@id": "spedit:query"
+    },
+    "requiresBasicAuth": {
+      "@id": "spedit:requiresBasicAuth",
+      "@type": "xsd:boolean"
+    },
+    "updateLogGraph": {
+      "@id": "spedit:updateLogGraph",
+      "@type": "xsd:anyURI"
+    }
+  },
+  "@type": "spedit:SparqlView"
+}

@@ -1,0 +1,23 @@
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX schema: <http://schema.org/>
+SELECT * #?name ?family ?birthdate ?weight
+WHERE {
+  ?patient a schema:Patient ;
+    foaf:name ?name .
+  OPTIONAL {  
+    ?patient foaf:familyName ?family . 
+  }
+  OPTIONAL {  
+    ?patient schema:birthDate ?birthdate .
+  }
+  ?patient schema:weight [
+    schema:value ?weight
+  ] .
+  OPTIONAL {
+    ?patient schema:memberOf ?medoffice .
+    ?medoffice schema:address [
+      schema:streetAddress ?medoffice_street ;
+      schema:postalCode ?medoffice_zip  
+    ] .
+  }
+}

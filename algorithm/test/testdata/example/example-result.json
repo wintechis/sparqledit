@@ -1,0 +1,294 @@
+[
+  {
+    "patient": {
+      "termType": "NamedNode",
+      "value": "http://example.org/patient/1",
+      "include": false
+    },
+    "name": {
+      "termType": "Literal",
+      "value": "John Doe",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "include": true
+    },
+    "family": {
+      "termType": "Literal",
+      "value": "Doe",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "include": true
+    },
+    "birthdate": {
+      "termType": "Literal",
+      "value": "1990-10-22",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#date"
+      },
+      "include": true
+    },
+    "weight": {
+      "termType": "Literal",
+      "value": "80.5",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#decimal"
+      },
+      "include": true
+    },
+    "medoffice": {
+      "termType": "NamedNode",
+      "value": "http://example.org/medicaloffice/drschwartz",
+      "include": true
+    },
+    "medoffice_street": {
+      "termType": "Literal",
+      "value": "Medicstreet 12",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "include": true
+    },
+    "medoffice_zip": {
+      "termType": "Literal",
+      "value": "91058",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#integer"
+      },
+      "include": true
+    }
+  },
+  {
+    "patient": {
+      "termType": "NamedNode",
+      "value": "http://example.org/patient/2",
+      "include": false
+    },
+    "name": {
+      "termType": "Literal",
+      "value": "Jane S. Doe",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "include": true
+    },
+    "birthdate": {
+      "termType": "Literal",
+      "value": "1992-03-31",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#date"
+      },
+      "include": true
+    },
+    "medoffice": {
+      "termType": "NamedNode",
+      "value": "http://example.org/medicaloffice/drschwartz",
+      "include": true
+    },
+    "medoffice_street": {
+      "termType": "Literal",
+      "value": "Medicstreet 12",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "include": true
+    },
+    "medoffice_zip": {
+      "termType": "Literal",
+      "value": "91058",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#integer"
+      },
+      "include": true
+    },
+    "family": {
+      "termType": "Literal",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "language": "",
+      "value": "",
+      "include": true,
+      "insertMode": true
+    },
+    "weight": {
+      "termType": "Literal",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#decimal"
+      },
+      "language": "",
+      "value": "0.0",
+      "include": true,
+      "insertMode": true
+    }
+  },
+  {
+    "patient": {
+      "termType": "NamedNode",
+      "value": "http://example.org/patient/3",
+      "include": false
+    },
+    "name": {
+      "termType": "Literal",
+      "value": "Emily Example",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "include": true
+    },
+    "birthdate": {
+      "termType": "Literal",
+      "value": "May 1st 1980",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#date"
+      },
+      "include": true
+    },
+    "weight": {
+      "termType": "Literal",
+      "value": "62",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#decimal"
+      },
+      "include": true
+    },
+    "medoffice": {
+      "termType": "NamedNode",
+      "value": "http://example.org/medicaloffice/drschwartz",
+      "include": true
+    },
+    "medoffice_street": {
+      "termType": "Literal",
+      "value": "Medicstreet 12",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "include": true
+    },
+    "medoffice_zip": {
+      "termType": "Literal",
+      "value": "91058",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#integer"
+      },
+      "include": true
+    },
+    "family": {
+      "termType": "Literal",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "language": "",
+      "value": "",
+      "include": true,
+      "insertMode": true
+    }
+  },
+  {
+    "patient": {
+      "termType": "NamedNode",
+      "value": "http://example.org/patient/3",
+      "include": false
+    },
+    "name": {
+      "termType": "Literal",
+      "value": "Emily Example",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "include": true
+    },
+    "birthdate": {
+      "termType": "Literal",
+      "value": "May 1st 1980",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#date"
+      },
+      "include": true
+    },
+    "weight": {
+      "termType": "Literal",
+      "value": "62",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#decimal"
+      },
+      "include": true
+    },
+    "medoffice": {
+      "termType": "NamedNode",
+      "value": "http://example.org/medicaloffice/drheilmann",
+      "include": true
+    },
+    "medoffice_street": {
+      "termType": "Literal",
+      "value": "Krankenstraße 6\nHaus B",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "include": true
+    },
+    "medoffice_zip": {
+      "termType": "Literal",
+      "value": "87654",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#integer"
+      },
+      "include": true
+    },
+    "family": {
+      "termType": "Literal",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "language": "",
+      "value": "",
+      "include": true,
+      "insertMode": true
+    }
+  }
+]

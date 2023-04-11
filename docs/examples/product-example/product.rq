@@ -1,0 +1,14 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX schema: <http://schema.org/>
+
+SELECT ?product ?name ?gtin ?weight
+FROM <http://example.org/dataset/graph>
+WHERE {
+  ?product rdf:type schema:Product ;
+    schema:name ?name ;
+    schema:gtin ?gtin ;
+    schema:weight [
+      schema:value ?weight
+    ]
+  FILTER (lang(?name) = 'en')
+}

@@ -1,0 +1,14 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX schema: <http://schema.org/>
+
+WITH <http://example.org/dataset/graph>
+DELETE { ?g_0 schema:value "10.5"^^xsd:decimal. }
+INSERT { ?g_0 schema:value "8.8"^^xsd:decimal. }
+WHERE {
+  <http://example.org/product/98765> rdf:type schema:Product;
+    schema:name "Metal cover ABC123 Type 2"@en;
+    schema:gtin 624141007349;
+    schema:weight ?g_0.
+  ?g_0 schema:value "10.5"^^xsd:decimal.
+}

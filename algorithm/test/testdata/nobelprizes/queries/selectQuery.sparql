@@ -1,0 +1,25 @@
+PREFIX nobel: <http://data.nobelprize.org/terms/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+
+SELECT ?name ?university ?prizeName ?prizeYear ?prizeMotivation 
+WHERE {
+  ?person rdf:type nobel:Laureate ;
+    rdfs:label ?name ;
+    nobel:nobelPrize ?prize .
+  OPTIONAL {
+    ?person dbo:affiliation [
+    	rdfs:label ?university
+ 	  ] ;
+    FILTER (lang(?university) = 'en')
+  }
+  ?prize rdfs:label ?prizeName ;
+    nobel:year ?prizeYear .
+  OPTIONAL {
+  	?prize nobel:motivation ?prizeMotivation .
+    #FILTER (lang(?prizeMotivation) = 'en')
+  }
+  FILTER (lang(?prizeName) = 'en')
+}
+LIMIT 10

@@ -1,0 +1,49 @@
+{
+  "name": "Nobel Prizes 1",
+  "description": "This is a simple test view for the 'Nobel Prizes as Linked Data' dataset.",
+  "creator": "Alice A.",
+  "dateCreated": "2023-02-01T15:14:12.677Z",
+  "queryURL": "http://localhost:3030/nobelprizes/query",
+  "updateURL": "http://localhost:3030/nobelprizes/update",
+  "query": "PREFIX nobel: <http://data.nobelprize.org/terms/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dbo: <http://dbpedia.org/ontology/>\n\nSELECT ?name ?university ?prizeName ?prizeYear ?prizeMotivation\nWHERE {\n  ?person rdf:type nobel:Laureate ;\n    rdfs:label ?name ;\n    nobel:nobelPrize ?prize .\n  OPTIONAL {\n    ?person dbo:affiliation [\n    \trdfs:label ?university\n \t  ] ;\n    FILTER (lang(?university) = 'en')\n  }\n  ?prize rdfs:label ?prizeName ;\n    nobel:year ?prizeYear .\n  OPTIONAL {\n  \t?prize nobel:motivation ?prizeMotivation .\n    FILTER (lang(?prizeMotivation) = 'en')\n  }\n  FILTER (lang(?prizeName) = 'en')\n}",
+  "requiresBasicAuth": false,
+  "@context": {
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "schema": "http://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "spedit": "http://iis.fraunhofer.de/sparqledit/ontology#",
+    "name": {
+      "@id": "schema:name"
+    },
+    "description": {
+      "@id": "schema:description"
+    },
+    "creator": {
+      "@id": "schema:creator"
+    },
+    "dateCreated": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:dateTime"
+    },
+    "queryURL": {
+      "@id": "spedit:queryURL",
+      "@type": "xsd:anyURI"
+    },
+    "updateURL": {
+      "@id": "spedit:updateURL",
+      "@type": "xsd:anyURI"
+    },
+    "query": {
+      "@id": "spedit:query"
+    },
+    "requiresBasicAuth": {
+      "@id": "spedit:requiresBasicAuth",
+      "@type": "xsd:boolean"
+    },
+    "updateLogGraph": {
+      "@id": "spedit:updateLogGraph",
+      "@type": "xsd:anyURI"
+    }
+  },
+  "@type": "spedit:SparqlView"
+}

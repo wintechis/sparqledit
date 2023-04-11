@@ -1,234 +1,88 @@
 # SPARQL_edit
 
-v0.2: **L**iteral **EDIT**ing with **SPARQL** (Ledit-SPARQL)
+The SPARQL_edit application in the [app](app/README.md) folder uses the alogrithm package from the [algorithm](algorithm/README.md) folder.
 
-v0.3: **SPARQLview** manager
+The [build](build) folder contains the built application. Section 'Setup' explains how to run the built application.
 
-v0.4: **SPARQLview** manager + **Solid** integration
+The [docs](docs) folder includes information around SPARQL_edit and provides example for tesing.
 
-v0.5: **Update log** feature
 
-## SPARQL_edit is a Web app that facilitates the editing of RDF literal values in a Knowledge Graph
+## SPARQL_edit application
 
-SPARQL_edit manages so-called "SPARQL views", simple configuration objects that define how to load a table of values from a Knowledge Graph. For each view, SPARQL_edit allows you to edit literal values in the table.
+SPARQL_edit is a Web application that facilitates editing RDF literal values in RDF Knowledge Graphs.
 
-SPARQL_edit executes user-defined [SPARQL/Select query](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/) and shows the results in a table. The result table displays literals as editable input fields where the user can simply change the value. 
+The SPARQL_edit app manages so-called "SPARQL views", simple configuration objects that define how to load a table of values from a SPARQL endpoint. For each view, SPARQL_edit allows you to edit literal values in the table of query results.
+
+SPARQL_edit executes a user-defined [SPARQL/Select query](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/) and shows the results in a table. The result table displays RDF literals as editable input fields where the user can change the value. 
 When the changes are saved, SPARQL_edit automatically creates a [SPARQL/Update query](https://www.w3.org/TR/sparql11-update/) and executes it. 
-There are, however, some restrictions for the generation of the update query. This relates to the _database view update problem_.
 
-SPARQL_edit supports simple ['SELECT' queries](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#select) on the [default graph](https://www.w3.org/TR/sparql11-query/#specifyingDataset) with a [basic graph pattern (BGP)](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#BasicGraphPatterns) that may contain 
+SPARQL_edit supports simple ['SELECT' queries](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#select) on the [default graph](https://www.w3.org/TR/sparql11-query/#specifyingDataset) with [basic graph patterns (BGP)](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#BasicGraphPatterns) that may contain 
 * [blank node patterns](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#QSynBlankNodes) such as [n-ary relations](https://www.w3.org/TR/swbp-n-aryRelations/)
-* one or none 'FROM' keyword for defining the default graph
+* one 'FROM' keyword for defining the default graph
 * 'OPTIONAL' triple patterns
 * 'FILTER' statements
 * solution sequence modifier ('ORDER','LIMIT','OFFSET')
 
-#### Restrictions
-* only queries with all or specific selected variables
-* edited SPARQL variable only once in object position
-* only literal values (object position) can be edited
-* no modified values
-  * no calculated values (variable bindings with 'BIND')
-  * no aggregation ('GROUP BY')
-* blank node problems
-  * no RDF containers and collections
-* no sub-queries
+### Restrictions
+There are some restrictions for the generation of the update query. The SPARQL_edit algorithm only supports a subset of the SPARQL grammar. The restricted SPARQL grammar is described in [docs/ontology-grammar](docs/ontology-grammar). Grammar definitions that differ from the [original SPARQL 1.1 grammar](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#sparqlGrammar) are listet in [/docs/ontology-grammar/sparql_grammar_diff.html](/docs/ontology-grammar/sparql_grammar_diff.html).
 
-Grammar definitions that differ from the [original SPARQL 1.1 grammar](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#sparqlGrammar): [/docs/sparql_grammar_diff.html](/docs/sparql_grammar_diff.html)
+The algorithm is limited to SelectQueries that ...
+* do not modify the selected variables ('AS')
+* do not use named graphs ('FROM NAMED') and graph graph patterns ('GRAPH')
+* do not use 'GROUP BY' or 'HAVING' solution modifiers
+* do not have sub-queries
+* do not use graph patterns other than normal triple patterns, optional graph patterns and filters
+* do not modify values with variable bindings ('BIND') or aggregation ('COUNT', 'MIN', etc.)
+* do not include RDF containers and collections
+* do not use property paths
 
-### Usage tips
 
-There are performance issues when loading more than 100000 results. Use the SPARQL LIMIT sequence modifier (e.g. 'LIMIT 1000') to limit the number of result rows.
+## Setup
 
-Shortcuts for the SPARQL editor
-| | |
+__Live-Version: [sparqledit.netlify.app](https://sparqledit.netlify.app/)__
+
+The folder [build](build) contains the built application. The static files can be served with any HTTP server.
+
+* With NodeJS, [http-server](https://www.npmjs.com/package/http-server) can be used for serving local files.
+  * installation: `npm install --global http-server`
+  * start http-server (on port 8080; in the [build](build) folder): `http-server -p 8080 build/`
+  * open [localhost:8080](http://localhost:8080/) in your browser
+* With Python, [http.server](https://docs.python.org/3/library/http.server.html) can be used: `python -m http.server --directory build/ 8080`
+
+
+## Usage tips
+
+Shortcuts for the query editor (based on [YASGUI](https://triply.cc/docs/yasgui#sparql-editor))
+
+| keys | command |
 |---|---|
 | [ctrl] + [enter] | submit query |
 | [ctrl] + # | comment/uncomment |
 | [crtl] + [shift] + F | auto-format |
 | [crtl] + Z | undo last change |
 | [crtl] + Y | redo last change |
-More shortcuts are in the [YASQE docs](https://triply.cc/docs/yasgui#supported-key-combinations).
 
 Changes to input fields can be submitted with `ENTER`.
 
-#### Default SPARQL endpoints
+There are performance issues when loading more than 100000 results. Use the SPARQL 'LIMIT' solution modifier to limit the number of result rows (e.g. 'LIMIT 1000').
 
-* Fuseki "test" dataset
-  * Query/Update: [http://localhost:3030/test](http://localhost:3030/test)
-  * Query: [http://localhost:3030/test/query](http://localhost:3030/test/query)
-  * Update: [http://localhost:3030/test/update](http://localhost:3030/test/update)
-* GraphDB "test" repository
-  * Query: [http://localhost:7200/repositories/test](http://localhost:7200/repositories/test)
-  * Update: [http://localhost:7200/repositories/test/statements](http://localhost:7200/repositories/test/statements)
+### SPARQL server CORS support
 
-### Algorithm for generating the update query
-
-Inputs:
-* (wildcard) SPARQL SELECT query
-* query results
-* modified literal (variable name, new value)
-
-Output: SPARQL delete-insert-where query
-
-Procedure:
-1. find bgp statement containing the edited variable
-    1. collect all bgp triples
-    2. find edited variable in object position
-2. replace all (named) variables in bgp statements with named nodes (URIs) or literals from query results
-    1. go over basic and 'OPTIONAL' bgp triples
-    2. if subject, predicate or object is a (named) variable, replace with cell value from result table's row where literal was modified
-    3. if subject, predicate or object is blank node, replace with variable (reasons: [1.1](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#BlankNodesInResults), [1.2](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#BGPsparqlBNodes), [2](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#grammarBNodes))
-3. build update query ([delete-insert-where](https://www.w3.org/TR/sparql11-update/#deleteInsert))
-    1. copy prefixes
-    2. copy modified BGP triples from (2.)
-    3. create 'DELETE' and 'INSERT' triple based on (2.)
-    4. (optionally) copy the specified default graph ('FROM' -> 'WITH')
-
-Example:
-```
-PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-PREFIX schema: <http://schema.org/>
-SELECT ?name ?birthdate ?weight
-FROM <http://localhost:3030/example/graph1>
-WHERE {
-  ?patient a schema:Patient ;
-    foaf:name ?name ;
-    schema:birthDate ?birthdate .
-  ?patient schema:weight [
-    schema:value ?weight
-  ]
-}
-```
-autogenerated update query when changing the patient's weight:
-```
-PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-PREFIX schema: <http://schema.org/>
-WITH <http://localhost:3030/example/graph1>
-DELETE { ?g_25 schema:value "80.5"^^<http://www.w3.org/2001/XMLSchema#decimal>. }
-INSERT { ?g_25 schema:value "88"^^<http://www.w3.org/2001/XMLSchema#decimal>. }
-WHERE {
-  <http://example.org/patient/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> schema:Patient;
-    foaf:name "John Doe";
-    schema:birthDate "1990-10-23"^^<http://www.w3.org/2001/XMLSchema#date>;
-    schema:weight ?g_25.
-  ?g_25 schema:value "80.5"^^<http://www.w3.org/2001/XMLSchema#decimal>.
-}
-```
-
-## Developer info
-
-SPARQL_edit is a React app written in JavaScript. The styling and design is done with Bootstrap.
-
-SPARQL_edit uses the [YASQE](https://triply.cc/docs/yasgui-api#yasqe) component from [YASGUI](https://github.com/TriplyDB/Yasgui) as query editor.
-It uses different RDF-related libraries:
-* [SPARQL.js](https://github.com/RubenVerborgh/SPARQL.js) for translating SPARQL queries into JS objects and back
-* [fetch-sparql-endpoint.js](https://github.com/rubensworks/fetch-sparql-endpoint.js/) for sending queries to the SPARQL endpoint
-* [rdf-literal.js](https://github.com/rubensworks/rdf-literal.js) for mapping RDF literals to JavaScript primitives
-* [@zazuko/rdf-vocabularies](https://github.com/zazuko/rdf-vocabularies) for shortening URIs with prefixes
-
-### Setup and commands
-
-Run the app in development mode: `npm start`
-
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-Build the app for production to the `build` folder: `npm run build`
-
-Test the build: `serve -s build`
-
-**Install sparqledit-algorithm library**
-
-.npmrc:
-```
-@scs-grp-tech:registry=https://git01.iis.fhg.de/api/v4/projects/9473/packages/npm/
-//git01.iis.fhg.de/api/v4/projects/9473/packages/npm/:_authToken=LxPr2aezwWyxGFeaXjLA
-```
-
-`npm i @scs-grp-tech/sparqledit-algorithm`
-
-#### Docker
-
-Build Docker image: `docker build -f Dockerfile.prod -t sparqledit .`
-
-Start Docker container: `docker run -p 3001:80 --name sparql_edit sparqledit`
-
-#### Upload to SOLID POD
-
-Build the app for production to the `build` folder: `npm run build`
-
-__Note:__ Use `"homepage": "."` in package.json if the app is not deployed to root.
-
-Export SOLID credentials as environment variables: `export SOLID_USERNAME=myusername; export SOLID_PASSWORD=mypassword`
-
-Start upload script: `npm run solid-upload`
-
-#### Replay updates
-
-install node-fetch library: `npm i -g node-fetch`
-
-run the NodeJS script: `node .\docs\updatelog\replay-sparql-updates.mjs`
-
-### TODOs
-
-* Publication
-  * "Legal notice" page (owner, cookies, licenses)
-  * `license-checker --production --summary > docs/license-check.txt`
-* Algorithm
-  * advanced support for named graphs (FROM NAMED)
-  * support for other [Graph Pattern](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#GraphPattern)
-  * check restrictions (restricted [SPARQL grammar](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#sparqlGrammar))
-  * more features:
-    * editable object URIs
-    * delete statements
-* React app
-  * turtle escape "<" and ">" with "&lt;" and "&gt;" ([link](https://www.w3.org/TR/turtle/#h3_sec-escapes))
-  * form validation
-    * SPARQL endpoint, query syntax + restrictions
-    * input cell content
-  * load multiple view configs at the same time; save all current views
-  * special input component for dateTime (with time zone)
-  * support for changing the generated update query
-* SOLID app
-  * multiple spedit:SparqlView instances in RDF
-  * better UI for up-/downloading views to/from Solid Pod
-
-__Additional features/ideas__
-* SPARQL_edit change log [DONE]
-  * reapply manual changes after the KG building pipeline recreated the KG
-  * replay changes based on log of changes/deltas executed with SPARQL_edit
-  * save changes as RDF in named graph of the edited KG (PROV-O for modeling)
-  * difficulty: transactional execution for update query and change logging
-* View uppdate permissions/restrictions
-  * define variables where updates are (not) permitted
-  * integration in SPARQL view RDF model
-  * HTML input controls are redndered read-only
-* HTML Widgets (https://triply.cc/docs/yasgui)
-* Graph visualization of query triple patterns
-  * show edited table cell as leaf node in graph
-* SPARQL_edit for RDF/Solid documents 
-  * using an internal SPARQL engine
-  * for local RDF files or Solid/LDP documents 
-
-### Important notes
-
-#### SPARQL server CORS support
-
-SPARQL_edit can only send and receive requests if the SPARQL server supports [Cross-Origin Resource Sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).
+SPARQL_edit can only send requests if the SPARQL server supports [Cross-Origin Resource Sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).
 
 [Apache Jena Fuseki](https://jena.apache.org/documentation/fuseki2/) supports CORS by default. The rules are included in Jetty's application server configuration which can be found in the file `apache-jena-fuseki-*\webapp\WEB-INF\web.xml`.
 
 [GraphDB](https://graphdb.ontotext.com/documentation/standard/workbench-user-interface.html#id2) does _not_ support CORS by default. It can be activated with command line parameters: `-Dgraphdb.workbench.cors.enable=true`.
 
-#### Mixed Content restriction
+### Mixed Content restriction
 
 If the app is served over _HTTPS_ the browser blocks _HTTP_ requests to other websites. ([Firefox docu](https://support.mozilla.org/en-US/kb/mixed-content-blocking-firefox))
 
 |  | SPARQL URL | Allowed ? |
 |---|---|---|
-| HTTPS | https://data.nobelprize.org/store/sparql | Yes |
-| HTTP  | http://ux1637:3030/nobelprizes | No (only if explicitly allowed, see below) |
-| localhost | http://localhost:3030/nobelprizes | Yes |
+| HTTPS | https://example.org/store/sparql | Yes |
+| HTTP  | http://ux1637:3030/example/sparql | No (only if explicitly allowed, see below) |
+| localhost | http://localhost:3030/example/sparql | Yes |
 
 Disable 'Mixed Content' blocking for a certain web page:
 * Chrome
@@ -237,3 +91,13 @@ Disable 'Mixed Content' blocking for a certain web page:
 * Firefox
   * click on lock symbol next to URL -> "Firefox has blocked parts of this page that are not secure" 
   * click on "Connection secure" -> "Disable protection for now"
+
+#### Default SPARQL endpoints for Jena Fuseki and GraphDB
+
+* Jena Fuseki "test" dataset
+  * Query/Update: [http://localhost:3030/test](http://localhost:3030/test)
+  * Query: [http://localhost:3030/test/query](http://localhost:3030/test/query)
+  * Update: [http://localhost:3030/test/update](http://localhost:3030/test/update)
+* GraphDB "test" repository
+  * Query: [http://localhost:7200/repositories/test](http://localhost:7200/repositories/test)
+  * Update: [http://localhost:7200/repositories/test/statements](http://localhost:7200/repositories/test/statements)

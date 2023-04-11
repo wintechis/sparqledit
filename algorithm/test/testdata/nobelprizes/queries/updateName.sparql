@@ -1,0 +1,12 @@
+PREFIX nobel: <http://data.nobelprize.org/terms/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+DELETE { <http://data.nobelprize.org/resource/laureate/960> rdfs:label "Arthur Ashkin". }
+INSERT { <http://data.nobelprize.org/resource/laureate/960> rdfs:label "${newValue}". }
+WHERE {
+  <http://data.nobelprize.org/resource/laureate/960> rdf:type nobel:Laureate;
+    rdfs:label "Arthur Ashkin";
+    nobel:nobelPrize <http://data.nobelprize.org/resource/nobelprize/Physics/2018>.
+  <http://data.nobelprize.org/resource/nobelprize/Physics/2018> rdfs:label "The Nobel Prize in Physics 2018"@en;
+    nobel:year 2018 .
+}

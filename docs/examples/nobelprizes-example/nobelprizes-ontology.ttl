@@ -1,0 +1,142 @@
+# Nobel Prizes as Linked Data
+# RDF Vocabulary for expressing Nobel Prizes as Linked Data, 29 June 2021
+# https://data.nobelprize.org/specification/
+# CC-BY 4.0 Licence (http://creativecommons.org/licenses/by/4.0/)
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix role: <http://purl.org/role/terms/> .
+
+<http://data.nobelprize.org/terms/>
+    a owl:Ontology ;
+    dcterms:title "Linked Nobelprizes"@en ;
+    dcterms:description "Linked Nobelprizes"@en ;
+    rdfs:seeAlso <http://www.nobelprize.org/> ;
+    owl:versionInfo "version 0.1" .
+
+<http://www.nobelprize.org/>
+    rdfs:label "Nobelprize.org" .
+
+<http://data.nobelprize.org/terms/Category>
+    a owl:Class ;
+    rdfs:comment "The Nobel Prize is given in six different categories." ;
+    rdfs:label "Nobel Prize category" ;
+    rdfs:subClassOf <http://www.w3.org/2004/02/skos/core#Concept> ;
+    owl:oneOf (<http://data.nobelprize.org/terms/Chemistry>
+        <http://data.nobelprize.org/terms/Physics>
+        <http://data.nobelprize.org/terms/Litterature>
+        <http://data.nobelprize.org/terms/Peace>
+        <http://data.nobelprize.org/terms/Economic_Sciences>
+        <http://data.nobelprize.org/terms/Physiology_or_Medicin>
+    ) .
+
+<http://data.nobelprize.org/terms/Chemistry>
+    a owl:Thing ;
+    rdfs:label "Chemistry" .
+
+<http://data.nobelprize.org/terms/Economic_Sciences>
+    a owl:Thing ;
+    rdfs:label "Economic sciences" .
+
+<http://data.nobelprize.org/terms/Laureate>
+    a owl:Class ;
+    rdfs:comment "A laureate is a person or organization who recieves one or several Nobel Prizes." ;
+    rdfs:label "Laureate" ;
+    rdfs:subClassOf <http://xmlns.com/foaf/0.1/Agent> .
+
+<http://data.nobelprize.org/terms/LaureateAward>
+    a owl:Class ;
+    rdfs:comment "The Nobel Prize is often divided to several laureates. LaureateAward captures the details of the award given to each laureate, such as share of the Nobel Prize, motivation etc." ;
+    rdfs:label "Laureate Award" ;
+    rdfs:subClassOf <http://dbpedia.org/ontology/Award> .
+
+<http://data.nobelprize.org/terms/Litterature>
+    a owl:Thing ;
+    rdfs:label "Litterature" .
+
+<http://data.nobelprize.org/terms/NobelPrize>
+    a owl:Class ;
+    rdfs:comment "The Nobel Prize is a set of annual international awards bestowed in a number of categories by Scandinavian committees in recognition of cultural and scientific advances. The will of the Swedish chemist Alfred Nobel, the inventor of dynamite, established the prizes in 1895. The prizes in Physics, Chemistry, Physiology or Medicine, Literature, and Peace were first awarded in 1901. The Peace Prize is awarded in Oslo, Norway, while the other prizes are awarded in Stockholm, Sweden." ;
+    rdfs:label "Nobel Prize" ;
+    rdfs:seeAlso <http://dbpedia.org/resource/Nobel_Prize> ;
+    rdfs:subClassOf <http://dbpedia.org/ontology/Award> .
+
+<http://data.nobelprize.org/terms/Peace>
+    a owl:Thing ;
+    rdfs:label "Peace" .
+
+<http://data.nobelprize.org/terms/Physics>
+    a owl:Thing ;
+    rdfs:label "Physics" .
+
+<http://data.nobelprize.org/terms/Physiology_or_Medicin>
+    a owl:Thing ;
+    rdfs:label "Physiology or Medicin" .
+
+<http://data.nobelprize.org/terms/category>
+    a owl:ObjectProperty ;
+    rdfs:comment "The category this Nobel Prize belongs to." ;
+    rdfs:domain <http://data.nobelprize.org/terms/NobelPrize> ;
+    rdfs:label "category" ;
+    rdfs:range <http://data.nobelprize.org/terms/Category> .
+
+<http://data.nobelprize.org/terms/laureate>
+    a owl:ObjectProperty ;
+    rdfs:comment "Which laureates that recieve an award." ;
+    rdfs:domain <http://data.nobelprize.org/terms/LaureateAward> ;
+    rdfs:label "laureate" ;
+    rdfs:range <http://data.nobelprize.org/terms/Laureate> .
+
+<http://data.nobelprize.org/terms/laureateAward>
+    a owl:ObjectProperty ;
+    rdfs:comment "Connects each laureate with the part of the Nobel Prize, that is the LaureateAward, he or she recieved." ;
+    rdfs:domain <http://data.nobelprize.org/terms/Laureate> ;
+    rdfs:label "laureateAward" ;
+    rdfs:range <http://data.nobelprize.org/terms/LaureateAward> ;
+    rdfs:subPropertyOf <http://dbpedia.org/ontology/Award> .
+
+<http://data.nobelprize.org/terms/motivation>
+    a owl:DatatypeProperty ;
+    rdfs:comment "The motivation for why the laureate or was given the Nobel Prize or the motivation for the whole prize." ;
+    rdfs:domain <http://data.nobelprize.org/terms/LaureateAward>, <http://data.nobelprize.org/terms/NobelPrize> ;
+    rdfs:label "motivation" ;
+    rdfs:range rdf:PlainLiteral .
+
+<http://data.nobelprize.org/terms/nobelPrize>
+    a owl:ObjectProperty ;
+    rdfs:comment "Points to the Nobel Prize recieved by a Laureate." ;
+    rdfs:domain <http://data.nobelprize.org/terms/Laureate> ;
+    rdfs:label "nobelPrize" ;
+    rdfs:range <http://data.nobelprize.org/terms/NobelPrize> ;
+    rdfs:subPropertyOf <http://dbpedia.org/ontology/Award> .
+
+<http://data.nobelprize.org/terms/share>
+    a owl:DatatypeProperty ;
+    rdfs:comment "The share of a Nobel Prize given to a Laureate, may be 1, 2, 3 or 4 corresponding to the whole prize, half the prize, third of the priza and a quarter of the prize." ;
+    rdfs:domain <http://dbpedia.org/ontology/LaureateAward> ;
+    rdfs:label "share" ;
+    rdfs:range <http://www.w3.org/2001/XMLSchema#Integer> .
+
+<http://data.nobelprize.org/terms/sortOrder>
+    a owl:DatatypeProperty ;
+    rdfs:comment "The sort order of laureates." ;
+    rdfs:domain <http://dbpedia.org/ontology/LaureateAward> ;
+    rdfs:label "sort order" ;
+    rdfs:range <http://www.w3.org/2001/XMLSchema#Integer> .
+
+<http://data.nobelprize.org/terms/university>
+    a owl:ObjectProperty ;
+    rdfs:comment "Points to the universities the Laureate was affiliated with during the period he did his contribution that laid the ground for the award." ;
+    rdfs:domain <http://data.nobelprize.org/terms/LaureateAward> ;
+    rdfs:label "university" ;
+    rdfs:range <http://dbpedia.org/ontology/University> .
+
+<http://data.nobelprize.org/terms/year>
+    a owl:DatatypeProperty ;
+    rdfs:comment "The year a given Nobel Prize was given." ;
+    rdfs:domain <http://dbpedia.org/ontology/Award> ;
+    rdfs:label "year" ;
+    rdfs:range <http://www.w3.org/2001/XMLSchema#Integer> .

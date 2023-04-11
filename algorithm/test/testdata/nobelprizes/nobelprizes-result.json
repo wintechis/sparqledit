@@ -1,0 +1,625 @@
+[
+  {
+    "person": {
+      "termType": "NamedNode",
+      "value": "http://data.nobelprize.org/resource/laureate/618",
+      "include": false
+    },
+    "name": {
+      "termType": "Literal",
+      "value": "André Paul Guillaume Gide",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "include": true
+    },
+    "prize": {
+      "termType": "NamedNode",
+      "value": "http://data.nobelprize.org/resource/nobelprize/Literature/1947",
+      "include": false
+    },
+    "prizeName": {
+      "termType": "Literal",
+      "value": "The Nobel Prize in Literature 1947",
+      "language": "en",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    },
+    "prizeYear": {
+      "termType": "Literal",
+      "value": "1947",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#integer"
+      },
+      "include": true
+    },
+    "university": {
+      "termType": "Literal",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "language": "en",
+      "value": "",
+      "include": true,
+      "insertMode": true
+    },
+    "prizeMotivation": {
+      "termType": "Literal",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "language": "sv",
+      "value": "",
+      "include": true,
+      "insertMode": true
+    }
+  },
+  {
+    "person": {
+      "termType": "NamedNode",
+      "value": "http://data.nobelprize.org/resource/laureate/960",
+      "include": false
+    },
+    "name": {
+      "termType": "Literal",
+      "value": "Arthur Ashkin",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "include": true
+    },
+    "prize": {
+      "termType": "NamedNode",
+      "value": "http://data.nobelprize.org/resource/nobelprize/Physics/2018",
+      "include": false
+    },
+    "university": {
+      "termType": "Literal",
+      "value": "Bell Laboratories",
+      "language": "en",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    },
+    "prizeName": {
+      "termType": "Literal",
+      "value": "The Nobel Prize in Physics 2018",
+      "language": "en",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    },
+    "prizeYear": {
+      "termType": "Literal",
+      "value": "2018",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#integer"
+      },
+      "include": true
+    },
+    "prizeMotivation": {
+      "termType": "Literal",
+      "value": "for groundbreaking inventions in the field of laser physics",
+      "language": "en",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    }
+  },
+  {
+    "person": {
+      "termType": "NamedNode",
+      "value": "http://data.nobelprize.org/resource/laureate/960",
+      "include": false
+    },
+    "name": {
+      "termType": "Literal",
+      "value": "Arthur Ashkin",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "include": true
+    },
+    "prize": {
+      "termType": "NamedNode",
+      "value": "http://data.nobelprize.org/resource/nobelprize/Physics/2018",
+      "include": false
+    },
+    "university": {
+      "termType": "Literal",
+      "value": "Bell Laboratories",
+      "language": "en",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    },
+    "prizeName": {
+      "termType": "Literal",
+      "value": "The Nobel Prize in Physics 2018",
+      "language": "en",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    },
+    "prizeYear": {
+      "termType": "Literal",
+      "value": "2018",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#integer"
+      },
+      "include": true
+    },
+    "prizeMotivation": {
+      "termType": "Literal",
+      "value": "för banbrytande uppfinningar inom laserfysik",
+      "language": "sv",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    }
+  },
+  {
+    "person": {
+      "termType": "NamedNode",
+      "value": "http://data.nobelprize.org/resource/laureate/961",
+      "include": false
+    },
+    "name": {
+      "termType": "Literal",
+      "value": "Gérard Mourou",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "include": true
+    },
+    "prize": {
+      "termType": "NamedNode",
+      "value": "http://data.nobelprize.org/resource/nobelprize/Physics/2018",
+      "include": false
+    },
+    "university": {
+      "termType": "Literal",
+      "value": "École Polytechnique",
+      "language": "en",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    },
+    "prizeName": {
+      "termType": "Literal",
+      "value": "The Nobel Prize in Physics 2018",
+      "language": "en",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    },
+    "prizeYear": {
+      "termType": "Literal",
+      "value": "2018",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#integer"
+      },
+      "include": true
+    },
+    "prizeMotivation": {
+      "termType": "Literal",
+      "value": "for groundbreaking inventions in the field of laser physics",
+      "language": "en",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    }
+  },
+  {
+    "person": {
+      "termType": "NamedNode",
+      "value": "http://data.nobelprize.org/resource/laureate/961",
+      "include": false
+    },
+    "name": {
+      "termType": "Literal",
+      "value": "Gérard Mourou",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "include": true
+    },
+    "prize": {
+      "termType": "NamedNode",
+      "value": "http://data.nobelprize.org/resource/nobelprize/Physics/2018",
+      "include": false
+    },
+    "university": {
+      "termType": "Literal",
+      "value": "École Polytechnique",
+      "language": "en",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    },
+    "prizeName": {
+      "termType": "Literal",
+      "value": "The Nobel Prize in Physics 2018",
+      "language": "en",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    },
+    "prizeYear": {
+      "termType": "Literal",
+      "value": "2018",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#integer"
+      },
+      "include": true
+    },
+    "prizeMotivation": {
+      "termType": "Literal",
+      "value": "för banbrytande uppfinningar inom laserfysik",
+      "language": "sv",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    }
+  },
+  {
+    "person": {
+      "termType": "NamedNode",
+      "value": "http://data.nobelprize.org/resource/laureate/961",
+      "include": false
+    },
+    "name": {
+      "termType": "Literal",
+      "value": "Gérard Mourou",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "include": true
+    },
+    "prize": {
+      "termType": "NamedNode",
+      "value": "http://data.nobelprize.org/resource/nobelprize/Physics/2018",
+      "include": false
+    },
+    "university": {
+      "termType": "Literal",
+      "value": "University of Michigan",
+      "language": "en",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    },
+    "prizeName": {
+      "termType": "Literal",
+      "value": "The Nobel Prize in Physics 2018",
+      "language": "en",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    },
+    "prizeYear": {
+      "termType": "Literal",
+      "value": "2018",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#integer"
+      },
+      "include": true
+    },
+    "prizeMotivation": {
+      "termType": "Literal",
+      "value": "for groundbreaking inventions in the field of laser physics",
+      "language": "en",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    }
+  },
+  {
+    "person": {
+      "termType": "NamedNode",
+      "value": "http://data.nobelprize.org/resource/laureate/961",
+      "include": false
+    },
+    "name": {
+      "termType": "Literal",
+      "value": "Gérard Mourou",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "include": true
+    },
+    "prize": {
+      "termType": "NamedNode",
+      "value": "http://data.nobelprize.org/resource/nobelprize/Physics/2018",
+      "include": false
+    },
+    "university": {
+      "termType": "Literal",
+      "value": "University of Michigan",
+      "language": "en",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    },
+    "prizeName": {
+      "termType": "Literal",
+      "value": "The Nobel Prize in Physics 2018",
+      "language": "en",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    },
+    "prizeYear": {
+      "termType": "Literal",
+      "value": "2018",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#integer"
+      },
+      "include": true
+    },
+    "prizeMotivation": {
+      "termType": "Literal",
+      "value": "för banbrytande uppfinningar inom laserfysik",
+      "language": "sv",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    }
+  },
+  {
+    "person": {
+      "termType": "NamedNode",
+      "value": "http://data.nobelprize.org/resource/laureate/962",
+      "include": false
+    },
+    "name": {
+      "termType": "Literal",
+      "value": "Donna Strickland",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "include": true
+    },
+    "prize": {
+      "termType": "NamedNode",
+      "value": "http://data.nobelprize.org/resource/nobelprize/Physics/2018",
+      "include": false
+    },
+    "university": {
+      "termType": "Literal",
+      "value": "University of Waterloo",
+      "language": "en",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    },
+    "prizeName": {
+      "termType": "Literal",
+      "value": "The Nobel Prize in Physics 2018",
+      "language": "en",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    },
+    "prizeYear": {
+      "termType": "Literal",
+      "value": "2018",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#integer"
+      },
+      "include": true
+    },
+    "prizeMotivation": {
+      "termType": "Literal",
+      "value": "for groundbreaking inventions in the field of laser physics",
+      "language": "en",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    }
+  },
+  {
+    "person": {
+      "termType": "NamedNode",
+      "value": "http://data.nobelprize.org/resource/laureate/962",
+      "include": false
+    },
+    "name": {
+      "termType": "Literal",
+      "value": "Donna Strickland",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "include": true
+    },
+    "prize": {
+      "termType": "NamedNode",
+      "value": "http://data.nobelprize.org/resource/nobelprize/Physics/2018",
+      "include": false
+    },
+    "university": {
+      "termType": "Literal",
+      "value": "University of Waterloo",
+      "language": "en",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    },
+    "prizeName": {
+      "termType": "Literal",
+      "value": "The Nobel Prize in Physics 2018",
+      "language": "en",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    },
+    "prizeYear": {
+      "termType": "Literal",
+      "value": "2018",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#integer"
+      },
+      "include": true
+    },
+    "prizeMotivation": {
+      "termType": "Literal",
+      "value": "för banbrytande uppfinningar inom laserfysik",
+      "language": "sv",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    }
+  },
+  {
+    "person": {
+      "termType": "NamedNode",
+      "value": "http://data.nobelprize.org/resource/laureate/990",
+      "include": false
+    },
+    "name": {
+      "termType": "Literal",
+      "value": "Andrea Ghez",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#string"
+      },
+      "include": true
+    },
+    "prize": {
+      "termType": "NamedNode",
+      "value": "http://data.nobelprize.org/resource/nobelprize/Physics/2020",
+      "include": false
+    },
+    "university": {
+      "termType": "Literal",
+      "value": "University of California",
+      "language": "en",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    },
+    "prizeName": {
+      "termType": "Literal",
+      "value": "The Nobel Prize in Physics 2020",
+      "language": "en",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "include": true
+    },
+    "prizeYear": {
+      "termType": "Literal",
+      "value": "2020",
+      "language": "",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/XMLSchema#integer"
+      },
+      "include": true
+    },
+    "prizeMotivation": {
+      "termType": "Literal",
+      "datatype": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+      },
+      "language": "sv",
+      "value": "",
+      "include": true,
+      "insertMode": true
+    }
+  }
+]

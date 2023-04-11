@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="EN" xml:lang="EN">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>SPARQL 1.1 Grammar</title>
+  <style type="text/css">
+    .unsupported {
+      color: red;
+      text-decoration: line-through;
+    }
+    .unsupported a {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="head">
+    <h1>Restricted SPARQL grammar for SPARQL_edit</h1>
+  </div>
+
+  <div class="body">
+    <p>Grammar definitions that differ from the <a
+        href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#sparqlGrammar">original SPARQL 1.1 grammar
+        rules</a>:</p>
+    <div class="grammarTable">
+      <table>
+        <tbody>
+          <tr valign="baseline">
+            <td><code>[2]  </code></td>
+            <td><code><a id="rQuery" name="rQuery">Query</a></code></td>
+            <td>  ::=  </td>
+            <td>
+              <code><a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rPrologue">Prologue</a><br />( <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rSelectQuery">SelectQuery</a> <span class="unsupported">| <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rConstructQuery">ConstructQuery</a> | <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rDescribeQuery">DescribeQuery</a> | <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rAskQuery">AskQuery</a> </span>)<br /><a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rValuesClause">ValuesClause</a></code>
+            </td>
+          </tr>
+          <tr valign="baseline">
+            <td><code>[9]  </code></td>
+            <td><code><a id="rSelectClause" name="rSelectClause">SelectClause</a></code></td>
+            <td>  ::=  </td>
+            <td>
+              <code><span class="token">'SELECT'</span> ( <span class="token">'DISTINCT'</span> | <span class="token">'REDUCED'</span> )? ( ( <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rVar">Var</a> <span class="unsupported">| ( <span class="token">'('</span> <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rExpression">Expression</a> <span class="token">'AS'</span> <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rVar">Var</a> <span class="token">')'</span> )</span> )+ | <span class="token">'*'</span> )</code>
+            </td>
+          </tr>
+          <tr valign="baseline">
+            <td><code>[13]  </code></td>
+            <td><code><a id="rDatasetClause" name="rDatasetClause">DatasetClause</a></code></td>
+            <td>  ::=  </td>
+            <td>
+              <code><span class="token">'FROM'</span> ( <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rDefaultGraphClause">DefaultGraphClause</a> <span class="unsupported">| <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rNamedGraphClause">NamedGraphClause</a> </span>)</code>
+            </td>
+          </tr>
+          <tr valign="baseline">
+            <td><code>[18]  </code></td>
+            <td><code><a id="rSolutionModifier" name="rSolutionModifier">SolutionModifier</a></code></td>
+            <td>  ::=  </td>
+            <td>
+              <code><span class="unsupported"><a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rGroupClause">GroupClause</a>? <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rHavingClause">HavingClause</a>?</span> <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rOrderClause">OrderClause</a>? <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rLimitOffsetClauses">LimitOffsetClauses</a>?</code>
+            </td>
+          </tr>
+          <tr valign="baseline">
+            <td><code>[53]  </code></td>
+            <td><code><a id="rGroupGraphPattern" name="rGroupGraphPattern">GroupGraphPattern</a></code></td>
+            <td>  ::=  </td>
+            <td>
+              <code><span class="token">'{'</span> ( <span class="unsupported"><a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rSubSelect">SubSelect</a> |</span> <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rGroupGraphPatternSub">GroupGraphPatternSub</a> ) <span class="token">'}'</span></code>
+            </td>
+          </tr>
+          <tr valign="baseline">
+            <td><code>[56]  </code></td>
+            <td>
+              <code><a id="rGraphPatternNotTriples" name="rGraphPatternNotTriples">GraphPatternNotTriples</a></code>
+            </td>
+            <td>  ::=  </td>
+            <td>
+              <code><span class="unsupported"><a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rGroupOrUnionGraphPattern">GroupOrUnionGraphPattern</a> |</span> <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rOptionalGraphPattern">OptionalGraphPattern</a> | <span class="unsupported"><a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rMinusGraphPattern">MinusGraphPattern</a> | <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rGraphGraphPattern">GraphGraphPattern</a> | <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rServiceGraphPattern">ServiceGraphPattern</a> |</span> <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rFilter">Filter</a> <span class="unsupported">| <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rBind">Bind</a> | <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rInlineData">InlineData</a></span></code>
+            </td>
+          </tr>
+          <tr valign="baseline">
+            <td><code>[83]  </code></td>
+            <td>
+              <code><a id="rPropertyListPathNotEmpty" name="rPropertyListPathNotEmpty">PropertyListPathNotEmpty</a></code>
+            </td>
+            <td>  ::=  </td>
+            <td>
+              <code>( <span class="unsupported"><a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rVerbPath">VerbPath</a> |</span> <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rVerbSimple">VerbSimple</a> ) <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rObjectListPath">ObjectListPath</a> ( <span class="token">';'</span> ( ( <span class="unsupported"><a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rVerbPath">VerbPath</a> |</span> <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rVerbSimple">VerbSimple</a> ) <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rObjectList">ObjectList</a> )? )*</code>
+            </td>
+          </tr>
+          <tr valign="baseline">
+            <td><code>[98]  </code></td>
+            <td><code><a id="rTriplesNode" name="rTriplesNode">TriplesNode</a></code></td>
+            <td>  ::=  </td>
+            <td>
+              <code><span class="unsupported"><a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rCollection">Collection</a> |</span>	<a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rBlankNodePropertyList">BlankNodePropertyList</a></code>
+            </td>
+          </tr>
+          <tr valign="baseline">
+            <td><code>[100]  </code></td>
+            <td><code><a id="rTriplesNodePath" name="rTriplesNodePath">TriplesNodePath</a></code></td>
+            <td>  ::=  </td>
+            <td>
+              <code><span class="unsupported"><a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rCollectionPath">CollectionPath</a> |</span>	<a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rBlankNodePropertyListPath">BlankNodePropertyListPath</a></code>
+            </td>
+          </tr>
+          <tr valign="baseline">
+            <td><code>[109]  </code></td>
+            <td><code><a id="rGraphTerm" name="rGraphTerm">GraphTerm</a></code></td>
+            <td>  ::=  </td>
+            <td>
+              <code><a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#riri">iri</a> |	<a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rRDFLiteral">RDFLiteral</a> |	<a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rNumericLiteral">NumericLiteral</a> |	<a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rBooleanLiteral">BooleanLiteral</a> |	<a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rBlankNode">BlankNode</a> <span class="unsupported">|	<a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#rNIL">NIL</a></span></code>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  </div>
+
+</body>
+
+</html>

@@ -1,0 +1,15 @@
+PREFIX nobel: <http://data.nobelprize.org/terms/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+INSERT {
+  <http://data.nobelprize.org/resource/laureate/961> dbo:affiliation _:g_1.
+  _:g_1 rdfs:label "${newValue}"@en.
+}
+WHERE {
+  <http://data.nobelprize.org/resource/laureate/961> rdf:type nobel:Laureate;
+    rdfs:label "Gérard Mourou";
+    nobel:nobelPrize <http://data.nobelprize.org/resource/nobelprize/Physics/2018>.
+  <http://data.nobelprize.org/resource/nobelprize/Physics/2018> rdfs:label "The Nobel Prize in Physics 2018"@en;
+    nobel:year 2018 .
+}

@@ -1,0 +1,14 @@
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX schema: <http://schema.org/>
+WITH <http://localhost:3030/example/graph1>
+DELETE { ?g_1 schema:postalCode 91058 . }
+INSERT { ?g_1 schema:postalCode ${newValue} . }
+WHERE {
+  <http://example.org/patient/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> schema:Patient;
+    foaf:name "John Doe".
+  <http://example.org/patient/1> schema:birthDate "1990-10-22"^^<http://www.w3.org/2001/XMLSchema#date>.
+  <http://example.org/patient/1> schema:memberOf <http://example.org/medicaloffice/drschwartz>.
+  <http://example.org/medicaloffice/drschwartz> schema:address ?g_1.
+  ?g_1 schema:streetAddress "Medicstreet 12";
+    schema:postalCode 91058 .
+}

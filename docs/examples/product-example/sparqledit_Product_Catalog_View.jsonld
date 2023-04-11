@@ -1,0 +1,49 @@
+{
+  "name": "Product Catalog View",
+  "description": "Product catalog view for all products from department C3. Version 202206-B",
+  "creator": "Alice A.",
+  "dateCreated": "2023-02-01T11:19:49.483Z",
+  "queryURL": "http://localhost:3030/productcatalog/query",
+  "updateURL": "http://localhost:3030/productcatalog/update",
+  "query": "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX schema: <http://schema.org/>\n\nSELECT ?product ?name ?gtin ?weight\nFROM <http://example.org/dataset/graph>\nWHERE {\n  ?product rdf:type schema:Product ;\n    schema:name ?name ;\n    schema:gtin ?gtin ;\n    schema:weight [\n      schema:value ?weight\n    ]\n  FILTER (lang(?name) = 'en')\n}",
+  "requiresBasicAuth": false,
+  "@context": {
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "schema": "http://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "spedit": "http://iis.fraunhofer.de/sparqledit/ontology#",
+    "name": {
+      "@id": "schema:name"
+    },
+    "description": {
+      "@id": "schema:description"
+    },
+    "creator": {
+      "@id": "schema:creator"
+    },
+    "dateCreated": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:dateTime"
+    },
+    "queryURL": {
+      "@id": "spedit:queryURL",
+      "@type": "xsd:anyURI"
+    },
+    "updateURL": {
+      "@id": "spedit:updateURL",
+      "@type": "xsd:anyURI"
+    },
+    "query": {
+      "@id": "spedit:query"
+    },
+    "requiresBasicAuth": {
+      "@id": "spedit:requiresBasicAuth",
+      "@type": "xsd:boolean"
+    },
+    "updateLogGraph": {
+      "@id": "spedit:updateLogGraph",
+      "@type": "xsd:anyURI"
+    }
+  },
+  "@type": "spedit:SparqlView"
+}

@@ -1,0 +1,10 @@
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX schema: <http://schema.org/>
+WITH <http://localhost:3030/example/graph1>
+DELETE { <http://example.org/patient/3> schema:birthDate "May 1st 1980"^^<http://www.w3.org/2001/XMLSchema#date>. }
+INSERT { <http://example.org/patient/3> schema:birthDate "${newValue}"^^<http://www.w3.org/2001/XMLSchema#date>. }
+WHERE {
+  <http://example.org/patient/3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> schema:Patient;
+    foaf:name "Emily Example".
+  <http://example.org/patient/3> schema:birthDate "May 1st 1980"^^<http://www.w3.org/2001/XMLSchema#date>.
+}

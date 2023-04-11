@@ -1,0 +1,11 @@
+PREFIX nobel: <http://data.nobelprize.org/terms/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+INSERT { <http://data.nobelprize.org/resource/nobelprize/Literature/1947> nobel:motivation "${newValue}"@sv. }
+WHERE {
+  <http://data.nobelprize.org/resource/laureate/618> rdf:type nobel:Laureate;
+    rdfs:label "André Paul Guillaume Gide";
+    nobel:nobelPrize <http://data.nobelprize.org/resource/nobelprize/Literature/1947>.
+  <http://data.nobelprize.org/resource/nobelprize/Literature/1947> rdfs:label "The Nobel Prize in Literature 1947"@en;
+    nobel:year 1947 .
+}
