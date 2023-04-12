@@ -137,8 +137,6 @@ Example of a _SparqlEditResultBindings_ object where a result value for the 'nam
 
 compile with TSC as dev-dependency: 
 1. `npm i`
-2. `npm run build`
-
-compile with globally installed TSC: `tsc`
+2. `npm run build` or `tsc`
 
 run unit tests: `npm t`
