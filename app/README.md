@@ -34,6 +34,14 @@ Build the app for production to the `build` folder: `npm run build`
 
 Test the build: `serve -s build`
 
+#### Bugfix for @inrupt dependency
+
+Webpack compilation error 'Can't import the named export 'EventEmitter' from non EcmaScript module (only default export is available)'
+
+Solution: rename/delete index.mjs in node_modules
+
+`cd node_modules/@inrupt/solid-client-authn-core/dist/; mv index.mjs backup-index.mjs`
+
 #### Docker
 
 Build Docker image: `docker build -f Dockerfile.prod -t sparqledit .`

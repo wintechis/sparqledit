@@ -1,5 +1,5 @@
 import SparqlClient from './SparqlClient';
-import { buildUpdateQueryObject } from '@scs-grp-tech/sparqledit-algorithm';
+import { buildUpdateQueryObject } from 'sparqledit-algorithm';
 import { Parser as SparqlParser } from 'sparqljs';
 import { Generator as SparqlGenerator } from 'sparqljs';
 import { Wildcard } from 'sparqljs';
