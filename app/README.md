@@ -17,9 +17,9 @@ It uses different RDF-related libraries:
 * v0.3: "SPARQL view" manager
 * v0.4: simple Solid integration
 * v0.5: "update log" feature
+* v0.6: restricted SPARQL grammar in query editor
 
 Upcoming versions
-* v0.6: restricted SPARQL grammar
 * v0.7: update guarantees
 
 ### Setup and commands

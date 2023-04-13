@@ -4,7 +4,7 @@ The SPARQL_edit application in the [app](app/README.md) folder uses the alogrith
 
 The [build](build) folder contains the built application. Section 'Setup' explains how to run the built application.
 
-The [docs](docs) folder includes information around SPARQL_edit and provides example for tesing.
+The [docs](docs) folder includes information around SPARQL_edit and provides examples for tesing.
 
 
 ## SPARQL_edit application

@@ -2,8 +2,14 @@ import React from 'react';
 
 import '../../styles/component-styles/SparqlViewDetailForm.css';
 
-import Yasqe from '@triply/yasqe';
-import '@triply/yasqe/build/yasqe.min.css';
+// // use official yasgui components
+// // npm i @triply/yasqe
+// import Yasqe from '@triply/yasqe';
+// import '@triply/yasqe/build/yasqe.min.css';
+
+// use fork from github:smeckler/yasgui-spedit with restricted SPARQL grammar
+import Yasqe from 'yasgui' // to have TS types; (alt: import Yasqe from 'yasgui/build/yasqe.min.js')
+import 'yasgui/build/yasqe.min.css';
 
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
