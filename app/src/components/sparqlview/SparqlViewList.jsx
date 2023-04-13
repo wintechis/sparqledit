@@ -98,13 +98,13 @@ export default function SparqlViewList() {
   return (
     <section>
       <Row className="justify-content-center mb-2">
-        <Col lg="6">
+        <Col lg="8">
           <h3 className="text-center">{viewCount === 1 ? '1 SPARQL view' : `${viewCount} SPARQL views`}</h3>
           <p className="infoText px-2">
             {
               'A "SPARQL view" is a simple configuration object. ' +
-              'It defines how to load a table of values from a Knowledge Graph. ' +
-              'SPARQL_edit allows you to edit literal values in the table.'
+              'It defines how to load a table of values from an RDF Knowledge Graph. ' +
+              'SPARQL_edit allows you to edit RDF literal values in the query result table.'
             }
           </p>
         </Col>

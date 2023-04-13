@@ -47,10 +47,10 @@ export default function SparqlViewListActive({ view, viewUpdateCallback, cardHan
           <>
             <Card.Text>{view.description}</Card.Text>
             <dl className="row">
-              <dt className="col-sm-2">Creator</dt>
-              <dd className="col-sm-10">{view.creator}</dd>
-              <dt className="col-sm-2">Modification date</dt>
-              <dd className="col-sm-10">{new Date(view.dateCreated).toLocaleString()}</dd>
+              <dt className="col-sm-3">Creator</dt>
+              <dd className="col-sm-9">{view.creator}</dd>
+              <dt className="col-sm-3">Modification date</dt>
+              <dd className="col-sm-9">{new Date(view.dateCreated).toLocaleString()}</dd>
             </dl>
             <SparqlViewDetail sparqlView={view} isEditMode={false} />
           </>

@@ -12,15 +12,15 @@ export default function LegalModal( { show, onHide } ) {
       <Modal.Body>
 
         <p>SPARQL_edit v{version}</p>
-        <p>© <a href="mailto:sascha.meckler@iis.fraunhofer.de" className="text-secondary">S. Meckler</a> 2022</p>
+        <p>© <a href="mailto:sascha.meckler@iis.fraunhofer.de" className="text-secondary">S. Meckler</a> 2023</p>
         <p>This Web application is still in development. No liability is taken for any damage caused by the use of this website.</p>
         <p>This Web application uses browser cookies and the HTML Web Storage (Local Storage) for storing data that is essential for the correct functioning of this Web application. By using this website, you consent to the use of data storage for technical reasons of function.</p>
 
         <p>This Web application uses the following open-source software:</p>
         <ul>
           <li>
-            <a href="https://github.com/facebook/react">facebook/react</a>
-            <p>
+            <a href="https://github.com/facebook/react" target="_blank" rel="noreferrer">facebook/react</a>
+            <p class="small">
               MIT License
 
               Copyright (c) Facebook, Inc. and its affiliates.
@@ -45,8 +45,8 @@ export default function LegalModal( { show, onHide } ) {
             </p>
           </li>
           <li>
-            <a href="https://github.com/react-bootstrap/react-bootstrap">react-bootstrap/react-bootstrap</a>
-            <p>
+            <a href="https://github.com/react-bootstrap/react-bootstrap" target="_blank" rel="noreferrer">react-bootstrap/react-bootstrap</a>
+            <p class="small">
               The MIT License (MIT)
 
               Copyright (c) 2014-present Stephen J. Collings, Matthew Honnibal, Pieter Vanderwerff
@@ -71,8 +71,8 @@ export default function LegalModal( { show, onHide } ) {
             </p>
           </li>
           <li>
-            <a href="https://github.com/twbs/bootstrap">twbs/bootstrap</a>
-            <p>
+            <a href="https://github.com/twbs/bootstrap" target="_blank" rel="noreferrer">twbs/bootstrap</a>
+            <p class="small">
               The MIT License (MIT)
 
               Copyright (c) 2011-2022 Twitter, Inc.
@@ -98,8 +98,8 @@ export default function LegalModal( { show, onHide } ) {
             </p>
           </li>
           <li>
-            <a href="https://github.com/twbs/icons">twbs/icons</a>
-            <p>
+            <a href="https://github.com/twbs/icons" target="_blank" rel="noreferrer">twbs/icons</a>
+            <p class="small">
               The MIT License (MIT)
 
               Copyright (c) 2019-2021 The Bootstrap Authors
@@ -112,8 +112,8 @@ export default function LegalModal( { show, onHide } ) {
             </p>
           </li>
           <li>
-            <a href="https://github.com/RubenVerborgh/SPARQL.js">RubenVerborgh/SPARQL.js</a>
-            <p>
+            <a href="https://github.com/RubenVerborgh/SPARQL.js" target="_blank" rel="noreferrer">RubenVerborgh/SPARQL.js</a>
+            <p class="small">
               The MIT License (MIT) Copyright ©2014 Ruben Verborgh
 
               Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -124,8 +124,8 @@ export default function LegalModal( { show, onHide } ) {
             </p>
           </li>
           <li>
-            <a href="https://github.com/rubensworks/fetch-sparql-endpoint.js">rubensworks/fetch-sparql-endpoint.js</a>
-            <p>
+            <a href="https://github.com/rubensworks/fetch-sparql-endpoint.js" target="_blank" rel="noreferrer">rubensworks/fetch-sparql-endpoint.js</a>
+            <p class="small">
               The MIT License (MIT)
 
               Copyright © 2017 Ruben Taelman
@@ -150,8 +150,8 @@ export default function LegalModal( { show, onHide } ) {
             </p>
           </li>
           <li>
-            <a href="https://github.com/rubensworks/jsonld-streaming-parser.js">rubensworks/jsonld-streaming-parser.js</a>
-            <p>
+            <a href="https://github.com/rubensworks/jsonld-streaming-parser.js" target="_blank" rel="noreferrer">rubensworks/jsonld-streaming-parser.js</a>
+            <p class="small">
               The MIT License (MIT)
 
               Copyright © 2018 Ruben Taelman
@@ -176,8 +176,8 @@ export default function LegalModal( { show, onHide } ) {
             </p>
           </li>
           <li>
-            <a href="https://github.com/rubensworks/rdf-literal.js">rubensworks/rdf-literal.js</a>
-            <p>
+            <a href="https://github.com/rubensworks/rdf-literal.js" target="_blank" rel="noreferrer">rubensworks/rdf-literal.js</a>
+            <p class="small">
               The MIT License (MIT)
 
               Copyright © 2019 Ruben Taelman
@@ -202,8 +202,8 @@ export default function LegalModal( { show, onHide } ) {
             </p>
           </li>
           <li>
-            <a href="https://github.com/TriplyDB/yasgui">TriplyDB/yasgui</a>
-            <p>
+            <a href="https://github.com/TriplyDB/yasgui" target="_blank" rel="noreferrer">TriplyDB/yasgui</a>
+            <p class="small">
               The MIT License (MIT)
 
               Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -226,8 +226,8 @@ export default function LegalModal( { show, onHide } ) {
             </p>
           </li>
           <li>
-            <a href="https://github.com/zazuko/rdf-vocabularies">zazuko/rdf-vocabularies</a>
-            <p>
+            <a href="https://github.com/zazuko/rdf-vocabularies" target="_blank" rel="noreferrer">zazuko/rdf-vocabularies</a>
+            <p class="small">
               The MIT License (MIT)
 
               Copyright (c) 2019 Zazuko GmbH
@@ -252,8 +252,8 @@ export default function LegalModal( { show, onHide } ) {
             </p>
           </li>
           <li>
-            <a href="https://github.com/inrupt/solid-ui-react">inrupt/solid-ui-react</a>
-            <p>
+            <a href="https://github.com/inrupt/solid-ui-react" target="_blank" rel="noreferrer">inrupt/solid-ui-react</a>
+            <p class="small">
               MIT License
 
               Copyright (c) 2020 Inrupt

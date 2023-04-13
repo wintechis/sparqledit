@@ -1,5 +1,6 @@
 textarea[readonly].white-readonly {
   background-color: white;
+  font-size: 14px;
 }
 
 /* .modal-90w {
