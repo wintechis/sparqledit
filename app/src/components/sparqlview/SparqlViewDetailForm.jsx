@@ -20,7 +20,8 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 export default function SparqlViewDetailForm({ sparqlView, sparqlViewUpdateCallback, isLoading, submitQueryCallback, credentialsForm }) {
   const [yasqe, setYasqe] = React.useState(null);
-  
+  const [isInvalidQuery, setIsInvalidQuery] = React.useState(false);
+
   function handleSubmit(e) {
     e.preventDefault();
     handleYasqeSubmit();
@@ -35,11 +36,26 @@ export default function SparqlViewDetailForm({ sparqlView, sparqlViewUpdateCallb
     sparqlViewUpdateCallback(sparqlView);
   }
 
+  function handleInvalidQuery() {
+    if(!yasqe) return;
+    if (yasqe.queryValid === false) {
+      setIsInvalidQuery(true);
+      yasqe.showNotification('invalidQueryNotification', 
+      'invalid syntax or grammar (SPARQL_edit allows only a subset of SPARQL)');
+    } else {
+      setIsInvalidQuery(false);
+      yasqe.hideNotification('invalidQueryNotification');
+    }
+  }
+
   // init and update YASQE
   React.useEffect(() => {
     //const handlerSubmit = (yasqe, reqest) => handleYasqeSubmit(yasqe, reqest);
     const handlerSubmit = () => handleYasqeSubmit();
-    const handlerChange = (yasqe) => handleFormChange('query', yasqe.getValue());
+    const handlerChange = (yasqe) => {
+      handleFormChange('query', yasqe.getValue());
+      handleInvalidQuery();
+    }
 
     if (!yasqe) {
       // create instance of YASQE
@@ -73,6 +89,7 @@ export default function SparqlViewDetailForm({ sparqlView, sparqlViewUpdateCallb
       yasqe.on("query", handlerSubmit);
       yasqe.on("change", handlerChange);
     }
+    handleInvalidQuery();
 
     // cleanup
     return () => {
@@ -159,8 +176,8 @@ export default function SparqlViewDetailForm({ sparqlView, sparqlViewUpdateCallb
           <Col>
             <div id='yasqe' />
             <div className="d-grid gap-2">
-              <Button variant="primary" type="submit" form="queryForm" disabled={isLoading} className="my-2">
-                { isLoading ? <><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> loading … </> : <><i className="bi bi-send"></i> submit query </>}
+              <Button variant={isInvalidQuery ? 'secondary' : 'primary'} type="submit" form="queryForm" disabled={isLoading} className="my-2">
+                { isLoading ? <><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> loading … </> : <><i className="bi bi-send"></i> {isInvalidQuery ? 'submit invalid query' : 'submit query'}</>}
               </Button>
             </div>
           </Col>
