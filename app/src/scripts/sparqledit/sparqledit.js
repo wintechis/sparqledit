@@ -1,5 +1,5 @@
 import SparqlClient from './SparqlClient';
-import { buildUpdateQueryObject } from 'sparqledit-algorithm';
+import { buildUpdateQueryObject, buildUpdateCheckQueryObject } from 'sparqledit-algorithm';
 import { Parser as SparqlParser } from 'sparqljs';
 import { Generator as SparqlGenerator } from 'sparqljs';
 import { Wildcard } from 'sparqljs';
@@ -48,6 +48,18 @@ async function executeSelectWildcardQuery(sparqlClient, querySubmission) {
   });
 
   return sparql_results;
+}
+
+export function buildCheckQueryForVariable(queryStr, variableRow) {
+  // parse query string into JS object
+  const queryObj = buildQueryObject(queryStr);
+
+  // SPARQLedit algorithm for creating a SPARQL update query object
+  const checkQueryObj = buildUpdateCheckQueryObject(queryObj, variableRow);
+
+  // return query string from JS query object
+  const checkQuery = stringifyQueryObject(checkQueryObj);
+  return checkQuery;
 }
 
 export function buildUpdateQueryForVariable(queryStr, variableRow) {

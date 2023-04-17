@@ -1,6 +1,6 @@
 {
   "name": "sparqledit",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Web app for editing RDF literals in Knowledge Graphs using SPARQL",
   "author": "Sascha Meckler <sascha.meckler@iis.fraunhofer.de>",
   "dependencies": {

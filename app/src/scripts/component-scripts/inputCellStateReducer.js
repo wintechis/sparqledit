@@ -7,6 +7,7 @@ export function initialInputCellState(sparqlSubmission, origValue) {
     currentCellValue: null,
     buildingError: null,
     updateQuery: null,
+    checkQuery: null,
     updateResult: null,
     updateError: null,
     isExecutingQuery: false
@@ -25,11 +26,12 @@ export function inputCellStateReducer(state, action) {
       if (action.currentCellValue != state.origCellValue) {
         newState.currentCellValue = action.currentCellValue
         try {
+          newState.checkQuery = action.buildCheckQuery();
           newState.updateQuery = action.buildUpdateQuery();
         } catch (error) {
           const buildingError = new BuildingError(
             `The update query building algorithm failed.\n${error.name} - ${error.message}`);
-          newState.updateQuery = null;
+          newState.updateQuery = newState.checkQuery = null;
           newState.buildingError = buildingError;
         }
       }
@@ -42,11 +44,12 @@ export function inputCellStateReducer(state, action) {
         currentCellValue: state.origCellValue
       };
       try {
+        newInsertState.checkQuery = action.buildCheckQuery();
         newInsertState.updateQuery = action.buildUpdateQuery();
       } catch (error) {
         const buildingError = new BuildingError(
           `The update query building algorithm failed.\n${error.name} - ${error.message}`);
-        newInsertState.updateQuery = null;
+        newInsertState.updateQuery = newInsertState.checkQuery = null;
         newInsertState.buildingError = buildingError;
       }
       return newInsertState;
@@ -63,6 +66,7 @@ export function inputCellStateReducer(state, action) {
         origCellValue: state.origCellValue,
         currentCellValue: state.currentCellValue,
         updateQuery: state.updateQuery,
+        checkQuery: state.checkQuery,
         isExecutingQuery: true
       };
 
@@ -84,7 +88,22 @@ export function inputCellStateReducer(state, action) {
         origCellValue: state.origCellValue,
         currentCellValue: state.currentCellValue,
         updateQuery: state.updateQuery,
+        checkQuery: state.checkQuery,
         updateError: updateError,
+        isExecutingQuery: false
+      };
+
+    case "INPUTCELL_UPDATECHECK_FAIL":
+      const checkError = new UpdateError(
+        `The update preflight check failed.\n ${action.error.message}`,
+        state.origSparqlSubmission.endpointUpdate);
+      return { 
+        origSparqlSubmission: state.origSparqlSubmission, 
+        origCellValue: state.origCellValue,
+        currentCellValue: state.currentCellValue,
+        updateQuery: state.updateQuery,
+        checkQuery: state.checkQuery,
+        updateError: checkError,
         isExecutingQuery: false
       };
 

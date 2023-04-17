@@ -7,7 +7,8 @@ import QueryResultTableInputCellModal from './QueryResultTableInputCellModal';
 import { initialInputCellState, inputCellStateReducer } from '../../scripts/component-scripts/inputCellStateReducer';
 import getInputTypeForLiteral from '../../scripts/component-scripts/inputCellDatatypeHelper';
 import { QuerySubmission } from '../../scripts/models/QuerySubmission';
-import { 
+import {
+  buildCheckQueryForVariable,
   buildUpdateQueryForVariable, 
   buildUpdateLogQueryForVariable, 
   executeSelectOrUpdateQuery 
@@ -66,6 +67,49 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
       return; // no action if form is submitted in wrong state
     }
     dispatch({ type: "INPUTCELL_UPDATE_START" });
+
+    // update check
+    try {
+      const checkSubmission = new QuerySubmission(
+        inputCellState.origSparqlSubmission.endpointQuery, 
+        inputCellState.origSparqlSubmission.endpointUpdate, 
+        inputCellState.checkQuery,
+        inputCellState.origSparqlSubmission.credentials);
+      console.log('inputCellState.checkQuery', inputCellState.checkQuery);
+      const checkQueryResult = await executeSelectOrUpdateQuery(checkSubmission);
+      console.log('checkQueryResult', checkQueryResult);
+      // 0 solutions: graph pattern matching has no result
+      // the relevant triples in the graph have been changed in the meantime
+      if(checkQueryResult.length === 0) {
+        return dispatch({
+          type: "INPUTCELL_UPDATECHECK_FAIL",
+          error: new Error('Triples have been changed in the meantime.')
+        });
+      } 
+      // >1 solutions: graph pattern matches more than one times
+      // ambiguous update query that would alter more than one triple
+      else if(checkQueryResult.length > 1) {
+        return dispatch({
+          type: "INPUTCELL_UPDATECHECK_FAIL",
+          error: new Error('Ambiguous update query.')
+        });
+      }
+      // 1 solution: ideal case
+      // update query is safe
+      else if(checkQueryResult.length === 1) {
+        console.log('update query check successful');
+      }
+      else {
+        throw new Error('invalid check result');
+      }
+    } catch (error) {
+      return dispatch({
+        type: "INPUTCELL_UPDATECHECK_FAIL",
+        error
+      });
+    }
+
+    // update execution
     try {
       const updateSubmission = new QuerySubmission(
         inputCellState.origSparqlSubmission.endpointQuery, 
@@ -106,7 +150,7 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
   const handleChange = (newValue) => {
     // define the function that the reducer will use for generating the update query
     const buildUpdateQuery = () => {
-       // deep copy orig rowBinding to keep it clean (e.g. in case of reset)
+      // deep copy orig rowBinding to keep it clean (e.g. in case of reset)
       const rowBindingWithNewValue = JSON.parse(JSON.stringify(rowBinding));
       // add the new value; valueNew prop is later used by the algo to indentify the modified variable
       rowBindingWithNewValue[variable].valueNew = String(newValue);
@@ -116,10 +160,20 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
         buildUpdateQueryForVariable(sparqlSubmission.queryString, rowBindingWithNewValue);
       return updateQu;
     }
+    const buildCheckQuery = () => {
+      // deep copy orig rowBinding to keep it clean (e.g. in case of reset)
+      const rowBindingWithNewValue = JSON.parse(JSON.stringify(rowBinding));
+      // add the new value; valueNew prop is later used by the algo to indentify the modified variable
+      rowBindingWithNewValue[variable].valueNew = String(newValue);
+      // build the update query
+      const checkQu = buildCheckQueryForVariable(sparqlSubmission.queryString, rowBindingWithNewValue);
+      return checkQu;
+    }
     dispatch({
       type: "INPUTCELL_CHANGE",
       currentCellValue: newValue,
-      buildUpdateQuery: buildUpdateQuery
+      buildUpdateQuery: buildUpdateQuery,
+      buildCheckQuery: buildCheckQuery
     });
   };
 
