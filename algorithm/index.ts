@@ -1,4 +1,8 @@
-export { buildUpdateQueryObject } from "./src/sparqleditalgorithm";
+export { 
+  buildUpdateQueryObject,
+  buildUpdateCheckQueryObject 
+} from "./src/sparqleditalgorithm";
+
 export {
   SparqlEditTerm,
   SparqlResultBindings,

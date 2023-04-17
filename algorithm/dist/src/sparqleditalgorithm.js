@@ -1,18 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buildUpdateQueryObject = void 0;
+exports.buildUpdateCheckQueryObject = exports.buildUpdateQueryObject = void 0;
+const SparqlJS = require("sparqljs");
 /**
- * SPARQL_edit algorithm
+ * SPARQL_edit algorithm: create update query for view update
  * @param selectQueryObject parsed JS object of the original SPARQL Select query
  * @param sparqlEditResultRow the row of all ResultBindungs that contains the edited variable value; extended with information for SPARQL_edit
  * @returns JS object of the created SPARQL Update query
  */
 function buildUpdateQueryObject(selectQueryObject, sparqlEditResultRow) {
     // 0. clone original query object
-    const modQuery = JSON.parse(JSON.stringify(selectQueryObject));
-    if (modQuery.where === undefined) {
-        throw new Error("missing 'WHERE' block");
-    }
+    const modQuery = deepCopySelectQuery(selectQueryObject);
     // 1. analyse edited variable
     // 1.1 collect information about the edited literal (= variable in query)
     const editedVar = findEditedVariableInResultRow(sparqlEditResultRow);
@@ -37,6 +35,53 @@ function buildUpdateQueryObject(selectQueryObject, sparqlEditResultRow) {
     return updateQueryObject;
 }
 exports.buildUpdateQueryObject = buildUpdateQueryObject;
+/**
+ * Update preflight check query
+ * @param selectQueryObject parsed JS object of the original SPARQL Select query
+ * @param sparqlEditResultRow the row of all ResultBindungs that contains the edited variable value; extended with information for SPARQL_edit
+ * @returns JS object of a SPARQL/Select query for checking
+ */
+function buildUpdateCheckQueryObject(selectQueryObject, sparqlEditResultRow) {
+    // same procedure as 'buildUpdateQueryObject' without the third step for the update query (skip generation of insert-delete clauses)
+    // 0. clone original query object and make wildcard query
+    const modQuery = deepCopySelectQuery(selectQueryObject, true);
+    // 1. analyse edited variable
+    // 1.1 collect information about the edited literal (= variable in query)
+    const editedVar = findEditedVariableInResultRow(sparqlEditResultRow);
+    // 1.2 collect BGP triples and find triple with edited variable
+    const editedVarBgpTripleRef = findEditedVariableBgpTriple(modQuery, editedVar);
+    // 1.3 check if edited/inserted variable in BGP of an optional block
+    const editedOptionalTriples = findEditedVariableOptionalBgpTriples(modQuery, editedVar);
+    // if NOT insert mode && optional var edited: copy optional bgp as normal bgp to query's where array
+    if (editedVar.insertMode !== true && editedOptionalTriples) {
+        const optBgpPattern = {
+            type: 'bgp',
+            triples: editedOptionalTriples
+        };
+        modQuery.where.push(optBgpPattern);
+    }
+    // 2. rebuild the query's where block 
+    rebuildQueryWhereBlock(modQuery, sparqlEditResultRow);
+    //console.dir(modQuery, { depth: null });
+    // 4. finalize check query
+    if (hasWhereBlockVariable(modQuery.where) === false) {
+        // if check query does not have variables, we need to extend it so that we will have 0 or 1 solutions
+        addMeaninglessBindPattern(modQuery);
+    }
+    return modQuery;
+}
+exports.buildUpdateCheckQueryObject = buildUpdateCheckQueryObject;
+// 0. prepare query (object)
+function deepCopySelectQuery(selectQueryObject, makeWildcard = false) {
+    if (!isSelectWhereQuery(selectQueryObject)) {
+        throw new Error("missing 'WHERE' block");
+    }
+    const modQuery = JSON.parse(JSON.stringify(selectQueryObject));
+    if (makeWildcard) {
+        modQuery.variables = [new SparqlJS.Wildcard()];
+    }
+    return modQuery;
+}
 // 1. analyse edited variable
 function findEditedVariableInResultRow(sparqlEditResultRow) {
     // iterate over query result's variables
@@ -56,9 +101,6 @@ function findEditedVariableInResultRow(sparqlEditResultRow) {
     throw new Error('no edited variable found');
 }
 function findEditedVariableBgpTriple(modQuery, editedVar) {
-    if (modQuery.where === undefined) {
-        throw new Error("missing 'WHERE' block");
-    }
     const bgpTriples = modQuery.where
         .filter(isBgpPattern)
         .flatMap(bgpPattern => bgpPattern.triples);
@@ -80,9 +122,6 @@ function findEditedVariableBgpTriple(modQuery, editedVar) {
     }
 }
 function findEditedVariableOptionalBgpTriples(modQuery, editedVar) {
-    if (modQuery.where === undefined) {
-        throw new Error("missing 'WHERE' block");
-    }
     let editedOptionalTriples = null;
     const optPatterns = modQuery.where
         .filter(isOptionalPattern);
@@ -102,9 +141,6 @@ function findEditedVariableOptionalBgpTriples(modQuery, editedVar) {
 }
 // 2. rebuild the query's where block 
 function rebuildQueryWhereBlock(modQuery, sparqlEditResultRow) {
-    if (modQuery.where === undefined) {
-        throw new Error("missing 'WHERE' block");
-    }
     for (let i = modQuery.where.length - 1; i >= 0; i--) {
         let pattern = modQuery.where[i];
         // case: BGP
@@ -247,9 +283,6 @@ function buildUpdateQuery(modQuery, editedVar, sparqlEditResultRow, editedOption
         prefixes: modQuery.prefixes
     };
     // 3.2 copy modified 'where' part
-    if (modQuery.where === undefined) {
-        throw new Error("missing 'WHERE' block");
-    }
     updateOperation.where = modQuery.where.filter(isBgpPattern);
     // 3.3 construct 'insert' and 'delete part'
     if (editedVar.insertMode === true) {
@@ -314,6 +347,25 @@ function buildInsertTriples(sparqlResultBindings, editedOptionalTriples, editedV
     };
     return insertBgpPattern;
 }
+// 4. check query
+function hasWhereBlockVariable(wherePatterns) {
+    return wherePatterns
+        .filter((pattern) => isBgpPattern(pattern))
+        .flatMap(pattern => pattern.triples)
+        .some(triple => isVariableTerm(triple.subject) || isVariableTerm(triple.object));
+}
+function addMeaninglessBindPattern(modQuery) {
+    const meaninglessBindStatement = {
+        type: "bind",
+        variable: factoryCreateRDFVariable('meaninglessVariable'),
+        expression: {
+            type: "operation",
+            operator: "now",
+            args: []
+        }
+    };
+    modQuery.where.push(meaninglessBindStatement);
+}
 // RDF factory and helper functions
 // factory for creating RDF Terms
 const rdf_data_factory_1 = require("rdf-data-factory");
@@ -329,7 +381,10 @@ function factoryCreateRDFVariable(value) {
         };
     }
 }
-// user-defined type guards for type narrowing when filtering
+// user-defined type guards for type narrowing
+function isSelectWhereQuery(selectQueryObject) {
+    return selectQueryObject.where !== undefined;
+}
 function isBgpPattern(pattern) {
     return pattern.type === 'bgp';
 }
