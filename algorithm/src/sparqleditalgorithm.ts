@@ -1,4 +1,3 @@
-import * as RDF from "@rdfjs/types";
 import * as SparqlJS from 'sparqljs';
 import { 
   SparqlEditResultBindings, 
@@ -7,6 +6,16 @@ import {
   PredicateType,
   SelectWhereQuery
 } from './types';
+import {
+  factory,
+  createRDFVariable,
+  isVariableTerm,
+  isBlankNodeTerm,
+  isPropertyPath,
+  isBgpPattern,
+  isOptionalPattern,
+  isSelectWhereQuery
+} from './helper';
 
 /**
  * SPARQL_edit algorithm: create update query for view update
@@ -207,7 +216,7 @@ function replaceSubjectVariable(subject: SubjectType, sparqlResultBindings: Spar
   }
   // blank node -> replace with named variable
   if (isBlankNodeTerm(subject)) {
-    return factoryCreateRDFVariable(subject.value);
+    return createRDFVariable(subject.value);
   }
   // default
   return subject;
@@ -270,7 +279,7 @@ function replaceObjectVariable(object: SparqlJS.Term, sparqlResultBindings: Spar
   }
   // blank node -> replace with named variable
   if (isBlankNodeTerm(object)) {
-    return factoryCreateRDFVariable(object.value);
+    return createRDFVariable(object.value);
   }
   // default
   return object;
@@ -395,7 +404,6 @@ function buildInsertTriples(sparqlResultBindings: SparqlEditResultBindings, edit
   return insertBgpPattern;
 }
 
-
 // 4. check query
 
 function hasWhereBlockVariable(wherePatterns: SparqlJS.Pattern[]): boolean {
@@ -408,7 +416,7 @@ function hasWhereBlockVariable(wherePatterns: SparqlJS.Pattern[]): boolean {
 function addMeaninglessBindPattern(modQuery: SelectWhereQuery) {
   const meaninglessBindStatement = {
     type: "bind",
-    variable: factoryCreateRDFVariable('meaninglessVariable'),
+    variable: createRDFVariable('meaninglessVariable'),
     expression: {
       type: "operation",
       operator: "now",
@@ -416,47 +424,4 @@ function addMeaninglessBindPattern(modQuery: SelectWhereQuery) {
     }
   } as SparqlJS.BindPattern;
   modQuery.where.push(meaninglessBindStatement);
-}
-
-// RDF factory and helper functions
-
-// factory for creating RDF Terms
-import { DataFactory } from 'rdf-data-factory';
-const factory: RDF.DataFactory = new DataFactory();
-
-function factoryCreateRDFVariable(value: string): RDF.Variable {
-  if (factory.variable) {
-    return factory.variable(value);
-  } else {
-    return {
-      termType: 'Variable',
-      value,
-    } as RDF.Variable;
-  }
-}
-
-// user-defined type guards for type narrowing
-
-function isSelectWhereQuery(selectQueryObject: SparqlJS.SelectQuery): selectQueryObject is SelectWhereQuery {
-  return selectQueryObject.where !== undefined
-}
-
-function isBgpPattern(pattern: SparqlJS.Pattern): pattern is SparqlJS.BgpPattern {
-  return pattern.type === 'bgp';
-}
-
-function isOptionalPattern(pattern: SparqlJS.Pattern): pattern is SparqlJS.OptionalPattern {
-  return pattern.type === 'optional';
-}
-
-function isVariableTerm(term: RDF.Term): term is RDF.Variable {
-  return term.termType === 'Variable';
-}
-
-function isPropertyPath(termOrPath: RDF.Term | SparqlJS.PropertyPath): termOrPath is SparqlJS.PropertyPath {
-  return termOrPath.hasOwnProperty('pathType');
-}
-
-function isBlankNodeTerm(term: RDF.Term): term is RDF.BlankNode {
-  return term.termType === 'BlankNode';
 }

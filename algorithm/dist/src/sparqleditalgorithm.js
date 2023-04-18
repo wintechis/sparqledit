@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.buildUpdateCheckQueryObject = exports.buildUpdateQueryObject = void 0;
 const SparqlJS = require("sparqljs");
+const helper_1 = require("./helper");
 /**
  * SPARQL_edit algorithm: create update query for view update
  * @param selectQueryObject parsed JS object of the original SPARQL Select query
@@ -73,7 +74,7 @@ function buildUpdateCheckQueryObject(selectQueryObject, sparqlEditResultRow) {
 exports.buildUpdateCheckQueryObject = buildUpdateCheckQueryObject;
 // 0. prepare query (object)
 function deepCopySelectQuery(selectQueryObject, makeWildcard = false) {
-    if (!isSelectWhereQuery(selectQueryObject)) {
+    if (!(0, helper_1.isSelectWhereQuery)(selectQueryObject)) {
         throw new Error("missing 'WHERE' block");
     }
     const modQuery = JSON.parse(JSON.stringify(selectQueryObject));
@@ -102,12 +103,12 @@ function findEditedVariableInResultRow(sparqlEditResultRow) {
 }
 function findEditedVariableBgpTriple(modQuery, editedVar) {
     const bgpTriples = modQuery.where
-        .filter(isBgpPattern)
+        .filter(helper_1.isBgpPattern)
         .flatMap(bgpPattern => bgpPattern.triples);
     const optTriples = modQuery.where
-        .filter(isOptionalPattern)
+        .filter(helper_1.isOptionalPattern)
         .flatMap(optPattern => optPattern.patterns)
-        .filter(isBgpPattern)
+        .filter(helper_1.isBgpPattern)
         .flatMap(bgpPattern => bgpPattern.triples);
     // iterate over bgp triples and compare variable names
     const allTriples = bgpTriples.concat(optTriples);
@@ -124,14 +125,14 @@ function findEditedVariableBgpTriple(modQuery, editedVar) {
 function findEditedVariableOptionalBgpTriples(modQuery, editedVar) {
     let editedOptionalTriples = null;
     const optPatterns = modQuery.where
-        .filter(isOptionalPattern);
+        .filter(helper_1.isOptionalPattern);
     for (const optPattern of optPatterns) {
         const triples = optPattern.patterns
-            .filter(isBgpPattern)
+            .filter(helper_1.isBgpPattern)
             .flatMap(bgpPattern => bgpPattern.triples);
         const foundMatch = triples
             .map(triple => triple['object'])
-            .filter(isVariableTerm)
+            .filter(helper_1.isVariableTerm)
             .some(variable => variable.value === editedVar.name);
         if (foundMatch) {
             editedOptionalTriples = triples;
@@ -144,7 +145,7 @@ function rebuildQueryWhereBlock(modQuery, sparqlEditResultRow) {
     for (let i = modQuery.where.length - 1; i >= 0; i--) {
         let pattern = modQuery.where[i];
         // case: BGP
-        if (isBgpPattern(pattern)) {
+        if ((0, helper_1.isBgpPattern)(pattern)) {
             // 2.1 replace all (named) variables in bgp triples with NamedNodes or Literals from query results 
             replaceAllNamedVariables(pattern.triples, sparqlEditResultRow);
         }
@@ -165,7 +166,7 @@ function replaceAllNamedVariables(bgpTriples, sparqlResultBindings) {
     });
 }
 function replaceSubjectVariable(subject, sparqlResultBindings) {
-    if (isVariableTerm(subject)) {
+    if ((0, helper_1.isVariableTerm)(subject)) {
         const varName = subject.value;
         // iterate over variables list
         for (const resultVariable of Object.keys(sparqlResultBindings)) {
@@ -179,14 +180,14 @@ function replaceSubjectVariable(subject, sparqlResultBindings) {
         }
     }
     // blank node -> replace with named variable
-    if (isBlankNodeTerm(subject)) {
-        return factoryCreateRDFVariable(subject.value);
+    if ((0, helper_1.isBlankNodeTerm)(subject)) {
+        return (0, helper_1.createRDFVariable)(subject.value);
     }
     // default
     return subject;
 }
 function replaceSubjectVariableInsertMode(subject, sparqlResultBindings) {
-    if (isVariableTerm(subject)) {
+    if ((0, helper_1.isVariableTerm)(subject)) {
         const varName = subject.value;
         // iterate over variables list
         for (const resultVariable of Object.keys(sparqlResultBindings)) {
@@ -199,15 +200,15 @@ function replaceSubjectVariableInsertMode(subject, sparqlResultBindings) {
             }
         }
         // if still variable = no value found in bindingRow -> set to blankNode
-        if (isVariableTerm(subject)) {
-            return factory.blankNode(subject.value);
+        if ((0, helper_1.isVariableTerm)(subject)) {
+            return helper_1.factory.blankNode(subject.value);
         }
     }
     // default
     return subject;
 }
 function replacePredicateVariable(predicate, sparqlResultBindings) {
-    if (!isPropertyPath(predicate) && isVariableTerm(predicate)) {
+    if (!(0, helper_1.isPropertyPath)(predicate) && (0, helper_1.isVariableTerm)(predicate)) {
         const varName = predicate.value;
         // iterate over variables list
         for (const resultVariable of Object.keys(sparqlResultBindings)) {
@@ -224,7 +225,7 @@ function replacePredicateVariable(predicate, sparqlResultBindings) {
     return predicate;
 }
 function replaceObjectVariable(object, sparqlResultBindings) {
-    if (isVariableTerm(object)) {
+    if ((0, helper_1.isVariableTerm)(object)) {
         const varName = object.value;
         // iterate over variables list
         for (const resultVariable of Object.keys(sparqlResultBindings)) {
@@ -239,14 +240,14 @@ function replaceObjectVariable(object, sparqlResultBindings) {
         }
     }
     // blank node -> replace with named variable
-    if (isBlankNodeTerm(object)) {
-        return factoryCreateRDFVariable(object.value);
+    if ((0, helper_1.isBlankNodeTerm)(object)) {
+        return (0, helper_1.createRDFVariable)(object.value);
     }
     // default
     return object;
 }
 function replaceObjectVariableInsertMode(object, sparqlResultBindings) {
-    if (isVariableTerm(object)) {
+    if ((0, helper_1.isVariableTerm)(object)) {
         const varName = object.value;
         // iterate over variables list
         for (const resultVariable of Object.keys(sparqlResultBindings)) {
@@ -260,8 +261,8 @@ function replaceObjectVariableInsertMode(object, sparqlResultBindings) {
             }
         }
         // if still variable = no value found in bindingRow -> set to blankNode
-        if (isVariableTerm(object)) {
-            return factory.blankNode(object.value);
+        if ((0, helper_1.isVariableTerm)(object)) {
+            return helper_1.factory.blankNode(object.value);
         }
     }
     // default
@@ -283,7 +284,7 @@ function buildUpdateQuery(modQuery, editedVar, sparqlEditResultRow, editedOption
         prefixes: modQuery.prefixes
     };
     // 3.2 copy modified 'where' part
-    updateOperation.where = modQuery.where.filter(isBgpPattern);
+    updateOperation.where = modQuery.where.filter(helper_1.isBgpPattern);
     // 3.3 construct 'insert' and 'delete part'
     if (editedVar.insertMode === true) {
         if (!editedOptionalTriples) {
@@ -317,7 +318,7 @@ function buildDeleteTriple(editedVarBgpTripleRef, editedVar) {
 function buildInsertTriple(editedVarBgpTripleRef, editedVar) {
     // one insert triple
     let insertCopy = JSON.parse(JSON.stringify(editedVarBgpTripleRef));
-    const insertValueLiteral = factory.literal(editedVar.valueNew, editedVar.language ? editedVar.language : editedVar.datatype);
+    const insertValueLiteral = helper_1.factory.literal(editedVar.valueNew, editedVar.language ? editedVar.language : editedVar.datatype);
     insertCopy.object = insertValueLiteral;
     const insertBgpPattern = {
         type: 'bgp',
@@ -331,9 +332,9 @@ function buildInsertTriples(sparqlResultBindings, editedOptionalTriples, editedV
     insertTriples.forEach(triple => {
         // insert new value
         const tripleObj = triple.object;
-        if (isVariableTerm(tripleObj) && tripleObj.value === editedVar.name) {
+        if ((0, helper_1.isVariableTerm)(tripleObj) && tripleObj.value === editedVar.name) {
             // replace variable with a literal containing the new user-defined value
-            const insertValueLiteral = factory.literal(editedVar.valueNew, editedVar.language ? editedVar.language : editedVar.datatype);
+            const insertValueLiteral = helper_1.factory.literal(editedVar.valueNew, editedVar.language ? editedVar.language : editedVar.datatype);
             triple.object = insertValueLiteral;
         }
         // replace subject, predicate and object
@@ -350,14 +351,14 @@ function buildInsertTriples(sparqlResultBindings, editedOptionalTriples, editedV
 // 4. check query
 function hasWhereBlockVariable(wherePatterns) {
     return wherePatterns
-        .filter((pattern) => isBgpPattern(pattern))
+        .filter((pattern) => (0, helper_1.isBgpPattern)(pattern))
         .flatMap(pattern => pattern.triples)
-        .some(triple => isVariableTerm(triple.subject) || isVariableTerm(triple.object));
+        .some(triple => (0, helper_1.isVariableTerm)(triple.subject) || (0, helper_1.isVariableTerm)(triple.object));
 }
 function addMeaninglessBindPattern(modQuery) {
     const meaninglessBindStatement = {
         type: "bind",
-        variable: factoryCreateRDFVariable('meaninglessVariable'),
+        variable: (0, helper_1.createRDFVariable)('meaninglessVariable'),
         expression: {
             type: "operation",
             operator: "now",
@@ -365,39 +366,5 @@ function addMeaninglessBindPattern(modQuery) {
         }
     };
     modQuery.where.push(meaninglessBindStatement);
-}
-// RDF factory and helper functions
-// factory for creating RDF Terms
-const rdf_data_factory_1 = require("rdf-data-factory");
-const factory = new rdf_data_factory_1.DataFactory();
-function factoryCreateRDFVariable(value) {
-    if (factory.variable) {
-        return factory.variable(value);
-    }
-    else {
-        return {
-            termType: 'Variable',
-            value,
-        };
-    }
-}
-// user-defined type guards for type narrowing
-function isSelectWhereQuery(selectQueryObject) {
-    return selectQueryObject.where !== undefined;
-}
-function isBgpPattern(pattern) {
-    return pattern.type === 'bgp';
-}
-function isOptionalPattern(pattern) {
-    return pattern.type === 'optional';
-}
-function isVariableTerm(term) {
-    return term.termType === 'Variable';
-}
-function isPropertyPath(termOrPath) {
-    return termOrPath.hasOwnProperty('pathType');
-}
-function isBlankNodeTerm(term) {
-    return term.termType === 'BlankNode';
 }
 //# sourceMappingURL=sparqleditalgorithm.js.map
