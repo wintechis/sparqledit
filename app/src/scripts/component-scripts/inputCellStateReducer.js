@@ -51,7 +51,6 @@ export function inputCellStateReducer(state, action) {
         currentCellValue: state.origCellValue
       };
       try {
-        newInsertState.checkQuery = action.buildCheckQuery();
         newInsertState.updateQuery = action.buildUpdateQuery();
       } catch (error) {
         const buildingError = new BuildingError(

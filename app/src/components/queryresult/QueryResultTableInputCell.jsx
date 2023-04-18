@@ -184,9 +184,16 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
   };
 
   const handleInputReset = (e) => {
+    // case 1: reset insert cell
     if (typeof(insertModeReset) === 'function') { // insert mode reset
-      insertModeReset();
+      return insertModeReset();
     }
+    // case 2: reset after preflight detected data change
+    const isDataChanged = inputCellState.updateCheckError instanceof DataChangeUpdateCheckError;
+    if (isDataChanged) {
+      return refreshTableCallback();
+    }
+    // case 3: normal cell reset
     inputRef.current.dataset.reset = true; // set flag for useEffect
     dispatch({
       type: "INPUTCELL_RESET"
@@ -208,10 +215,13 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
     if (insertMode) {
       const buildUpdateQuery = () => {
         rowBinding[variable].valueNew = String(inputCellState.origCellValue);
-        const updateQu = buildUpdateQueryForVariable(sparqlSubmission.queryString, rowBinding, insertMode);
+        const updateQu = buildUpdateQueryForVariable(sparqlSubmission.queryString, rowBinding);
         return updateQu;
       }
-      dispatch({ type: "INPUTCELL_INSERT_INIT", buildUpdateQuery: buildUpdateQuery });
+      dispatch({ 
+        type: "INPUTCELL_INSERT_INIT", 
+        buildUpdateQuery: buildUpdateQuery
+      });
       inputRef.current.dataset.reset = true; // set flag for focus
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps

@@ -32,8 +32,8 @@ export default function QueryResultTableInputCellModal({ show, onHide, inputCell
       </Modal.Header>
       <Modal.Body className={anyError ? (isDataChanged ? 'alert-warning' : 'alert-danger') : ''}>
         { inputCellState.buildingError ? <UpdateInfoModalError errorTitle={'Update query generation error'} errorObject={inputCellState.buildingError} />  : null }
-        { inputCellState.updateCheckError ? <UpdateInfoModalError errorTitle={'Update preflight check'} errorObject={inputCellState.updateCheckError} />  : null }
         { inputCellState.updateError ? <UpdateInfoModalError errorTitle={'Update execution error'} errorObject={inputCellState.updateError} />  : null }
+        { inputCellState.updateCheckError ? <UpdateInfoModalError errorTitle={'Update preflight check'} errorObject={inputCellState.updateCheckError} />  : null }
         { inputCellState.updateQuery ?
           <Form>
             <Form.Group className="mb-3" controlId="formSparqlUpdateQuery">
