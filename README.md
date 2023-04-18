@@ -24,7 +24,9 @@ SPARQL_edit supports simple ['SELECT' queries](https://www.w3.org/TR/2013/REC-sp
 * solution sequence modifier ('ORDER','LIMIT','OFFSET')
 
 ### Restrictions
-There are some restrictions for the generation of the update query. The SPARQL_edit algorithm only supports a subset of the SPARQL grammar. The restricted SPARQL grammar is described in [docs/ontology-grammar](docs/ontology-grammar). Grammar definitions that differ from the [original SPARQL 1.1 grammar](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#sparqlGrammar) are listet in [/docs/ontology-grammar/sparql_grammar_diff.html](/docs/ontology-grammar/sparql_grammar_diff.html).
+There are some restrictions for the generation of the update query. The SPARQL_edit algorithm only supports a subset of the SPARQL grammar. Unsupported SPARQL features are treated like wrong syntax or grammar inside the query editor (YASQE) of the app. A correct query which conforms to the SPARQL 1.1 specification might be labeled invalid because it uses language features that are not supported by the view-update algorithm. SPARQL_edit allows for the execution of possibly invalid queries and tries to display the results although the literal update feature won't work in this case.
+
+The restricted SPARQL grammar is described in [docs/ontology-grammar](docs/ontology-grammar). Grammar definitions that differ from the [original SPARQL 1.1 grammar](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/#sparqlGrammar) are listet in [/docs/ontology-grammar/sparql_grammar_diff.html](/docs/ontology-grammar/sparql_grammar_diff.html).
 
 The algorithm is limited to SelectQueries that ...
 * do not modify the selected variables ('AS')
