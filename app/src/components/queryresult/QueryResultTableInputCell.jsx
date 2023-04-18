@@ -83,7 +83,7 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
       if(checkQueryResult.length === 0) {
         return dispatch({
           type: "INPUTCELL_UPDATECHECK_FAIL",
-          error: new Error('Triples have been changed in the meantime.')
+          error: new Error('ineffective update query')
         });
       } 
       // >1 solutions: graph pattern matches more than one times
@@ -91,13 +91,13 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
       else if(checkQueryResult.length > 1) {
         return dispatch({
           type: "INPUTCELL_UPDATECHECK_FAIL",
-          error: new Error('Ambiguous update query.')
+          error: new Error('ambiguous update query')
         });
       }
       // 1 solution: ideal case
       // update query is safe
       else if(checkQueryResult.length === 1) {
-        console.log('update query check successful');
+        console.log('successful update query check');
       }
       else {
         throw new Error('invalid check result');
@@ -212,7 +212,7 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
 
   const isReadOnlyInput = inputCellState.isExecutingQuery || isRefreshing; // disable input when updating the value and refreshing the table
   const showButtons = (inputCellState.updateQuery || inputCellState.buildingError) ? true : false;
-  const anyError = (inputCellState.buildingError || inputCellState.updateError) ? true : false;
+  const anyError = (inputCellState.buildingError || inputCellState.updateError || inputCellState.updateCheckError) ? true : false;
   const inputValue = (inputCellState.currentCellValue || inputCellState.currentCellValue === '') ? inputCellState.currentCellValue : inputCellState.origCellValue;
 
   return (

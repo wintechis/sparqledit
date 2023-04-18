@@ -14,6 +14,13 @@ export class UpdateError extends Error {
   }
 }
 
+export class UpdateCheckError extends UpdateError {
+  constructor(message, endpointUpdate) {
+    super(message, endpointUpdate);
+    this.name = "UpdateCheckError";
+  }
+}
+
 export class BuildingError extends Error {
   constructor(message) {
     super(message);

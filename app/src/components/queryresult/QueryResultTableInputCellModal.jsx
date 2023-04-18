@@ -13,7 +13,8 @@ const TEXTAREA_ROWS_MAX = 12;
 
 export default function QueryResultTableInputCellModal({ show, onHide, inputCellState }) {
 
-  const anyError = inputCellState.buildingError || inputCellState.updateError;
+  const anyError = inputCellState.buildingError || inputCellState.updateCheckError || inputCellState.updateError;
+
   let textareaRows = TEXTAREA_ROWS_MIN;
   if (inputCellState.updateQuery) {
     const numberOfLines = inputCellState.updateQuery.split(/\r\n|\r|\n/).length;
@@ -37,6 +38,7 @@ export default function QueryResultTableInputCellModal({ show, onHide, inputCell
           </Form>
          : null }
         { inputCellState.buildingError ? <UpdateInfoModalError errorTitle={'Update query generation error'} errorObject={inputCellState.buildingError} />  : null }
+        { inputCellState.updateCheckError ? <UpdateInfoModalError errorTitle={'Update preflight check'} errorObject={inputCellState.updateCheckError} />  : null }
         { inputCellState.updateError ? <UpdateInfoModalError errorTitle={'Update execution error'} errorObject={inputCellState.updateError} />  : null }
       </Modal.Body>
     </Modal>

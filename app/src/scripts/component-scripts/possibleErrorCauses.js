@@ -1,7 +1,8 @@
 import { 
   QueryError, 
   BuildingError, 
-  UpdateError, 
+  UpdateError,
+  UpdateCheckError,
   SolidError 
 } from '../CustomErrors';
 
@@ -51,6 +52,16 @@ export default function possibleErrorCauses(error) {
       error.message.toLowerCase().includes('failed to fetch')) {
       causeNotices.push('Wrong SPARQL update endpoint URL');
       causeNotices.push('The SPARQL endpoint requires authentication (e.g. username/password)');
+    }
+  }
+
+  if (error instanceof UpdateCheckError) {
+    if (error.message.toLowerCase().includes('ineffective')) {
+      causeNotices.push('RDF literal value has been changed in the meantime');
+      causeNotices.push('Connected RDF triples have been modified in the meantime');
+    }
+    if (error.message.toLowerCase().includes('ambiguous')) {
+      causeNotices.push('The generated update would affect more than one RDF triple');
     }
   }
 

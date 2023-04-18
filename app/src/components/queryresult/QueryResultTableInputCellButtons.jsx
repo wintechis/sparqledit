@@ -5,7 +5,7 @@ import Spinner from 'react-bootstrap/Spinner';
 
 export default function QueryResultTableInputCellButtons({ handleLiteralUpdate, handleInputReset, openModal, inputCellState }) {
 
-  const anyError = inputCellState.buildingError || inputCellState.updateError;
+  const anyError = inputCellState.buildingError || inputCellState.updateCheckError || inputCellState.updateError;
 
   return (
     <ButtonGroup aria-label="update controls" className="mt-1">
