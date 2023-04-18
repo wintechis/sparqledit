@@ -1,12 +1,18 @@
 import React from 'react';
+
+import '../../styles/component-styles/QueryResultTableInputCell.css';
+
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Collapse from 'react-bootstrap/Collapse';
+
 import QueryResultTableInputCellButtons from './QueryResultTableInputCellButtons';
 import QueryResultTableInputCellModal from './QueryResultTableInputCellModal';
+
 import { initialInputCellState, inputCellStateReducer } from '../../scripts/component-scripts/inputCellStateReducer';
 import getInputTypeForLiteral from '../../scripts/component-scripts/inputCellDatatypeHelper';
 import { QuerySubmission } from '../../scripts/models/QuerySubmission';
+import { UpdateCheckError, DataChangeUpdateCheckError } from '../../scripts/CustomErrors';
 import {
   buildCheckQueryForVariable,
   buildUpdateQueryForVariable, 
@@ -83,7 +89,7 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
       if(checkQueryResult.length === 0) {
         return dispatch({
           type: "INPUTCELL_UPDATECHECK_FAIL",
-          error: new Error('ineffective update query')
+          error: new DataChangeUpdateCheckError('ineffective update query')
         });
       } 
       // >1 solutions: graph pattern matches more than one times
@@ -91,7 +97,7 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
       else if(checkQueryResult.length > 1) {
         return dispatch({
           type: "INPUTCELL_UPDATECHECK_FAIL",
-          error: new Error('ambiguous update query')
+          error: new UpdateCheckError('ambiguous update query')
         });
       }
       // 1 solution: ideal case
@@ -100,7 +106,7 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
         console.log('successful update query check');
       }
       else {
-        throw new Error('invalid check result');
+        throw new UpdateCheckError('invalid check result');
       }
     } catch (error) {
       return dispatch({
@@ -213,6 +219,7 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
   const isReadOnlyInput = inputCellState.isExecutingQuery || isRefreshing; // disable input when updating the value and refreshing the table
   const showButtons = (inputCellState.updateQuery || inputCellState.buildingError) ? true : false;
   const anyError = (inputCellState.buildingError || inputCellState.updateError || inputCellState.updateCheckError) ? true : false;
+  const isDataChanged = inputCellState.updateCheckError instanceof DataChangeUpdateCheckError;
   const inputValue = (inputCellState.currentCellValue || inputCellState.currentCellValue === '') ? inputCellState.currentCellValue : inputCellState.origCellValue;
 
   return (
@@ -220,10 +227,10 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
       <Form onSubmit={e => handleLiteralUpdate(e)}>
         {
           {
-            'checkbox': <Form.Check type="checkbox" onChange={e => handleCheckboxChange(e)} label={inputValue} ref={inputRef} checked={inputValue === 'true' ? true : false} isInvalid={anyError} readOnly={isReadOnlyInput} />,
-            'textarea': <Form.Control as='textarea' onChange={e => handleInputChange(e)} ref={inputRef} value={inputValue} lang={language} isInvalid={anyError} isValid={inputCellState.updateResult ? true : null} readOnly={isReadOnlyInput} />
+            'checkbox': <Form.Check type="checkbox" onChange={e => handleCheckboxChange(e)} label={inputValue} ref={inputRef} checked={inputValue === 'true' ? true : false} isInvalid={anyError} readOnly={isReadOnlyInput} className={isDataChanged ? 'warninput' : ''} />,
+            'textarea': <Form.Control as='textarea' onChange={e => handleInputChange(e)} ref={inputRef} value={inputValue} lang={language} isInvalid={anyError} isValid={inputCellState.updateResult ? true : null} readOnly={isReadOnlyInput} className={isDataChanged ? 'warninput' : ''} />
           }[inputType] ||
-          <Form.Control type={inputType} onChange={e => handleInputChange(e)} isInvalid={anyError} ref={inputRef} value={inputValue} lang={language} step={inputStep} isValid={inputCellState.updateResult ? true : null} readOnly={isReadOnlyInput} />
+          <Form.Control type={inputType} onChange={e => handleInputChange(e)} isInvalid={anyError} ref={inputRef} value={inputValue} lang={language} step={inputStep} isValid={inputCellState.updateResult ? true : null} readOnly={isReadOnlyInput} className={isDataChanged ? 'warninput' : ''} />
         }
         <Collapse in={showButtons} mountOnEnter={true} unmountOnExit={true}>
           <div>

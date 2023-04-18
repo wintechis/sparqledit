@@ -1,0 +1,18 @@
+input.is-invalid.warninput,
+textarea.is-invalid.warninput,
+div.warninput input
+{
+  border-color: var(--bs-warning) !important;
+  background-image: none !important;  /* remove red error icon */
+}
+
+input.is-invalid.warninput:focus,
+textarea.is-invalid.warninput:focus,
+div.warninput input:focus
+{
+  box-shadow: 0 0 0 0.25rem rgba(var(--bs-warning-rgb), 0.3) !important;
+}
+
+div.warninput label {
+  color: var(--bs-warning) !important;
+}

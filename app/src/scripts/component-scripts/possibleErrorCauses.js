@@ -3,6 +3,7 @@ import {
   BuildingError, 
   UpdateError,
   UpdateCheckError,
+  DataChangeUpdateCheckError,
   SolidError 
 } from '../CustomErrors';
 
@@ -55,7 +56,7 @@ export default function possibleErrorCauses(error) {
     }
   }
 
-  if (error instanceof UpdateCheckError) {
+  if (error instanceof UpdateCheckError || error instanceof DataChangeUpdateCheckError) {
     if (error.message.toLowerCase().includes('ineffective')) {
       causeNotices.push('RDF literal value has been changed in the meantime');
       causeNotices.push('Connected RDF triples have been modified in the meantime');

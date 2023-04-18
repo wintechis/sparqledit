@@ -1,8 +1,10 @@
 import { 
   BuildingError, 
   UpdateError, 
-  UpdateCheckError 
+  UpdateCheckError,
+  DataChangeUpdateCheckError
 } from '../CustomErrors';
+
 
 export function initialInputCellState(sparqlSubmission, origValue) {
   return {
@@ -99,9 +101,11 @@ export function inputCellStateReducer(state, action) {
       };
 
     case "INPUTCELL_UPDATECHECK_FAIL":
-      const checkError = new UpdateCheckError(
-        `The preflight check was not successful:\n ${action.error.message}`,
-        state.origSparqlSubmission.endpointUpdate);
+      const erMsg = `The preflight check was not successful:\n ${action.error.message}`;
+      let checkError = new UpdateCheckError(erMsg, state.origSparqlSubmission.endpointUpdate);
+      if (action.error instanceof DataChangeUpdateCheckError) {
+        checkError = new DataChangeUpdateCheckError(erMsg, state.origSparqlSubmission.endpointUpdate);
+      }
       return { 
         origSparqlSubmission: state.origSparqlSubmission, 
         origCellValue: state.origCellValue,
