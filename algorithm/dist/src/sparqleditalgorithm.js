@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buildUpdateCheckQueryObject = exports.buildUpdateQueryObject = void 0;
+exports.buildUpdateCheckQuery = exports.buildUpdateQuery = void 0;
 const SparqlJS = require("sparqljs");
 const helper_1 = require("./helper");
 /**
@@ -9,7 +9,7 @@ const helper_1 = require("./helper");
  * @param sparqlEditResultRow the row of all ResultBindungs that contains the edited variable value; extended with information for SPARQL_edit
  * @returns JS object of the created SPARQL Update query
  */
-function buildUpdateQueryObject(selectQueryObject, sparqlEditResultRow) {
+function buildUpdateQuery(selectQueryObject, sparqlEditResultRow) {
     // 0. clone original query object
     const modQuery = deepCopySelectQuery(selectQueryObject);
     // 1. analyse edited variable
@@ -31,18 +31,18 @@ function buildUpdateQueryObject(selectQueryObject, sparqlEditResultRow) {
     rebuildQueryWhereBlock(modQuery, sparqlEditResultRow);
     //console.dir(modQuery, { depth: null })
     // 3. build update query
-    const updateQueryObject = buildUpdateQuery(modQuery, editedVar, sparqlEditResultRow, editedOptionalTriples, editedVarBgpTripleRef);
+    const updateQueryObject = buildUpdateQueryObject(modQuery, editedVar, sparqlEditResultRow, editedOptionalTriples, editedVarBgpTripleRef);
     //console.dir(updateQueryObject, { depth: null })
     return updateQueryObject;
 }
-exports.buildUpdateQueryObject = buildUpdateQueryObject;
+exports.buildUpdateQuery = buildUpdateQuery;
 /**
  * Update preflight check query
  * @param selectQueryObject parsed JS object of the original SPARQL Select query
  * @param sparqlEditResultRow the row of all ResultBindungs that contains the edited variable value; extended with information for SPARQL_edit
  * @returns JS object of a SPARQL/Select query for checking
  */
-function buildUpdateCheckQueryObject(selectQueryObject, sparqlEditResultRow) {
+function buildUpdateCheckQuery(selectQueryObject, sparqlEditResultRow) {
     // same procedure as 'buildUpdateQueryObject' without the third step for the update query (skip generation of insert-delete clauses)
     // 0. clone original query object and make wildcard query
     const modQuery = deepCopySelectQuery(selectQueryObject, true);
@@ -71,7 +71,7 @@ function buildUpdateCheckQueryObject(selectQueryObject, sparqlEditResultRow) {
     }
     return modQuery;
 }
-exports.buildUpdateCheckQueryObject = buildUpdateCheckQueryObject;
+exports.buildUpdateCheckQuery = buildUpdateCheckQuery;
 // 0. prepare query (object)
 function deepCopySelectQuery(selectQueryObject, makeWildcard = false) {
     if (!(0, helper_1.isSelectWhereQuery)(selectQueryObject)) {
@@ -269,7 +269,7 @@ function replaceObjectVariableInsertMode(object, sparqlResultBindings) {
     return object;
 }
 // 3. build update query
-function buildUpdateQuery(modQuery, editedVar, sparqlEditResultRow, editedOptionalTriples, editedVarBgpTripleRef) {
+function buildUpdateQueryObject(modQuery, editedVar, sparqlEditResultRow, editedOptionalTriples, editedVarBgpTripleRef) {
     var _a;
     const updateOperation = {
         updateType: 'insertdelete',

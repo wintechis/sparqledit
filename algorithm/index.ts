@@ -1,6 +1,6 @@
 export { 
-  buildUpdateQueryObject,
-  buildUpdateCheckQueryObject 
+  buildUpdateQuery,
+  buildUpdateCheckQuery 
 } from "./src/sparqleditalgorithm";
 
 export {

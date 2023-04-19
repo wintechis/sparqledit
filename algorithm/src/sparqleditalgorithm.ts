@@ -23,7 +23,7 @@ import {
  * @param sparqlEditResultRow the row of all ResultBindungs that contains the edited variable value; extended with information for SPARQL_edit
  * @returns JS object of the created SPARQL Update query
  */
-export function buildUpdateQueryObject(selectQueryObject: SparqlJS.SelectQuery, sparqlEditResultRow: SparqlEditResultBindings): SparqlJS.Update {
+export function buildUpdateQuery(selectQueryObject: SparqlJS.SelectQuery, sparqlEditResultRow: SparqlEditResultBindings): SparqlJS.Update {
   
   // 0. clone original query object
   const modQuery = deepCopySelectQuery(selectQueryObject);
@@ -49,7 +49,7 @@ export function buildUpdateQueryObject(selectQueryObject: SparqlJS.SelectQuery, 
   //console.dir(modQuery, { depth: null })
 
   // 3. build update query
-  const updateQueryObject = buildUpdateQuery(modQuery, editedVar, sparqlEditResultRow, editedOptionalTriples, editedVarBgpTripleRef);
+  const updateQueryObject = buildUpdateQueryObject(modQuery, editedVar, sparqlEditResultRow, editedOptionalTriples, editedVarBgpTripleRef);
   //console.dir(updateQueryObject, { depth: null })
 
   return updateQueryObject;
@@ -61,7 +61,7 @@ export function buildUpdateQueryObject(selectQueryObject: SparqlJS.SelectQuery, 
  * @param sparqlEditResultRow the row of all ResultBindungs that contains the edited variable value; extended with information for SPARQL_edit
  * @returns JS object of a SPARQL/Select query for checking
  */
-export function buildUpdateCheckQueryObject(selectQueryObject: SparqlJS.SelectQuery, sparqlEditResultRow: SparqlEditResultBindings): SparqlJS.SelectQuery {
+export function buildUpdateCheckQuery(selectQueryObject: SparqlJS.SelectQuery, sparqlEditResultRow: SparqlEditResultBindings): SparqlJS.SelectQuery {
   // same procedure as 'buildUpdateQueryObject' without the third step for the update query (skip generation of insert-delete clauses)
 
   // 0. clone original query object and make wildcard query
@@ -310,7 +310,7 @@ function replaceObjectVariableInsertMode(object: SparqlJS.Term, sparqlResultBind
 
 // 3. build update query
 
-function buildUpdateQuery(modQuery: SelectWhereQuery, editedVar: EditedVariableInfo, sparqlEditResultRow: SparqlEditResultBindings, editedOptionalTriples: SparqlJS.Triple[] | null, editedVarBgpTripleRef: SparqlJS.Triple) {
+function buildUpdateQueryObject(modQuery: SelectWhereQuery, editedVar: EditedVariableInfo, sparqlEditResultRow: SparqlEditResultBindings, editedOptionalTriples: SparqlJS.Triple[] | null, editedVarBgpTripleRef: SparqlJS.Triple) {
   const updateOperation: SparqlJS.InsertDeleteOperation = {
     updateType: 'insertdelete',
     delete: [],

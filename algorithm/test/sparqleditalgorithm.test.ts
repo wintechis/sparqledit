@@ -30,7 +30,7 @@ test('example - change literal value', () => {
 
   // execute
   console.time('timeAlgo');
-  const updateQueryObj = sparqleditalgorithm.buildUpdateQueryObject(selectqueryobj_example, sparqleditQueryResults[resultRowIndex]);
+  const updateQueryObj = sparqleditalgorithm.buildUpdateQuery(selectqueryobj_example, sparqleditQueryResults[resultRowIndex]);
   const updateQueryStr = stringifyQueryObject(updateQueryObj);
   console.timeEnd('timeAlgo');
 
@@ -49,7 +49,7 @@ test('example - change literal value inside blank node inside optional', () => {
   const expectedUpdateQueryStr = testcase_example.updateWeightQuery(newLiteralValue);
 
   // execute
-  const updateQueryObj = sparqleditalgorithm.buildUpdateQueryObject(selectqueryobj_example, sparqleditQueryResults[resultRowIndex]);
+  const updateQueryObj = sparqleditalgorithm.buildUpdateQuery(selectqueryobj_example, sparqleditQueryResults[resultRowIndex]);
   const updateQueryStr = stringifyQueryObject(updateQueryObj);
 
   // assert
@@ -67,7 +67,7 @@ test('example - change literal value inside blank node inside optional 2', () =>
   const expectedUpdateQueryStr = testcase_example.updatePostalcodeQuery(newLiteralValue);
 
   // execute
-  const updateQueryObj = sparqleditalgorithm.buildUpdateQueryObject(selectqueryobj_example, sparqleditQueryResults[resultRowIndex]);
+  const updateQueryObj = sparqleditalgorithm.buildUpdateQuery(selectqueryobj_example, sparqleditQueryResults[resultRowIndex]);
   const updateQueryStr = stringifyQueryObject(updateQueryObj);
 
   // assert
@@ -85,7 +85,7 @@ test('example - insert literal value', () => {
   const expectedInsertQueryStr = testcase_example.insertFamilynameQuery(newLiteralValue);
 
   // execute
-  const updateQueryObj = sparqleditalgorithm.buildUpdateQueryObject(selectqueryobj_example, sparqleditQueryResults[resultRowIndex]);
+  const updateQueryObj = sparqleditalgorithm.buildUpdateQuery(selectqueryobj_example, sparqleditQueryResults[resultRowIndex]);
   const updateQueryStr = stringifyQueryObject(updateQueryObj);
 
   // assert
@@ -103,7 +103,7 @@ test('example - insert literal value inside blank node inside optional', () => {
   const expectedInsertQueryStr = testcase_example.insertWeightQuery(newLiteralValue);
 
   // execute
-  const updateQueryObj = sparqleditalgorithm.buildUpdateQueryObject(selectqueryobj_example, sparqleditQueryResults[resultRowIndex]);
+  const updateQueryObj = sparqleditalgorithm.buildUpdateQuery(selectqueryobj_example, sparqleditQueryResults[resultRowIndex]);
   const updateQueryStr = stringifyQueryObject(updateQueryObj);
 
   // assert
@@ -121,7 +121,7 @@ test('nobelprizes - change literal value', () => {
   const expectedUpdateQueryStr = testcase_nobelprizes.updateNameQuery(newLiteralValue);
 
   // execute
-  const updateQueryObj = sparqleditalgorithm.buildUpdateQueryObject(selectqueryobj_nobelprizes, sparqleditQueryResults[resultRowIndex]);
+  const updateQueryObj = sparqleditalgorithm.buildUpdateQuery(selectqueryobj_nobelprizes, sparqleditQueryResults[resultRowIndex]);
   const updateQueryStr = stringifyQueryObject(updateQueryObj);
 
   // assert
@@ -139,7 +139,7 @@ test('nobelprizes - change literal value inside optional', () => {
   const expectedUpdateQueryStr = testcase_nobelprizes.updateMotivationQuery(newLiteralValue);
 
   // execute
-  const updateQueryObj = sparqleditalgorithm.buildUpdateQueryObject(selectqueryobj_nobelprizes, sparqleditQueryResults[resultRowIndex]);
+  const updateQueryObj = sparqleditalgorithm.buildUpdateQuery(selectqueryobj_nobelprizes, sparqleditQueryResults[resultRowIndex]);
   const updateQueryStr = stringifyQueryObject(updateQueryObj);
 
   // assert
@@ -157,7 +157,7 @@ test('nobelprizes - change literal value inside blank node inside optional', () 
   const expectedUpdateQueryStr = testcase_nobelprizes.updateUniversityLabelQuery(newLiteralValue);
 
   // execute
-  const updateQueryObj = sparqleditalgorithm.buildUpdateQueryObject(selectqueryobj_nobelprizes, sparqleditQueryResults[resultRowIndex]);
+  const updateQueryObj = sparqleditalgorithm.buildUpdateQuery(selectqueryobj_nobelprizes, sparqleditQueryResults[resultRowIndex]);
   const updateQueryStr = stringifyQueryObject(updateQueryObj);
 
   // assert
@@ -175,7 +175,7 @@ test('nobelprizes - insert query for literal inside optional', () => {
   const expectedInsertQueryStr = testcase_nobelprizes.insertMotivationQuery(newLiteralValue);
 
   // execute
-  const updateQueryObj = sparqleditalgorithm.buildUpdateQueryObject(selectqueryobj_nobelprizes, sparqleditQueryResults[resultRowIndex]);
+  const updateQueryObj = sparqleditalgorithm.buildUpdateQuery(selectqueryobj_nobelprizes, sparqleditQueryResults[resultRowIndex]);
   const updateQueryStr = stringifyQueryObject(updateQueryObj);
 
   // assert
@@ -193,7 +193,7 @@ test('nobelprizes - insert query for blank node value inside optional', () => {
   const expectedInsertQueryStr = testcase_nobelprizes.insertUniversityLabelQuery(newLiteralValue);
 
   // execute
-  const updateQueryObj = sparqleditalgorithm.buildUpdateQueryObject(selectqueryobj_nobelprizes, sparqleditQueryResults[resultRowIndex]);
+  const updateQueryObj = sparqleditalgorithm.buildUpdateQuery(selectqueryobj_nobelprizes, sparqleditQueryResults[resultRowIndex]);
   const updateQueryStr = stringifyQueryObject(updateQueryObj);
 
   // assert
