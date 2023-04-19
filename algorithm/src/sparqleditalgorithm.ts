@@ -1,14 +1,24 @@
-import * as RDF from "@rdfjs/types";
 import * as SparqlJS from 'sparqljs';
 import { 
   SparqlEditResultBindings, 
   EditedVariableInfo, 
   SubjectType, 
-  PredicateType 
+  PredicateType,
+  SelectWhereQuery
 } from './types';
+import {
+  factory,
+  createRDFVariable,
+  isVariableTerm,
+  isBlankNodeTerm,
+  isPropertyPath,
+  isBgpPattern,
+  isOptionalPattern,
+  isSelectWhereQuery
+} from './helper';
 
 /**
- * SPARQL_edit algorithm
+ * SPARQL_edit algorithm: create update query for view update
  * @param selectQueryObject parsed JS object of the original SPARQL Select query
  * @param sparqlEditResultRow the row of all ResultBindungs that contains the edited variable value; extended with information for SPARQL_edit
  * @returns JS object of the created SPARQL Update query
@@ -16,10 +26,7 @@ import {
 export function buildUpdateQueryObject(selectQueryObject: SparqlJS.SelectQuery, sparqlEditResultRow: SparqlEditResultBindings): SparqlJS.Update {
   
   // 0. clone original query object
-  const modQuery: SparqlJS.SelectQuery = JSON.parse(JSON.stringify(selectQueryObject));
-  if (modQuery.where === undefined) {
-    throw new Error("missing 'WHERE' block");
-  }
+  const modQuery = deepCopySelectQuery(selectQueryObject);
 
   // 1. analyse edited variable
   // 1.1 collect information about the edited literal (= variable in query)
@@ -48,6 +55,59 @@ export function buildUpdateQueryObject(selectQueryObject: SparqlJS.SelectQuery, 
   return updateQueryObject;
 }
 
+/**
+ * Update preflight check query
+ * @param selectQueryObject parsed JS object of the original SPARQL Select query
+ * @param sparqlEditResultRow the row of all ResultBindungs that contains the edited variable value; extended with information for SPARQL_edit
+ * @returns JS object of a SPARQL/Select query for checking
+ */
+export function buildUpdateCheckQueryObject(selectQueryObject: SparqlJS.SelectQuery, sparqlEditResultRow: SparqlEditResultBindings): SparqlJS.SelectQuery {
+  // same procedure as 'buildUpdateQueryObject' without the third step for the update query (skip generation of insert-delete clauses)
+
+  // 0. clone original query object and make wildcard query
+  const modQuery = deepCopySelectQuery(selectQueryObject, true);
+
+  // 1. analyse edited variable
+  // 1.1 collect information about the edited literal (= variable in query)
+  const editedVar = findEditedVariableInResultRow(sparqlEditResultRow);
+  // 1.2 collect BGP triples and find triple with edited variable
+  const editedVarBgpTripleRef = findEditedVariableBgpTriple(modQuery, editedVar);
+  // 1.3 check if edited/inserted variable in BGP of an optional block
+  const editedOptionalTriples = findEditedVariableOptionalBgpTriples(modQuery, editedVar);
+  // if NOT insert mode && optional var edited: copy optional bgp as normal bgp to query's where array
+  if (editedVar.insertMode !== true && editedOptionalTriples) {
+    const optBgpPattern: SparqlJS.BgpPattern = {
+      type: 'bgp',
+      triples: editedOptionalTriples
+    };
+    modQuery.where.push(optBgpPattern);
+  }
+
+  // 2. rebuild the query's where block 
+  rebuildQueryWhereBlock(modQuery, sparqlEditResultRow);
+  //console.dir(modQuery, { depth: null });
+
+  // 4. finalize check query
+  if (hasWhereBlockVariable(modQuery.where) === false) {
+    // if check query does not have variables, we need to extend it so that we will have 0 or 1 solutions
+    addMeaninglessBindPattern(modQuery);
+  }
+  return modQuery;
+}
+
+// 0. prepare query (object)
+
+function deepCopySelectQuery(selectQueryObject: SparqlJS.SelectQuery, makeWildcard: boolean = false): SelectWhereQuery {
+  if (!isSelectWhereQuery(selectQueryObject)) {
+    throw new Error("missing 'WHERE' block");
+  }
+  const modQuery = JSON.parse(JSON.stringify(selectQueryObject));
+  if (makeWildcard) {
+    modQuery.variables = [ new SparqlJS.Wildcard() ];
+  }
+  return modQuery;
+}
+
 // 1. analyse edited variable
 
 function findEditedVariableInResultRow(sparqlEditResultRow: SparqlEditResultBindings): EditedVariableInfo {
@@ -68,11 +128,7 @@ function findEditedVariableInResultRow(sparqlEditResultRow: SparqlEditResultBind
   throw new Error('no edited variable found');    
 }
 
-function findEditedVariableBgpTriple(modQuery: SparqlJS.SelectQuery, editedVar: EditedVariableInfo) {
-  if (modQuery.where === undefined) {
-    throw new Error("missing 'WHERE' block");
-  }
-
+function findEditedVariableBgpTriple(modQuery: SelectWhereQuery, editedVar: EditedVariableInfo) {
   const bgpTriples = modQuery.where
     .filter(isBgpPattern)
     .flatMap(bgpPattern => bgpPattern.triples);
@@ -95,11 +151,7 @@ function findEditedVariableBgpTriple(modQuery: SparqlJS.SelectQuery, editedVar: 
   }
 }
 
-function findEditedVariableOptionalBgpTriples(modQuery: SparqlJS.SelectQuery, editedVar: EditedVariableInfo) {
-  if (modQuery.where === undefined) {
-    throw new Error("missing 'WHERE' block");
-  }
-
+function findEditedVariableOptionalBgpTriples(modQuery: SelectWhereQuery, editedVar: EditedVariableInfo) {
   let editedOptionalTriples: SparqlJS.Triple[] | null = null;
 
   const optPatterns = modQuery.where
@@ -122,11 +174,7 @@ function findEditedVariableOptionalBgpTriples(modQuery: SparqlJS.SelectQuery, ed
 
 // 2. rebuild the query's where block 
 
-function rebuildQueryWhereBlock(modQuery: SparqlJS.SelectQuery, sparqlEditResultRow: SparqlEditResultBindings) {
-  if (modQuery.where === undefined) {
-    throw new Error("missing 'WHERE' block");
-  }
-
+function rebuildQueryWhereBlock(modQuery: SelectWhereQuery, sparqlEditResultRow: SparqlEditResultBindings) {
   for (let i = modQuery.where.length - 1; i >= 0; i--) {
     let pattern = modQuery.where[i];
     // case: BGP
@@ -168,7 +216,7 @@ function replaceSubjectVariable(subject: SubjectType, sparqlResultBindings: Spar
   }
   // blank node -> replace with named variable
   if (isBlankNodeTerm(subject)) {
-    return factoryCreateRDFVariable(subject.value);
+    return createRDFVariable(subject.value);
   }
   // default
   return subject;
@@ -231,7 +279,7 @@ function replaceObjectVariable(object: SparqlJS.Term, sparqlResultBindings: Spar
   }
   // blank node -> replace with named variable
   if (isBlankNodeTerm(object)) {
-    return factoryCreateRDFVariable(object.value);
+    return createRDFVariable(object.value);
   }
   // default
   return object;
@@ -262,7 +310,7 @@ function replaceObjectVariableInsertMode(object: SparqlJS.Term, sparqlResultBind
 
 // 3. build update query
 
-function buildUpdateQuery(modQuery: SparqlJS.SelectQuery, editedVar: EditedVariableInfo, sparqlEditResultRow: SparqlEditResultBindings, editedOptionalTriples: SparqlJS.Triple[] | null, editedVarBgpTripleRef: SparqlJS.Triple) {
+function buildUpdateQuery(modQuery: SelectWhereQuery, editedVar: EditedVariableInfo, sparqlEditResultRow: SparqlEditResultBindings, editedOptionalTriples: SparqlJS.Triple[] | null, editedVarBgpTripleRef: SparqlJS.Triple) {
   const updateOperation: SparqlJS.InsertDeleteOperation = {
     updateType: 'insertdelete',
     delete: [],
@@ -278,9 +326,6 @@ function buildUpdateQuery(modQuery: SparqlJS.SelectQuery, editedVar: EditedVaria
   };
 
   // 3.2 copy modified 'where' part
-  if (modQuery.where === undefined) {
-    throw new Error("missing 'WHERE' block");
-  }
   updateOperation.where = modQuery.where.filter(isBgpPattern);
 
   // 3.3 construct 'insert' and 'delete part'
@@ -359,40 +404,24 @@ function buildInsertTriples(sparqlResultBindings: SparqlEditResultBindings, edit
   return insertBgpPattern;
 }
 
-// RDF factory and helper functions
+// 4. check query
 
-// factory for creating RDF Terms
-import { DataFactory } from 'rdf-data-factory';
-const factory: RDF.DataFactory = new DataFactory();
-
-function factoryCreateRDFVariable(value: string): RDF.Variable {
-  if (factory.variable) {
-    return factory.variable(value);
-  } else {
-    return {
-      termType: 'Variable',
-      value,
-    } as RDF.Variable;
-  }
+function hasWhereBlockVariable(wherePatterns: SparqlJS.Pattern[]): boolean {
+  return wherePatterns
+    .filter((pattern): pattern is SparqlJS.BgpPattern => isBgpPattern(pattern))
+    .flatMap(pattern => pattern.triples)
+    .some(triple => isVariableTerm(triple.subject) || isVariableTerm(triple.object));
 }
 
-// user-defined type guards for type narrowing when filtering
-function isBgpPattern(pattern: SparqlJS.Pattern): pattern is SparqlJS.BgpPattern {
-  return pattern.type === 'bgp';
-}
-
-function isOptionalPattern(pattern: SparqlJS.Pattern): pattern is SparqlJS.OptionalPattern {
-  return pattern.type === 'optional';
-}
-
-function isVariableTerm(term: RDF.Term): term is RDF.Variable {
-  return term.termType === 'Variable';
-}
-
-function isPropertyPath(termOrPath: RDF.Term | SparqlJS.PropertyPath): termOrPath is SparqlJS.PropertyPath {
-  return termOrPath.hasOwnProperty('pathType');
-}
-
-function isBlankNodeTerm(term: RDF.Term): term is RDF.BlankNode {
-  return term.termType === 'BlankNode';
+function addMeaninglessBindPattern(modQuery: SelectWhereQuery) {
+  const meaninglessBindStatement = {
+    type: "bind",
+    variable: createRDFVariable('meaninglessVariable'),
+    expression: {
+      type: "operation",
+      operator: "now",
+      args: []
+    }
+  } as SparqlJS.BindPattern;
+  modQuery.where.push(meaninglessBindStatement);
 }

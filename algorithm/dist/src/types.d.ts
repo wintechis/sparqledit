@@ -24,3 +24,6 @@ export declare type EditedVariableInfo = {
 };
 export declare type SubjectType = RDF.NamedNode | RDF.Variable | RDF.BlankNode | RDF.Quad;
 export declare type PredicateType = RDF.NamedNode | RDF.Variable | SparqlJS.PropertyPath;
+export declare type SelectWhereQuery = Omit<SparqlJS.SelectQuery, 'where'> & {
+    where: SparqlJS.Pattern[];
+};

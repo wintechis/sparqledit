@@ -1,13 +1,20 @@
 import React from 'react';
+
+import '../../styles/component-styles/QueryResultTableInputCell.css';
+
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Collapse from 'react-bootstrap/Collapse';
+
 import QueryResultTableInputCellButtons from './QueryResultTableInputCellButtons';
 import QueryResultTableInputCellModal from './QueryResultTableInputCellModal';
+
 import { initialInputCellState, inputCellStateReducer } from '../../scripts/component-scripts/inputCellStateReducer';
 import getInputTypeForLiteral from '../../scripts/component-scripts/inputCellDatatypeHelper';
 import { QuerySubmission } from '../../scripts/models/QuerySubmission';
-import { 
+import { UpdateCheckError, DataChangeUpdateCheckError } from '../../scripts/CustomErrors';
+import {
+  buildCheckQueryForVariable,
   buildUpdateQueryForVariable, 
   buildUpdateLogQueryForVariable, 
   executeSelectOrUpdateQuery 
@@ -66,6 +73,49 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
       return; // no action if form is submitted in wrong state
     }
     dispatch({ type: "INPUTCELL_UPDATE_START" });
+
+    // update check
+    try {
+      const checkSubmission = new QuerySubmission(
+        inputCellState.origSparqlSubmission.endpointQuery, 
+        inputCellState.origSparqlSubmission.endpointUpdate, 
+        inputCellState.checkQuery,
+        inputCellState.origSparqlSubmission.credentials);
+      console.log('inputCellState.checkQuery', inputCellState.checkQuery);
+      const checkQueryResult = await executeSelectOrUpdateQuery(checkSubmission);
+      console.log('checkQueryResult', checkQueryResult);
+      // 0 solutions: graph pattern matching has no result
+      // the relevant triples in the graph have been changed in the meantime
+      if(checkQueryResult.length === 0) {
+        return dispatch({
+          type: "INPUTCELL_UPDATECHECK_FAIL",
+          error: new DataChangeUpdateCheckError('ineffective update query')
+        });
+      } 
+      // >1 solutions: graph pattern matches more than one times
+      // ambiguous update query that would alter more than one triple
+      else if(checkQueryResult.length > 1) {
+        return dispatch({
+          type: "INPUTCELL_UPDATECHECK_FAIL",
+          error: new UpdateCheckError('ambiguous update query')
+        });
+      }
+      // 1 solution: ideal case
+      // update query is safe
+      else if(checkQueryResult.length === 1) {
+        console.log('successful update query check');
+      }
+      else {
+        throw new UpdateCheckError('invalid check result');
+      }
+    } catch (error) {
+      return dispatch({
+        type: "INPUTCELL_UPDATECHECK_FAIL",
+        error
+      });
+    }
+
+    // update execution
     try {
       const updateSubmission = new QuerySubmission(
         inputCellState.origSparqlSubmission.endpointQuery, 
@@ -106,7 +156,7 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
   const handleChange = (newValue) => {
     // define the function that the reducer will use for generating the update query
     const buildUpdateQuery = () => {
-       // deep copy orig rowBinding to keep it clean (e.g. in case of reset)
+      // deep copy orig rowBinding to keep it clean (e.g. in case of reset)
       const rowBindingWithNewValue = JSON.parse(JSON.stringify(rowBinding));
       // add the new value; valueNew prop is later used by the algo to indentify the modified variable
       rowBindingWithNewValue[variable].valueNew = String(newValue);
@@ -116,17 +166,34 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
         buildUpdateQueryForVariable(sparqlSubmission.queryString, rowBindingWithNewValue);
       return updateQu;
     }
+    const buildCheckQuery = () => {
+      // deep copy orig rowBinding to keep it clean (e.g. in case of reset)
+      const rowBindingWithNewValue = JSON.parse(JSON.stringify(rowBinding));
+      // add the new value; valueNew prop is later used by the algo to indentify the modified variable
+      rowBindingWithNewValue[variable].valueNew = String(newValue);
+      // build the update query
+      const checkQu = buildCheckQueryForVariable(sparqlSubmission.queryString, rowBindingWithNewValue);
+      return checkQu;
+    }
     dispatch({
       type: "INPUTCELL_CHANGE",
       currentCellValue: newValue,
-      buildUpdateQuery: buildUpdateQuery
+      buildUpdateQuery: buildUpdateQuery,
+      buildCheckQuery: buildCheckQuery
     });
   };
 
   const handleInputReset = (e) => {
+    // case 1: reset insert cell
     if (typeof(insertModeReset) === 'function') { // insert mode reset
-      insertModeReset();
+      return insertModeReset();
     }
+    // case 2: reset after preflight detected data change
+    const isDataChanged = inputCellState.updateCheckError instanceof DataChangeUpdateCheckError;
+    if (isDataChanged) {
+      return refreshTableCallback();
+    }
+    // case 3: normal cell reset
     inputRef.current.dataset.reset = true; // set flag for useEffect
     dispatch({
       type: "INPUTCELL_RESET"
@@ -148,17 +215,21 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
     if (insertMode) {
       const buildUpdateQuery = () => {
         rowBinding[variable].valueNew = String(inputCellState.origCellValue);
-        const updateQu = buildUpdateQueryForVariable(sparqlSubmission.queryString, rowBinding, insertMode);
+        const updateQu = buildUpdateQueryForVariable(sparqlSubmission.queryString, rowBinding);
         return updateQu;
       }
-      dispatch({ type: "INPUTCELL_INSERT_INIT", buildUpdateQuery: buildUpdateQuery });
+      dispatch({ 
+        type: "INPUTCELL_INSERT_INIT", 
+        buildUpdateQuery: buildUpdateQuery
+      });
       inputRef.current.dataset.reset = true; // set flag for focus
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const isReadOnlyInput = inputCellState.isExecutingQuery || isRefreshing; // disable input when updating the value and refreshing the table
   const showButtons = (inputCellState.updateQuery || inputCellState.buildingError) ? true : false;
-  const anyError = (inputCellState.buildingError || inputCellState.updateError) ? true : false;
+  const anyError = (inputCellState.buildingError || inputCellState.updateError || inputCellState.updateCheckError) ? true : false;
+  const isDataChanged = inputCellState.updateCheckError instanceof DataChangeUpdateCheckError;
   const inputValue = (inputCellState.currentCellValue || inputCellState.currentCellValue === '') ? inputCellState.currentCellValue : inputCellState.origCellValue;
 
   return (
@@ -166,10 +237,10 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
       <Form onSubmit={e => handleLiteralUpdate(e)}>
         {
           {
-            'checkbox': <Form.Check type="checkbox" onChange={e => handleCheckboxChange(e)} label={inputValue} ref={inputRef} checked={inputValue === 'true' ? true : false} isInvalid={anyError} readOnly={isReadOnlyInput} />,
-            'textarea': <Form.Control as='textarea' onChange={e => handleInputChange(e)} ref={inputRef} value={inputValue} lang={language} isInvalid={anyError} isValid={inputCellState.updateResult ? true : null} readOnly={isReadOnlyInput} />
+            'checkbox': <Form.Check type="checkbox" onChange={e => handleCheckboxChange(e)} label={inputValue} ref={inputRef} checked={inputValue === 'true' ? true : false} isInvalid={anyError} readOnly={isReadOnlyInput} className={isDataChanged ? 'warninput' : ''} />,
+            'textarea': <Form.Control as='textarea' onChange={e => handleInputChange(e)} ref={inputRef} value={inputValue} lang={language} isInvalid={anyError} isValid={inputCellState.updateResult ? true : null} readOnly={isReadOnlyInput} className={isDataChanged ? 'warninput' : ''} />
           }[inputType] ||
-          <Form.Control type={inputType} onChange={e => handleInputChange(e)} isInvalid={anyError} ref={inputRef} value={inputValue} lang={language} step={inputStep} isValid={inputCellState.updateResult ? true : null} readOnly={isReadOnlyInput} />
+          <Form.Control type={inputType} onChange={e => handleInputChange(e)} isInvalid={anyError} ref={inputRef} value={inputValue} lang={language} step={inputStep} isValid={inputCellState.updateResult ? true : null} readOnly={isReadOnlyInput} className={isDataChanged ? 'warninput' : ''} />
         }
         <Collapse in={showButtons} mountOnEnter={true} unmountOnExit={true}>
           <div>

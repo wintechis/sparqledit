@@ -1,4 +1,10 @@
-import { BuildingError, UpdateError } from '../CustomErrors';
+import { 
+  BuildingError, 
+  UpdateError, 
+  UpdateCheckError,
+  DataChangeUpdateCheckError
+} from '../CustomErrors';
+
 
 export function initialInputCellState(sparqlSubmission, origValue) {
   return {
@@ -7,8 +13,10 @@ export function initialInputCellState(sparqlSubmission, origValue) {
     currentCellValue: null,
     buildingError: null,
     updateQuery: null,
+    checkQuery: null,
     updateResult: null,
     updateError: null,
+    updateCheckError: null,
     isExecutingQuery: false
   }
 };
@@ -25,11 +33,12 @@ export function inputCellStateReducer(state, action) {
       if (action.currentCellValue != state.origCellValue) {
         newState.currentCellValue = action.currentCellValue
         try {
+          newState.checkQuery = action.buildCheckQuery();
           newState.updateQuery = action.buildUpdateQuery();
         } catch (error) {
           const buildingError = new BuildingError(
             `The update query building algorithm failed.\n${error.name} - ${error.message}`);
-          newState.updateQuery = null;
+          newState.updateQuery = newState.checkQuery = null;
           newState.buildingError = buildingError;
         }
       }
@@ -46,7 +55,7 @@ export function inputCellStateReducer(state, action) {
       } catch (error) {
         const buildingError = new BuildingError(
           `The update query building algorithm failed.\n${error.name} - ${error.message}`);
-        newInsertState.updateQuery = null;
+        newInsertState.updateQuery = newInsertState.checkQuery = null;
         newInsertState.buildingError = buildingError;
       }
       return newInsertState;
@@ -63,6 +72,7 @@ export function inputCellStateReducer(state, action) {
         origCellValue: state.origCellValue,
         currentCellValue: state.currentCellValue,
         updateQuery: state.updateQuery,
+        checkQuery: state.checkQuery,
         isExecutingQuery: true
       };
 
@@ -84,7 +94,24 @@ export function inputCellStateReducer(state, action) {
         origCellValue: state.origCellValue,
         currentCellValue: state.currentCellValue,
         updateQuery: state.updateQuery,
+        checkQuery: state.checkQuery,
         updateError: updateError,
+        isExecutingQuery: false
+      };
+
+    case "INPUTCELL_UPDATECHECK_FAIL":
+      const erMsg = `The preflight check was not successful:\n ${action.error.message}`;
+      let checkError = new UpdateCheckError(erMsg, state.origSparqlSubmission.endpointUpdate);
+      if (action.error instanceof DataChangeUpdateCheckError) {
+        checkError = new DataChangeUpdateCheckError(erMsg, state.origSparqlSubmission.endpointUpdate);
+      }
+      return { 
+        origSparqlSubmission: state.origSparqlSubmission, 
+        origCellValue: state.origCellValue,
+        currentCellValue: state.currentCellValue,
+        updateQuery: state.updateQuery,
+        checkQuery: state.checkQuery,
+        updateCheckError: checkError,
         isExecutingQuery: false
       };
 
