@@ -54,7 +54,7 @@ function UpdateInfoModalError({ errorTitle, errorObject }) {
     <>
       <p>{errorTitle}</p>
       <Alert variant="light">
-        <p>{`${errorObject.name} - ${errorObject.message}`}</p>
+        <p>{errorObject.message}</p>
         {causeNotices.length > 0 ? <div>
           <p className="font-weight-bold mb-1">Possible causes:</p>
           <ul>{causeNotices.map(cause => <li key={cause}>{cause}</li>)}</ul>
