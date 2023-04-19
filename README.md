@@ -83,7 +83,7 @@ If the app is served over _HTTPS_ the browser blocks _HTTP_ requests to other we
 |  | SPARQL URL | Allowed ? |
 |---|---|---|
 | HTTPS | https://example.org/store/sparql | Yes |
-| HTTP  | http://ux1637:3030/example/sparql | No (only if explicitly allowed, see below) |
+| HTTP  | http://example.org/example/sparql | No (only if explicitly allowed, see below) |
 | localhost | http://localhost:3030/example/sparql | Yes |
 
 Disable 'Mixed Content' blocking for a certain web page:

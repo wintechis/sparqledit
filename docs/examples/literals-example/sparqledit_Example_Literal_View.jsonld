@@ -3,8 +3,8 @@
   "description": "Very simple example view that lists every RDF triple with a literal object.",
   "creator": "System",
   "dateCreated": "2022-12-01T16:08:17.168Z",
-  "queryURL": "http://ux1637:3030/sparqledit-example",
-  "updateURL": "http://ux1637:3030/sparqledit-example",
+  "queryURL": "http://localhost:3030/sparqledit-example",
+  "updateURL": "http://localhost:3030/sparqledit-example",
   "query": "SELECT *\nWHERE {\n  ?s ?p ?o\n  FILTER( isLiteral(?o) )\n} LIMIT 25",
   "requiresBasicAuth": false,
   "@context": {

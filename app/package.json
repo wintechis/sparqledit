@@ -23,7 +23,6 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "solid-upload": "node solid-upload.js",
     "sass": "sass src/styles/sass:src/styles --watch --no-source-map"
   },
   "eslintConfig": {
