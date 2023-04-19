@@ -1,11 +1,15 @@
+import {
+  Wildcard,
+  Parser as SparqlParser,
+  Generator as SparqlGenerator
+} from 'sparqljs';
+import { DataFactory, Store } from 'n3';
+
+import * as Algorithm from 'sparqledit-algorithm';
+
 import SparqlClient from './SparqlClient';
-import { buildUpdateQueryObject, buildUpdateCheckQueryObject } from 'sparqledit-algorithm';
-import { Parser as SparqlParser } from 'sparqljs';
-import { Generator as SparqlGenerator } from 'sparqljs';
-import { Wildcard } from 'sparqljs';
 import { toISODateWithTimezone } from '../utilities';
 import { RDF_NAMESPACES } from '../models/RdfNamespaces';
-import { DataFactory, Store } from 'n3';
 
 export async function executeSelectOrUpdateQuery(querySubmission) {
   const sparqlClient = new SparqlClient(querySubmission.credentials);
@@ -55,7 +59,7 @@ export function buildCheckQueryForVariable(queryStr, variableRow) {
   const queryObj = buildQueryObject(queryStr);
 
   // SPARQLedit algorithm for creating a SPARQL update query object
-  const checkQueryObj = buildUpdateCheckQueryObject(queryObj, variableRow);
+  const checkQueryObj = Algorithm.buildUpdateCheckQuery(queryObj, variableRow);
 
   // return query string from JS query object
   const checkQuery = stringifyQueryObject(checkQueryObj);
@@ -67,7 +71,7 @@ export function buildUpdateQueryForVariable(queryStr, variableRow) {
   const queryObj = buildQueryObject(queryStr);
 
   // SPARQLedit algorithm for creating a SPARQL update query object
-  const updateQueryObj = buildUpdateQueryObject(queryObj, variableRow);
+  const updateQueryObj = Algorithm.buildUpdateQuery(queryObj, variableRow);
 
   // return query string from JS query object
   const updateQuery = stringifyQueryObject(updateQueryObj);
@@ -79,7 +83,7 @@ export function buildUpdateLogQueryForVariable(queryStr, variableRow, sparqlView
   const queryObj = buildQueryObject(queryStr);
 
   // SPARQLedit algorithm for creating a SPARQL update query object
-  const updateQueryObj = buildUpdateQueryObject(queryObj, variableRow);
+  const updateQueryObj = Algorithm.buildUpdateQuery(queryObj, variableRow);
 
   // add log components (prefixes, graph part, time bind) to query
   addUpdateLogComponentsToUpdateQuery(updateQueryObj, sparqlView.updateLogGraph);
