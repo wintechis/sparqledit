@@ -29,11 +29,12 @@ export default function SparqlViewDetail({ sparqlView, sparqlViewUpdateCallback,
   const executeQuery = () => {
     // if no explicit update endpoint => same as query endpoint
     const updateURL = sparqlView.updateURL && sparqlView.updateURL.length > 1 ? sparqlView.updateURL : sparqlView.queryURL;
+    const submissionCredentials = credentials.username.length > 0 ? credentials : null;
     setSubmittedQuery(new QuerySubmission(
       sparqlView.queryURL,
       updateURL,
       sparqlView.query,
-      credentials));
+      submissionCredentials));
   };
 
   function handleCredentialsInput(key, newValue) {
