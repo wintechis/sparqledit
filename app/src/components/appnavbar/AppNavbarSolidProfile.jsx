@@ -17,17 +17,19 @@ export default function AppNavbarSolidProfile({ webId }) {
   ];
   const organizationProperty = RDF_NAMESPACES.vcard + 'organization-name';
 
+  // const errorComponent = ({error}) => <span>{`Unknown user ${error}`}</span>;
+
   return (
     <CombinedDataProvider datasetUrl={webId} thingUrl={webId} loadingComponent={ProfilePlaceholder}>
       <div className="d-flex align-items-center">
         <div className="image-placeholder">
-          <Image property={imageProperty} width={50} className="image-profile" loadingComponent={null} />
+          <Image property={imageProperty} width={50} className="image-profile" loadingComponent={null} errorComponent={() => <></>} />
         </div>
         <div className="mx-3">
           <h5 className="my-0">
-            <Text properties={nameProperties} errorComponent={'Unknown user'} />
+            <Text properties={nameProperties} errorComponent={() => <span>{`Unknown user`}</span>} />
           </h5>
-          <small><Text property={organizationProperty} errorComponent={'-'} /></small>
+          <small><Text property={organizationProperty} errorComponent={() => <span>-</span>} /></small>
         </div>
       </div>
     </CombinedDataProvider>

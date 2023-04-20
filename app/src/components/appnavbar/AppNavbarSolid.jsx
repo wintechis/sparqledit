@@ -35,7 +35,7 @@ export function AppNavbarSolid({ webId }) {
 export function AppNavbarSolidLogin() {
   const authOptions = { clientName: "SPARQL_edit" };
   const [currentUrl, setCurrentUrl] = React.useState("https://localhost:3000");
-  const [customIdp, setCustomIdp] = React.useState("https://idp.example.org");
+  const [customIdp, setCustomIdp] = React.useState("");
 
   React.useEffect(() => {
     setCurrentUrl(window.location.href);
@@ -66,7 +66,7 @@ export function AppNavbarSolidLogin() {
       </NavDropdown.Item>
       <InputGroup className="mt-2 customIDPInputGroup">
         <FormControl className="customIDPFormControl" aria-label="custom IDP" aria-describedby="customIDPButton" size="sm" type="url"
-          onChange={( e ) => setCustomIdp( e.target.value )} value={customIdp} />
+          onChange={( e ) => setCustomIdp( e.target.value )} value={customIdp} placeholder="https://idp.example.org" />
         <LoginButton authOptions={authOptions} oidcIssuer={customIdp} redirectUrl={currentUrl} onError={logInOutError}>
           <Button type="submit" variant="outline-secondary" id="customIDPButton"><i className="bi bi-play-fill"></i></Button>
         </LoginButton>
