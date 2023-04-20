@@ -8,11 +8,10 @@ class SparqlClient {
     // create a custom fetch handler
     function myfetch(url, options) {
       // AbortController
-      options.signal = abortController.signal;
+      options.signal = abortController?.signal;
       
       // Basic Auth header
       if (credentials) {
-        console.log(credentials)
         const authStr = 'Basic ' + Buffer.from(credentials.username + ':' + credentials.password, 'utf8').toString('base64');
         if (options.headers instanceof Headers) {
           options.headers.set('Authorization', authStr);

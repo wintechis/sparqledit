@@ -67,14 +67,7 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
 
   const [inputCellState, dispatch] = React.useReducer(inputCellStateReducer, initialState);
 
-  async function handleLiteralUpdate(e) {
-    e.preventDefault();
-    if(!inputCellState.updateQuery || inputCellState.isExecutingQuery) {
-      return; // no action if form is submitted in wrong state
-    }
-    dispatch({ type: "INPUTCELL_UPDATE_START" });
-
-    // update check
+  async function executeUpdateCheckQuery() {
     try {
       const checkSubmission = new QuerySubmission(
         inputCellState.origSparqlSubmission.endpointQuery, 
@@ -114,8 +107,9 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
         error
       });
     }
+  }
 
-    // update execution
+  async function executeUpdateQuery() {
     try {
       const updateSubmission = new QuerySubmission(
         inputCellState.origSparqlSubmission.endpointQuery, 
@@ -143,6 +137,18 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
         error
       });
     }
+  }
+
+  async function handleLiteralUpdate(e) {
+    e.preventDefault();
+    if(!inputCellState.updateQuery || inputCellState.isExecutingQuery) {
+      return; // no action if form is submitted in wrong state
+    }
+    dispatch({ type: "INPUTCELL_UPDATE_START" });
+
+    executeUpdateCheckQuery();
+
+    executeUpdateQuery();
   };
 
   const handleInputChange= (e) => {

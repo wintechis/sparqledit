@@ -23,6 +23,15 @@ export default function QueryResultTableInputCellModal({ show, onHide, inputCell
     textareaRows = Math.max(TEXTAREA_ROWS_MIN, Math.min(numberOfLines + 1, TEXTAREA_ROWS_MAX));
   }
 
+  const createUpdateInfoModalErrorJsx = () => {
+    if (inputCellState.buildingError) 
+      return <UpdateInfoModalError errorTitle={'Update query generation error'} errorObject={inputCellState.buildingError} />;
+    if(inputCellState.updateError) 
+      return <UpdateInfoModalError errorTitle={'Update execution error'} errorObject={inputCellState.updateError} />;
+    if(inputCellState.updateCheckError)
+      return <UpdateInfoModalError errorTitle={'Update preflight check'} errorObject={inputCellState.updateCheckError} />;
+  }
+
   return (
     <Modal show={show} onHide={onHide} size="lg" dialogClassName="modal-90w" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header className={anyError ? (isDataChanged ? 'alert-warning' : 'alert-danger') : ''} closeButton>
@@ -31,17 +40,15 @@ export default function QueryResultTableInputCellModal({ show, onHide, inputCell
         </Modal.Title>
       </Modal.Header>
       <Modal.Body className={anyError ? (isDataChanged ? 'alert-warning' : 'alert-danger') : ''}>
-        { inputCellState.buildingError ? <UpdateInfoModalError errorTitle={'Update query generation error'} errorObject={inputCellState.buildingError} />  : null }
-        { inputCellState.updateError ? <UpdateInfoModalError errorTitle={'Update execution error'} errorObject={inputCellState.updateError} />  : null }
-        { inputCellState.updateCheckError ? <UpdateInfoModalError errorTitle={'Update preflight check'} errorObject={inputCellState.updateCheckError} />  : null }
-        { inputCellState.updateQuery ?
+        {createUpdateInfoModalErrorJsx()}
+        {inputCellState.updateQuery &&
           <Form>
             <Form.Group className="mb-3" controlId="formSparqlUpdateQuery">
               <Form.Label>Auto-generated update query</Form.Label>
               <Form.Control as="textarea" rows={textareaRows} defaultValue={inputCellState.updateQuery} className="white-readonly" readOnly />
             </Form.Group>
           </Form>
-         : null }
+        }
       </Modal.Body>
     </Modal>
   );
@@ -55,10 +62,12 @@ function UpdateInfoModalError({ errorTitle, errorObject }) {
       <p>{errorTitle}</p>
       <Alert variant="light">
         <p>{errorObject.message}</p>
-        {causeNotices.length > 0 ? <div>
-          <p className="font-weight-bold mb-1">Possible causes:</p>
-          <ul>{causeNotices.map(cause => <li key={cause}>{cause}</li>)}</ul>
-        </div> : null}
+        {causeNotices.length > 0 &&
+          <div>
+            <p className="font-weight-bold mb-1">Possible causes:</p>
+            <ul>{causeNotices.map(cause => <li key={cause}>{cause}</li>)}</ul>
+          </div>
+        }
       </Alert>
     </>
   );
