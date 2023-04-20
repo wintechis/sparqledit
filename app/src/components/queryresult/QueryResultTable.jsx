@@ -39,6 +39,8 @@ export default function QueryResultTable({ refreshTableCallback, isRefreshing, s
     addInsertModeLiteralsToQueryResultBindings(sparqlResultBindingsRaw);
   }
 
+  throw new Error('blubb')
+  
   // filter (text search)
   const sparqlResultBindings = sparqlResultBindingsRaw.filter(binding => Object.values(binding).some(spo => spo.value.toLowerCase().indexOf(searchString.toLowerCase()) > -1));
 

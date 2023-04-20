@@ -14,6 +14,7 @@
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.2",
     "react-dom": "^17.0.2",
+    "react-error-boundary": "^4.0.4",
     "react-scripts": "4.0.3",
     "sparqledit-algorithm": "file:../algorithm",
     "sparqljs": "^3.5.1",
@@ -30,17 +31,11 @@
       "react-app"
     ]
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version"
-    ]
-  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
   "devDependencies": {
     "react-error-overlay": "^6.0.9",
     "sass": "^1.45.0",

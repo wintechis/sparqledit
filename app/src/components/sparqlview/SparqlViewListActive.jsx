@@ -6,10 +6,32 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 
 import { useSession } from '@inrupt/solid-ui-react';
 
+import { ErrorBoundary } from "react-error-boundary";
+
 import SparqlViewDetail from './SparqlViewDetail';
 import SparqlViewListActiveSolidModal from './SparqlViewListActiveSolidModal';
 
-export default function SparqlViewListActive({ view, viewUpdateCallback, cardHandler }) {
+export default function SparqlViewListActive(props) {
+
+  function fallbackRender({ error, resetErrorBoundary }) {
+    return <SparqlViewListItemActiveFallback view={props.view} error={error} resetErrorBoundary={resetErrorBoundary} />;
+  }
+
+  const logError = (error) => {
+    console.error('ViewError', error);
+  };
+
+  return (
+    <ErrorBoundary
+      fallbackRender={fallbackRender}
+      onReset={(details) => {}}
+      onError={logError}>
+      <SparqlViewListItemActive {...props} />
+    </ErrorBoundary>
+  );
+}
+
+function SparqlViewListItemActive({ view, viewUpdateCallback, cardHandler }) {
   const [activeTabKey, setActiveTabKey] = React.useState('view');
   const [solidModalShow, setSolidModalShow] = React.useState(false);
   const { session } = useSession();
@@ -55,6 +77,31 @@ export default function SparqlViewListActive({ view, viewUpdateCallback, cardHan
             <SparqlViewDetail sparqlView={view} isEditMode={false} />
           </>
         }
+      </Card.Body>
+    </Card>
+  );
+}
+
+function SparqlViewListItemActiveFallback({ view, error, resetErrorBoundary }) {
+  // Call resetErrorBoundary() to reset the error boundary and retry the render.
+
+  const errMessage = `${error.name} - ${error.message}`;
+
+  return (
+    <Card className="shadow">
+      <Card.Header>
+        <div className="d-flex pr-2 justify-content-between flex-wrap">
+          <h5>{view.name}</h5>
+          <Nav>
+            <Nav.Item >
+              <Nav.Link onClick={resetErrorBoundary}>Reload</Nav.Link>
+            </Nav.Item>
+          </Nav>
+        </div>
+      </Card.Header>
+      <Card.Body>
+        <h5 className='text-danger'>ViewError</h5>
+        <p className='text-danger'>{errMessage}</p>
       </Card.Body>
     </Card>
   );
