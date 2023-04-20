@@ -11,14 +11,14 @@ import SparqlClient from './SparqlClient';
 import { toISODateWithTimezone } from '../utilities';
 import { RDF_NAMESPACES } from '../models/RdfNamespaces';
 
-export async function executeSelectOrUpdateQuery(querySubmission) {
-  const sparqlClient = new SparqlClient(querySubmission.credentials);
+export async function executeSelectOrUpdateQuery(querySubmission, abortController) {
+  const sparqlClient = new SparqlClient(querySubmission.credentials, abortController);
 
   const queryType = sparqlClient.getQueryType(querySubmission.queryString);
   if (queryType === 'SELECT') {
-    return executeSelectWildcardQuery(sparqlClient, querySubmission);
+    return executeSelectWildcardQuery(sparqlClient, querySubmission, abortController);
   } else {
-    return sparqlClient.submitUpdateQuery(querySubmission.endpointUpdate, querySubmission.queryString);
+    return sparqlClient.submitUpdateQuery(querySubmission.endpointUpdate, querySubmission.queryString, abortController);
   }
 }
 

@@ -26,11 +26,15 @@ function useFileFromSolid(fileURL, initialFetchState = defaultInitialFetchState)
   const [fetchState, dispatch] = React.useReducer(fetchReducer, initialFetchState);
 
   React.useEffect(() => {
-    async function fetchFileFromSolidPod() {
+    async function fetchFileFromSolidPod(abortController) {
       dispatch({ type: "FETCH_START" });
+
+      // create a custom fetch handler
+      const myfetch = (url) => fetch(url, {signal: abortController.signal});
+
       try {
         // fetch raw file
-        const file = await getFile(fileURL, { fetch: fetch });
+        const file = await getFile(fileURL, { fetch: myfetch });
         console.log( `Fetched a ${getContentType(file)} file from ${getSourceUrl(file)}.`);
         console.log(`The file is ${isRawData(file) ? "not " : ""}a dataset.`);
         dispatch({
@@ -38,8 +42,11 @@ function useFileFromSolid(fileURL, initialFetchState = defaultInitialFetchState)
           file: file
         });
       } catch (error) {
+        if (error.name === 'AbortError' || abortController.signal.aborted) return;
+        
+        // only dispatch if fetch was not aborted
         const customError = new SolidError(
-          `The file could not be loaded from the Solid Pod.\n${error.name} - ${error.message}`, 
+          `The file could not be loaded from the Solid Pod.\n${error.name} - ${error.message}`,
           fileURL);
         dispatch({
           type: "FETCH_FAIL",
@@ -47,7 +54,15 @@ function useFileFromSolid(fileURL, initialFetchState = defaultInitialFetchState)
         });
       }
     }
-    if(fileURL && fileURL.length > 0) fetchFileFromSolidPod();
+
+    const abortController = new AbortController();
+
+    if(fileURL && fileURL.length > 0) fetchFileFromSolidPod(abortController);
+
+    // clean-up/abort function
+    return () => {
+      abortController.abort();
+    };
   }, [fileURL]);
 
   return fetchState;
