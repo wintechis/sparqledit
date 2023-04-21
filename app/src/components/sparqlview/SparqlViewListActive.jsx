@@ -88,20 +88,19 @@ function SparqlViewListItemActiveFallback({ view, error, resetErrorBoundary }) {
   const errMessage = `${error.name} - ${error.message}`;
 
   return (
-    <Card className="shadow">
+    <Card className="shadow text-danger" border="danger">
       <Card.Header>
         <div className="d-flex pr-2 justify-content-between flex-wrap">
           <h5>{view.name}</h5>
           <Nav>
             <Nav.Item >
-              <Nav.Link onClick={resetErrorBoundary}>Reload</Nav.Link>
+              <Nav.Link onClick={resetErrorBoundary} className="text-danger"><i className="bi bi-bootstrap-reboot"></i> Reload</Nav.Link>
             </Nav.Item>
           </Nav>
         </div>
       </Card.Header>
       <Card.Body>
-        <h5 className='text-danger'>ViewError</h5>
-        <p className='text-danger'>{errMessage}</p>
+        <p className="text-danger"><strong>ViewError: </strong>{errMessage}</p>
       </Card.Body>
     </Card>
   );
