@@ -68,30 +68,25 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
   const [inputCellState, dispatch] = React.useReducer(inputCellStateReducer, initialState);
 
   async function executeUpdateCheckQuery() {
+    const checkSubmission = new QuerySubmission(
+      inputCellState.origSparqlSubmission.endpointQuery, 
+      inputCellState.origSparqlSubmission.endpointUpdate, 
+      inputCellState.checkQuery,
+      inputCellState.origSparqlSubmission.credentials);
+    console.log('inputCellState.checkQuery', inputCellState.checkQuery);
+
     try {
-      const checkSubmission = new QuerySubmission(
-        inputCellState.origSparqlSubmission.endpointQuery, 
-        inputCellState.origSparqlSubmission.endpointUpdate, 
-        inputCellState.checkQuery,
-        inputCellState.origSparqlSubmission.credentials);
-      console.log('inputCellState.checkQuery', inputCellState.checkQuery);
       const checkQueryResult = await executeSelectOrUpdateQuery(checkSubmission);
-      console.log('checkQueryResult', checkQueryResult);
+
       // 0 solutions: graph pattern matching has no result
       // the relevant triples in the graph have been changed in the meantime
       if(checkQueryResult.length === 0) {
-        return dispatch({
-          type: "INPUTCELL_UPDATECHECK_FAIL",
-          error: new DataChangeUpdateCheckError('ineffective update query')
-        });
+        throw new DataChangeUpdateCheckError('ineffective update query');
       } 
       // >1 solutions: graph pattern matches more than one times
       // ambiguous update query that would alter more than one triple
       else if(checkQueryResult.length > 1) {
-        return dispatch({
-          type: "INPUTCELL_UPDATECHECK_FAIL",
-          error: new UpdateCheckError('ambiguous update query')
-        });
+        throw new UpdateCheckError('ambiguous update query');
       }
       // 1 solution: ideal case
       // update query is safe
@@ -102,21 +97,25 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
         throw new UpdateCheckError('invalid check result');
       }
     } catch (error) {
-      return dispatch({
+      dispatch({
         type: "INPUTCELL_UPDATECHECK_FAIL",
         error
       });
+      return false;
     }
+    return true;
   }
 
   async function executeUpdateQuery() {
+    const updateSubmission = new QuerySubmission(
+      inputCellState.origSparqlSubmission.endpointQuery, 
+      inputCellState.origSparqlSubmission.endpointUpdate, 
+      inputCellState.updateQuery,
+      inputCellState.origSparqlSubmission.credentials);
+
     try {
-      const updateSubmission = new QuerySubmission(
-        inputCellState.origSparqlSubmission.endpointQuery, 
-        inputCellState.origSparqlSubmission.endpointUpdate, 
-        inputCellState.updateQuery,
-        inputCellState.origSparqlSubmission.credentials);
       const updateResult = await executeSelectOrUpdateQuery(updateSubmission);
+
       if(updateResult === 'SUCCESS') {
         // // 1) signal successful update (drawback: no feedback if value actually changed)
         // dispatch({
@@ -146,9 +145,8 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
     }
     dispatch({ type: "INPUTCELL_UPDATE_START" });
 
-    executeUpdateCheckQuery();
-
-    executeUpdateQuery();
+    const isUpdateSafe = await executeUpdateCheckQuery();
+    if (isUpdateSafe) executeUpdateQuery();
   };
 
   const handleInputChange= (e) => {
