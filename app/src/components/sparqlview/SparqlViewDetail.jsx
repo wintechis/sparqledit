@@ -57,7 +57,7 @@ export default function SparqlViewDetail({ sparqlView, sparqlViewUpdateCallback,
         <Form onSubmit={e => {e.preventDefault(); executeQuery()}}>
           { sparqlView.requiresBasicAuth ? 
             <dl className="row">
-              <dt className="col-sm-2">Authentication</dt>
+              <dt className="col-sm-3">Authentication</dt>
               <dd className="col-sm-5">{credFormJsx}</dd>
               <dd className="col-sm-2"><p className="text-secondary">* required fields</p></dd>
             </dl> : null }

@@ -1,6 +1,6 @@
 {
   "name": "Example Literal View",
-  "description": "Very simple example view that lists every RDF triple with a literal object.",
+  "description": "Example view that lists every RDF triple with a literal object.",
   "creator": "System",
   "dateCreated": "2022-12-01T16:08:17.168Z",
   "queryURL": "http://localhost:3030/sparqledit-example",
