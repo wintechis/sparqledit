@@ -2,6 +2,9 @@
   "name": "sparqledit-algorithm",
   "version": "0.8.0",
   "description": "SPARQL_edit algorithm for generating SPARQL update queries",
+  "keywords": [ "SPARQL", "RDF" ],
+  "author": "Sascha Meckler <sascha.meckler@iis.fraunhofer.de>",
+  "license": "AGPL-3.0",
   "main": "dist/index.js",
   "typings": "dist/index",
   "scripts": {
@@ -9,9 +12,6 @@
     "test": "jest",
     "prepublishOnly": "npm run build"
   },
-  "keywords": [],
-  "author": "Sascha Meckler <sascha.meckler@iis.fraunhofer.de>",
-  "license": "",
   "jest": {
     "preset": "ts-jest"
   },

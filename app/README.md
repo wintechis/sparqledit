@@ -23,7 +23,7 @@ It uses different RDF-related libraries:
 
 ### Setup and commands
 
-Install dependencies: `npm i`
+Install dependencies: `npm ci`
 
 Run the app in development mode: `npm start`
 
@@ -76,3 +76,60 @@ __Ideas for new features__
 * SPARQL_edit for RDF documents
   * using an internal SPARQL engine
   * RDF resources or LDP/Solid servers
+
+## Licenses
+
+© 2023 | S.Meckler | Fraunhofer IIS
+
+The SPARQL_edit algorithm and application can be redistributed and/or modified under the terms of the [GNU Affero General Public License version 3](../LICENSE).
+
+### List of dependency licenses
+
+2023-04-25 v0.7.5 depth=1
+
+| name | version | repository | summary | from package.json | from license | from readme | 
+|---|---|---|---|---|---|---|
+| @babel/plugin-proposal-export-default-from | 7.18.10 | https://github.com/babel/babel | MIT | MIT | MIT | 
+| @babel/plugin-transform-react-jsx-self | 7.21.0 | https://github.com/babel/babel | MIT | MIT | MIT | 
+| @babel/plugin-transform-react-jsx-source | 7.19.6 | https://github.com/babel/babel | MIT | MIT | MIT | 
+| @babel/preset-flow | 7.21.4 | https://github.com/babel/babel | MIT | MIT | MIT | 
+| @babel/register | 7.21.0 | https://github.com/babel/babel | MIT | MIT | MIT | 
+| @expo/bunyan | 4.0.0 | http://github.com/trentm/node-bunyan | MIT | MIT | MIT | 
+| @expo/cli | 0.6.2 | https://github.com/expo/expo | MIT | MIT |  | 
+| @expo/vector-icons | 13.0.0 | https://github.com/expo/vector-icons | MIT | MIT | MIT | 
+| @inrupt/solid-ui-react | 2.8.2 | https://github.com/inrupt/solid-ui-react | MIT | MIT | MIT | MIT
+| @jest/create-cache-key-function | 29.5.0 | https://github.com/facebook/jest | MIT | MIT | MIT | 
+| @jest/environment | 29.5.0 | (none) | MIT | MIT | MIT | 
+| @react-native-community/cli | 10.2.2 | https://github.com/react-native-community/cli | MIT | MIT | MIT | 
+| @react-native/assets | 1.0.0 | git@github.com:facebook/react-native | MIT | MIT |  | 
+| @react-native/polyfills | 2.0.0 | git@github.com:facebook/react-native | MIT | MIT |  | 
+| @zazuko/rdf-vocabularies | 2021.9.22 | https://github.com/zazuko/rdf-vocabularies | MIT | MIT | MIT | 
+| anser | 1.4.10 | http://github.com/IonicaBizau/anser | MIT | MIT | MIT | 
+| ast-types | 0.14.2 | http://github.com/benjamn/ast-types | MIT | MIT |  | 
+| babel-core | 7.0.0-bridge.0 | (none) | MIT | MIT |  | 
+| babel-plugin-module-resolver | 4.1.0 | https://github.com/tleunen/babel-plugin-module-resolver | MIT | MIT | MIT | 
+| babel-plugin-react-native-web | 0.18.12 | http://github.com/necolas/react-native-web | MIT | MIT | MIT | 
+| babel-preset-expo | 9.3.2 | https://github.com/expo/expo | MIT | MIT |  | 
+| bindings | 1.5.0 | http://github.com/TooTallNate/node-bindings | MIT | MIT | MIT | MIT
+| blueimp-md5 | 2.19.0 | http://github.com/blueimp/JavaScript-MD5 | MIT | MIT | MIT | 
+| bootstrap | 5.2.3 | https://github.com/twbs/bootstrap | MIT | MIT | MIT | 
+| bootstrap-icons | 1.10.4 | https://github.com/twbs/icons | MIT | MIT | MIT | MIT
+| browserfs | 1.4.3 | https://github.com/jvilk/BrowserFS | MIT | MIT | MIT | MIT
+| deprecated-react-native-prop-types | 3.0.1 | github:facebook/react-native-deprecated-modules | MIT | MIT |  | 
+| expo | 48.0.10 | https://github.com/expo/expo | MIT | MIT |  | 
+| fetch-sparql-endpoint | 2.4.1 | git@github.com:rubensworks/fetch-sparql-endpoint.js | MIT | MIT | MIT | 
+| flow-parser | 0.185.2 | https://github.com/facebook/flow | MIT | MIT |  | 
+| jest-environment-node | 29.5.0 | (none) | MIT | MIT | MIT | 
+| jsonld-streaming-parser | 2.4.3 | git@github.com:rubensworks/streaming-jsonld-parser.js | MIT | MIT | MIT | 
+| nan | 2.17.0 | http://github.com/nodejs/nan | MIT | MIT | MIT | MIT
+| rdf-literal | 1.3.1 | git@github.com:rubensworks/rdf-literal.js | MIT | MIT | MIT | 
+| react | 18.2.0 | https://github.com/facebook/react | MIT | MIT | MIT | 
+| react-bootstrap | 2.7.3 | https://github.com/react-bootstrap/react-bootstrap | MIT | MIT | MIT | 
+| react-dom | 17.0.2 | https://github.com/facebook/react | MIT | MIT | MIT | 
+| react-error-boundary | 4.0.4 | https://github.com/bvaughn/react-error-boundary | MIT | MIT | MIT | 
+| react-native | 0.71.6 | (none) | MIT | MIT | MIT | MIT
+| react-scripts | 4.0.3 | https://github.com/facebook/create-react-app | MIT | MIT | MIT | 
+| sparqljs | 3.6.2 | https://github.com/RubenVerborgh/SPARQL.js | MIT | MIT | MIT | 
+| type-fest | 0.13.1 | sindresorhus/type-fest | (MIT OR CC0-1.0);MIT | (MIT OR CC0-1.0) | MIT | 
+| typescript | 4.9.5 | https://github.com/Microsoft/TypeScript | Apache;Apache-2.0 | Apache-2.0 | Apache | 
+| yasgui | 0.0.0 | https://github.com/TriplyDB/Yasgui | Apache;MIT |  | Apache;MIT | MIT | 

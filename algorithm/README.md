@@ -163,3 +163,19 @@ The SPARQL_edit application is able to decide if it is safe to execute the SPARQ
 * 0 results: relevant triples in the graph have been changed in the meantime
 * 1 result: ideal case in which the update query would affect exactly one RDF triple
 * 2..n results: the update query is ambiguous and would alter more than one RDF triple; unlikely special case with blank nodes
+
+## Licenses
+
+© 2023 | S.Meckler | Fraunhofer IIS
+
+The SPARQL_edit algorithm and application can be redistributed and/or modified under the terms of the [GNU Affero General Public License version 3](../LICENSE).
+
+### List of dependency licenses
+
+2023-04-25 v0.8.0
+
+| name | version | repository | summary | from package.json | from license | from readme | 
+|---|---|---|---|---|---|---|
+| @rdfjs/types | 1.1.0 | https://github.com/rdfjs/types | MIT | MIT | MIT |  | 
+| @types/node | 18.15.11 | https://github.com/DefinitelyTyped/DefinitelyTyped | MIT | MIT | MIT |  | 
+| rdf-data-factory | 1.1.1 | https://github.com/rubensworks/rdf-data-factory.js | MIT | MIT | MIT |  | 

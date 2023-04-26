@@ -41,7 +41,7 @@ The algorithm is limited to SelectQueries that ...
 
 ## Setup
 
-__Live-Version: [sparqledit.netlify.app](https://sparqledit.netlify.app/)__
+__Live-Version: [TODO](TODO)__
 
 The folder [build](build) contains the built application. The static files can be served with any HTTP server.
 
@@ -103,3 +103,9 @@ Disable 'Mixed Content' blocking for a certain web page:
 * GraphDB "test" repository
   * Query: [http://localhost:7200/repositories/test](http://localhost:7200/repositories/test)
   * Update: [http://localhost:7200/repositories/test/statements](http://localhost:7200/repositories/test/statements)
+
+## License
+
+© 2023 | S.Meckler | Fraunhofer IIS
+
+The SPARQL_edit algorithm and application can be redistributed and/or modified under the terms of the [GNU Affero General Public License version 3 (AGPL-3.0)](../LICENSE).
