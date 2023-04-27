@@ -2,9 +2,14 @@
   "name": "sparqledit",
   "version": "0.7.5",
   "description": "Web app for editing RDF literals in Knowledge Graphs using SPARQL",
-  "keywords": [ "SPARQL", "RDF", "Knowledge Graph" ],
+  "keywords": [
+    "SPARQL",
+    "RDF",
+    "Knowledge Graph"
+  ],
   "author": "Sascha Meckler <sascha.meckler@iis.fraunhofer.de>",
-  "license": "AGPL-3.0",
+  "repository": "github:wintechis/sparqledit",
+  "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@inrupt/solid-ui-react": "^2.6.1",
     "@zazuko/rdf-vocabularies": "^2021.9.22-3",
@@ -26,6 +31,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "predeploy": "npm run build && rm -rf ../build && mv build ../build",
+    "deploy": "gh-pages -d ../build",
     "sass": "sass src/styles/sass:src/styles --watch --no-source-map"
   },
   "eslintConfig": {
@@ -39,6 +46,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "gh-pages": "^5.0.0",
     "react-error-overlay": "^6.0.9",
     "sass": "^1.45.0",
     "solid-auth-cli": "^1.0.15",

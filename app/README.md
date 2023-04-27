@@ -2,7 +2,7 @@
 
 ## Developer info
 
-SPARQL_edit is a React app written in JavaScript. The styling and design is done with Bootstrap.
+SPARQL_edit is a React app written in JavaScript. The styling is done with Bootstrap.
 
 SPARQL_edit uses the [YASQE](https://triply.cc/docs/yasgui-api#yasqe) component from [YASGUI](https://github.com/TriplyDB/Yasgui) as query editor.
 It uses different RDF-related libraries:
@@ -31,7 +31,10 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 Build the app for production into the `build` folder: `npm run build`
 
-Test the build: `serve -s build`
+The generated static files can be served with any HTTP server, e.g. with
+* [serve](https://www.npmjs.com/package/serve): `npm install -g serve; serve -s build`
+* [http-server](https://www.npmjs.com/package/http-server): `npm install -g http-server; http-server -p 3000 build/`
+* Python's [http.server](https://docs.python.org/3/library/http.server.html): `python -m http.server --directory build/ 3000`
 
 #### Bugfix for @inrupt dependency
 
@@ -53,7 +56,7 @@ install node-fetch library: `npm i -g node-fetch`
 
 run the NodeJS script: `node .\docs\updatelog\replay-sparql-updates.mjs`
 
-### TODOs
+### Improvements
 
 * Algorithm
   * support for named graphs (FROM NAMED) and graph patterns ?

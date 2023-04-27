@@ -1,10 +1,8 @@
 # SPARQL_edit tutorial
 
-TODO: GitHub Pages
+Open [wintechis.github.io/sparqledit](https://wintechis.github.io/sparqledit/) with Chrome or Firefox.
 
-Open [https://sparqledit.netlify.app](https://sparqledit.netlify.app/) with Chrome or Firefox.
-
-For this tutorial, SPARQL_edit comes with several "SPARQL views" by default. These "SPARQL view" examples are configured to query data from an [Apache Jena Fuseki](https://jena.apache.org/documentation/fuseki2/) triple store hosted at [TODO](TODO).
+For this tutorial, SPARQL_edit comes with several "SPARQL views" by default. These "SPARQL view" examples are configured to query data from an [Apache Jena Fuseki](https://jena.apache.org/documentation/fuseki2/) triple store hosted at [fuseki.ada.iis.fhg.de](https://fuseki.ada.iis.fhg.de/).
 
 Please use on of these user credentials:
 * bob / bobpw

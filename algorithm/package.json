@@ -4,7 +4,8 @@
   "description": "SPARQL_edit algorithm for generating SPARQL update queries",
   "keywords": [ "SPARQL", "RDF" ],
   "author": "Sascha Meckler <sascha.meckler@iis.fraunhofer.de>",
-  "license": "AGPL-3.0",
+  "repository": "github:wintechis/sparqledit",
+  "license": "AGPL-3.0-or-later",
   "main": "dist/index.js",
   "typings": "dist/index",
   "scripts": {
