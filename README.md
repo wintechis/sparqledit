@@ -4,7 +4,7 @@ SPARQL_edit is a Web application that facilitates editing RDF literal values in 
 
 <span style="border-style: solid;padding: 5px;"> [online version](https://wintechis.github.io/sparqledit/) & [tutorial](docs/tutorial/TUTORIAL.md) </span>
 
-The SPARQL_edit application in the [app](app/README.md) folder uses the alogrithm package from the [algorithm](algorithm/README.md) folder.
+The SPARQL_edit application in the [app](app) folder uses the alogrithm package from the [algorithm](algorithm) folder.
 
 Instructions for building the application are described in the app's [README](app/README.md). The [docs](docs) folder includes information around SPARQL_edit and examples for testing.
 
@@ -89,4 +89,4 @@ Disable 'Mixed Content' blocking for a certain web page:
 
 © 2023 | S.Meckler | Fraunhofer IIS
 
-The SPARQL_edit algorithm and application can be redistributed and/or modified under the terms of the [GNU Affero General Public License version 3 (AGPL-3.0)](../LICENSE).
+The SPARQL_edit algorithm and application can be redistributed and/or modified under the terms of the [GNU Affero General Public License version 3 (AGPL-3.0)](LICENSE).

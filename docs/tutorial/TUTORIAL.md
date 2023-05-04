@@ -4,14 +4,14 @@ Open [wintechis.github.io/sparqledit](https://wintechis.github.io/sparqledit/) w
 
 For this tutorial, SPARQL_edit comes with several "SPARQL views" by default. These "SPARQL view" examples are configured to query data from an [Apache Jena Fuseki](https://jena.apache.org/documentation/fuseki2/) triple store hosted at [fuseki.ada.iis.fhg.de](https://fuseki.ada.iis.fhg.de/).
 
-Please use on of these user credentials:
+Please use one of these user credentials:
 * bob / bobpw
 * alice / alicepw
 
 
 ## Lay user perspective
 
-Lay or business users open ready-to-use "SPARQL views" that have been created by experts colleagues. A "SPARQL view" is a simple configuration text file which defines how to load a table of values from an RDF Knowledge Graph. With this "SPARQL view", data from the Knowledge Graph is displayed in a table where certain values can be changed.
+Lay or business users open ready-to-use "SPARQL views" that have been created by experts colleagues. A "SPARQL view" is a simple configuration text file which defines how to load a table of values from an RDF Knowledge Graph. With this information, SPARQL_edit queries the Knowledge Graph and displays the results in a table where certain values can be changed.
 
 ### Update RDF literal value
 
@@ -21,14 +21,15 @@ Steps for updating an RDF literal value with an existing "SPARQL view".
 
 ### "SPARQL view" from Solid Pod
 
-Steps for loading a new "SPARQL view" (configuration file) from a Solid Pod.
-Alternatively, a "SPARQL view" configuration file can be loaded from disk.
+Steps for loading a new "SPARQL view" configuration file from a Solid Pod.
+
+Alternatively, a "SPARQL view" configuration file can be loaded from disk via "load config file" without Solid.
 
 <img src="img/solidimport.jpg" width="800" />
 
 ## Expert user perspective
 
-Expert users create and test "SPARQL views" for their colleagues. "SPARQL view" configuration files are text files in the JSON-LD format. They can be uploaded to Solid Pods or distributed as files.
+Expert users create and test "SPARQL views" for their colleagues. "SPARQL view" configuration files are RDF documents in the JSON-LD format. They can be uploaded to Solid Pods or distributed as files.
 
 ### Create new "SPARQL view"
 
@@ -38,7 +39,7 @@ You can create a new "SPARQL view" from scratch or by cloning an existing view c
 
 ### Edit a "SPARQL view"
 
-New or existing "SPARQL views" can be edited in the "edit" tab.
+New or existing "SPARQL views" can be edited in the "Edit" tab.
 
 <img src="img/viewedit.jpg" width="800" />
 
