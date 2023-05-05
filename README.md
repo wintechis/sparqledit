@@ -2,7 +2,9 @@
 
 SPARQL_edit is a Web application that facilitates editing RDF literal values in RDF Knowledge Graphs.
 
-<span style="border-style: solid;padding: 5px;"> [online version](https://wintechis.github.io/sparqledit/) & [tutorial](docs/tutorial/TUTORIAL.md) </span>
+* <img src="app/public/logo_cs.png" height="12"> __[Online version](https://wintechis.github.io/sparqledit/)__
+  * :man: user: bob / bobpw
+* :information_source: __[Tutorial](docs/tutorial/TUTORIAL.md)__
 
 The SPARQL_edit application in the [app](app) folder uses the alogrithm package from the [algorithm](algorithm) folder.
 

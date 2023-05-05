@@ -17,8 +17,12 @@ import { createDowloadFileName, downloadJsonld } from '../../scripts/utilities';
 
 export default function SparqlViewList() {
   const initialViews = [
-    SparqlViewFactory.createFrom('simple'),
-    SparqlViewFactory.createFrom('advanced')
+    SparqlViewFactory.createFrom('product'),
+    SparqlViewFactory.createFrom('nobel-prizes'),
+    SparqlViewFactory.createFrom('nobel-laureates'),
+    SparqlViewFactory.createFrom('patient'),
+    SparqlViewFactory.createFrom('physician'),
+    SparqlViewFactory.createFrom('patient-physician'),
   ];
   const [views, setViews] = useLocalStorage('sparqlViews', initialViews);
   const viewCount = views.filter(view => view.deleted !== true).length;
@@ -136,7 +140,7 @@ function SparqlViewListItem({ view, cardHandler }) {
 function SparqlViewListItemDeleted({ view, cardHandler }) {
   return (
     <div className="d-flex justify-content-center align-items-center">
-      <span>View "{view.name}" deleted.</span>
+      <span>"{view.name}" deleted.</span>
       <Button variant='link' onClick={e => cardHandler.restore(view)}>Restore this view?</Button>
     </div>
   );

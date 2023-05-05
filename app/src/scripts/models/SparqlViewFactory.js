@@ -3,29 +3,7 @@ import { JsonLdParser } from "jsonld-streaming-parser";
 import { RDF_NAMESPACES } from './RdfNamespaces';
 import { DataFactory, Store, Parser } from 'n3';
 import { RDFProcessingError } from "../CustomErrors";
-
-const simpleExampleQuery = 'SELECT *\nWHERE {\n  ?s ?p ?o\n  FILTER( isLiteral(?o) )\n} LIMIT 25';
-const advancedExampleQuery = `
-PREFIX schema: <http://schema.org/>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-
-SELECT *
-FROM <http://localhost:7200/repositories/test/graph_1>
-WHERE {
-  ?s ?p ?o .
-  OPTIONAL {  
-    ?s rdfs:label ?label .
-  }
-  OPTIONAL {  
-    ?s schema:name ?name .
-  }
-  OPTIONAL {
-    ?s ?p [
-      rdf:value ?value
-    ] .
-  }
-}`.trim();
+import { getSparqlViewExampleByKey } from './sparqlviewexamples';
 
 export default class SparqlViewFactory {
 
@@ -43,40 +21,13 @@ export default class SparqlViewFactory {
       Date.now(),
       '',
       '',
-      'SELECT *\nWHERE {\n  ?s ?p ?o\n}',
+      'SELECT *\nWHERE {\n  ?s ?p ?o\n}\nLIMIT 100',
       false
     );
   }
 
-  static newSparqlViewExample(exmapleVariantKey) {
-    switch (exmapleVariantKey.toLowerCase().trim()) {
-      case 'simple':
-        return new SparqlView(
-          this.generateUnsafeUuid(),
-          'Simple S-P-O view',
-          'Edit this view or create a new one.\nConnect to a SPARQL endpoint and edit any literal value.',
-          'system',
-          Date.now(),
-          'http://localhost:3030/example/query',
-          'http://localhost:3030/example/update',
-          simpleExampleQuery,
-          false
-        );
-      case 'advanced':
-        return new SparqlView(
-          this.generateUnsafeUuid(),
-          'Advanced features example view',
-          'This example view shows SPARQL language features which are supported by SPARQL_edit.',
-          'system',
-          Date.now(),
-          'http://localhost:7200/repositories/test',
-          'http://localhost:7200/repositories/test/statements',
-          advancedExampleQuery,
-          true    
-        );
-      default:
-        return this.newBlankSparqlView();
-    }
+  static newSparqlViewExample(exampleVariantKey) {
+    return getSparqlViewExampleByKey(this.generateUnsafeUuid(), exampleVariantKey);
   }
 
   static newSparqlViewFromObject(object) {
@@ -109,6 +60,7 @@ export default class SparqlViewFactory {
     if (input instanceof Object) { // incl. instanceof SparqlView
       return this.newSparqlViewFromObject(input);
     }
+    // used in 'SparqlViewList' component: examples for first start
     if (typeof input === 'string') {
       return this.newSparqlViewExample(input);
     }

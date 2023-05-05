@@ -1,11 +1,11 @@
 {
-  "name": "Example Literal View",
-  "description": "Example view that lists every RDF triple with a literal object.",
-  "creator": "System",
-  "dateCreated": "2022-12-01T16:08:17.168Z",
-  "queryURL": "http://localhost:3030/sparqledit-example",
-  "updateURL": "http://localhost:3030/sparqledit-example",
-  "query": "SELECT *\nWHERE {\n  ?s ?p ?o\n  FILTER( isLiteral(?o) )\n} LIMIT 25",
+  "name": "Product Catalog",
+  "description": "Product catalog view for all products from department C3. Version 202206-B",
+  "creator": "Alice A.",
+  "dateCreated": "2023-02-01T11:19:49.483Z",
+  "queryURL": "http://localhost:3030/sparqledit-example/query",
+  "updateURL": "http://localhost:3030/sparqledit-example/update",
+  "query": "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX schema: <http://schema.org/>\n\nSELECT ?product ?name ?gtin ?weight\nFROM <http://example.org/graph/productcatalog-0>\nWHERE {\n  ?product rdf:type schema:Product ;\n    schema:name ?name ;\n    schema:gtin ?gtin ;\n    schema:weight [\n      schema:value ?weight\n    ]\n  FILTER (lang(?name) = 'en')\n}",
   "requiresBasicAuth": false,
   "@context": {
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",

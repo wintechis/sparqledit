@@ -1,12 +1,13 @@
 {
-  "name": "Example View 1 - Patients",
-  "description": "Example view for the RDF example dataset. Table of patients' names, birthdates and weights.",
-  "creator": "Admin",
-  "dateCreated": "2022-12-01T16:21:17.660Z",
+  "name": "Patients-Physicians Example",
+  "description": "Table of patients and their physicians.\nView for the example dataset made with schema.org concepts.\n(enabled update logging)",
+  "creator": "Alice A.",
+  "dateCreated": "2023-01-15T17:20:00.000Z",
   "queryURL": "http://localhost:3030/sparqledit-example/query",
   "updateURL": "http://localhost:3030/sparqledit-example/update",
-  "query": "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX schema: <http://schema.org/>\n\nSELECT ?name ?birthdate ?weight\nWHERE {\n  ?patient a schema:Patient ;\n    foaf:name ?name ;\n    schema:birthDate ?birthdate .\n  ?patient schema:weight [\n    schema:value ?weight\n  ]\n}",
+  "query": "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX schema: <http://schema.org/>\n\nSELECT ?name ?family ?birthdate ?weight ?medoffice ?medoffice_street ?medoffice_zip\nFROM <http://example.org/graph/patients-0>\nWHERE {\n  ?patient a schema:Patient ;\n    foaf:name ?name .\n  OPTIONAL {  \n    ?patient foaf:familyName ?family . \n  }\n  ?patient schema:birthDate ?birthdate .\n  OPTIONAL {\n    ?patient schema:weight [\n      schema:value ?weight\n    ] .\n  }\n  OPTIONAL {\n    ?patient schema:memberOf ?medoffice .\n    ?medoffice schema:address [\n      schema:streetAddress ?medoffice_street ;\n      schema:postalCode ?medoffice_zip  \n    ] .\n  }\n}",
   "requiresBasicAuth": false,
+  "updateLogGraph": "http://example.org/graph/updatelog-0",
   "@context": {
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
     "schema": "http://schema.org/",

@@ -23,6 +23,8 @@ Steps for updating an RDF literal value with an existing "SPARQL view".
 
 Steps for loading a new "SPARQL view" configuration file from a Solid Pod.
 
+Example views are available on [our Solid server](https://solid.iis.fraunhofer.de/SCS-DS-IoT/projects/sparqledit/), e.g. the [Product Catalog View](https://solid.iis.fraunhofer.de/SCS-DS-IoT/projects/sparqledit/sparqledit_Product_Catalog.jsonld).
+
 Alternatively, a "SPARQL view" configuration file can be loaded from disk via "load config file" without Solid.
 
 <img src="img/solidimport.jpg" width="800" />
