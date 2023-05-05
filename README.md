@@ -2,8 +2,8 @@
 
 SPARQL_edit is a Web application that facilitates editing RDF literal values in RDF Knowledge Graphs.
 
-* <img src="app/public/logo_cs.png" height="12"> __[Online version](https://wintechis.github.io/sparqledit/)__
-  * :man: user: bob / bobpw
+* <img src="app/public/logo_cs.png" style="height: 1.1em"> __[Online version](https://wintechis.github.io/sparqledit/)__
+  * user: bob / bobpw
 * :information_source: __[Tutorial](docs/tutorial/TUTORIAL.md)__
 
 The SPARQL_edit application in the [app](app) folder uses the alogrithm package from the [algorithm](algorithm) folder.
@@ -86,6 +86,7 @@ Disable 'Mixed Content' blocking for a certain web page:
 * Firefox
   * click on lock symbol next to URL -> "Firefox has blocked parts of this page that are not secure" 
   * click on "Connection secure" -> "Disable protection for now"
+
 
 ## License
 
