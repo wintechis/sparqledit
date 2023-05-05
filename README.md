@@ -2,7 +2,7 @@
 
 SPARQL_edit is a Web application that facilitates editing RDF literal values in RDF Knowledge Graphs.
 
-* <img src="app/public/logo_cs.png" style="height: 1.1em"> __[Online version](https://wintechis.github.io/sparqledit/)__
+* :globe_with_meridians: __[Online version](https://wintechis.github.io/sparqledit/)__
   * user: bob / bobpw
 * :information_source: __[Tutorial](docs/tutorial/TUTORIAL.md)__
 
@@ -45,7 +45,7 @@ The algorithm is limited to SelectQueries that ...
 
 ## Usage tips
 
-### [Tutorial](docs/tutorial/TUTORIAL.md)
+There are performance issues when loading more than 50000 results. Please use the SPARQL 'LIMIT' solution modifier to limit the number of result rows (e.g. 'LIMIT 10000').
 
 Shortcuts for the query editor (based on [YASGUI](https://triply.cc/docs/yasgui#sparql-editor))
 
@@ -58,8 +58,6 @@ Shortcuts for the query editor (based on [YASGUI](https://triply.cc/docs/yasgui#
 | [crtl] + Y | redo last change |
 
 Changes to input fields can be submitted with `ENTER`.
-
-There are performance issues when loading more than 50000 results. Use the SPARQL 'LIMIT' solution modifier to limit the number of result rows (e.g. 'LIMIT 1000').
 
 ### SPARQL server CORS support
 
