@@ -18,8 +18,8 @@ import { createDowloadFileName, downloadJsonld } from '../../scripts/utilities';
 export default function SparqlViewList() {
   const initialViews = [
     SparqlViewFactory.createFrom('product'),
-    SparqlViewFactory.createFrom('nobel-prizes'),
     SparqlViewFactory.createFrom('nobel-laureates'),
+    SparqlViewFactory.createFrom('nobel-prizes'),
     SparqlViewFactory.createFrom('patient'),
     SparqlViewFactory.createFrom('physician'),
     SparqlViewFactory.createFrom('patient-physician'),

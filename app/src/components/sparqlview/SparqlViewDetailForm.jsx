@@ -99,7 +99,7 @@ export default function SparqlViewDetailForm({ sparqlView, sparqlViewUpdateCallb
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [yasqe, sparqlView]);
+  }, [yasqe, sparqlView, submitQueryCallback]);
 
   return (
     <section className='mb-4'>

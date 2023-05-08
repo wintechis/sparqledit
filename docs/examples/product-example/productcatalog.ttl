@@ -16,6 +16,19 @@
     schema:unitCode "KGM"
   ] .
 
+<product/98770> rdf:type schema:Product ;
+  schema:name "Metal cover ABC125"@en ;
+  schema:countryOfOrigin <http://www.wikidata.org/entity/Q30> ;
+  schema:gtin 624141007335 ;
+  schema:productionDate "2023-04-14T10:10:22"^^xsd:dateTime ;
+  schema:width "1.60 m" ;
+  schema:depth "1.25 m" ;
+  schema:weight [
+    rdf:type schema:QuantitativeValue ;
+    schema:value "22.8"^^xsd:decimal ;
+    schema:unitCode "KGM"
+  ] .
+
 <product/98777> a schema:Product ;
   schema:name "Metal cover ABC444"@en ;
   schema:countryOfOrigin <http://www.wikidata.org/entity/Q30> ;
