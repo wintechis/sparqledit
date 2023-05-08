@@ -2,7 +2,7 @@
 
 Open [wintechis.github.io/sparqledit](https://wintechis.github.io/sparqledit/) with Chrome or Firefox.
 
-For this tutorial, SPARQL_edit comes with several "SPARQL views" by default. These "SPARQL view" examples are configured to query data from an [Apache Jena Fuseki](https://jena.apache.org/documentation/fuseki2/) triple store hosted at [fuseki.ada.iis.fhg.de](https://fuseki.ada.iis.fhg.de/).
+For this tutorial, SPARQL_edit comes with several "SPARQL views" by default. These "SPARQL view" examples are configured to query data from an [Apache Jena Fuseki](https://jena.apache.org/documentation/fuseki2/) triple store hosted at [fuseki.iis.fraunhofer.de](https://fuseki.iis.fraunhofer.de/).
 
 Please use one of these user credentials:
 * bob / bobpw
