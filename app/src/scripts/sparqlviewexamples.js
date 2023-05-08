@@ -1,4 +1,4 @@
-import SparqlView from "./SparqlView";
+import SparqlView from "./models/SparqlView";
 
 export function getSparqlViewExampleByKey(id, sparqlViewKey) {
   switch (sparqlViewKey.toLowerCase().trim()) {
@@ -101,17 +101,17 @@ const patientQuery = `
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX schema: <http://schema.org/>
 
-SELECT ?physician ?telephone ?address ?postalCode
+SELECT *
 FROM <http://example.org/graph/patients-0>
 WHERE {
-  ?physician a schema:Physician ;
-    schema:telephone ?telephone ;
-    schema:isAcceptingNewPatients ?acceptNewPatients .
+  ?patient a schema:Patient ;
+    foaf:name ?name ;
+    schema:birthDate ?birthdate .
   OPTIONAL {
-    ?physician schema:address [
-      a schema:PostalAddress ;
-      schema:streetAddress ?address ;
-      schema:postalCode ?postalCode
+    ?patient schema:weight [
+      a schema:QuantitativeValue ;
+      schema:unitCode <http://www.ontology-of-units-of-measure.org/resource/om-2/kilogram> ;
+      schema:value ?weight
     ]
   }
 }
@@ -131,15 +131,17 @@ const physicianQuery = `
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX schema: <http://schema.org/>
 
-SELECT *
+SELECT ?physician ?telephone ?address ?postalCode
 FROM <http://example.org/graph/patients-0>
 WHERE {
-  ?patient a schema:Patient ;
-    foaf:name ?name ;
-    schema:birthDate ?birthdate .
+  ?physician a schema:Physician ;
+    schema:telephone ?telephone ;
+    schema:isAcceptingNewPatients ?acceptNewPatients .
   OPTIONAL {
-    ?patient schema:weight [
-      schema:value ?weight
+    ?physician schema:address [
+      a schema:PostalAddress ;
+      schema:streetAddress ?address ;
+      schema:postalCode ?postalCode
     ]
   }
 }

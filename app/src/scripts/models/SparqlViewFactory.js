@@ -3,7 +3,7 @@ import { JsonLdParser } from "jsonld-streaming-parser";
 import { RDF_NAMESPACES } from './RdfNamespaces';
 import { DataFactory, Store, Parser } from 'n3';
 import { RDFProcessingError } from "../CustomErrors";
-import { getSparqlViewExampleByKey } from './sparqlviewexamples';
+import { getSparqlViewExampleByKey } from '../sparqlviewexamples';
 
 export default class SparqlViewFactory {
 

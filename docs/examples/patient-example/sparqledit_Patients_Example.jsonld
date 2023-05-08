@@ -5,7 +5,7 @@
   "dateCreated": "2022-12-01T16:21:17.660Z",
   "queryURL": "http://localhost:3030/sparqledit-example/query",
   "updateURL": "http://localhost:3030/sparqledit-example/update",
-  "query": "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX schema: <http://schema.org/>\n\nSELECT ?physician ?telephone ?address ?postalCode\nFROM <http://example.org/graph/patients-0>\nWHERE {\n  ?physician a schema:Physician ;\n    schema:telephone ?telephone ;\n    schema:isAcceptingNewPatients ?acceptNewPatients .\n  OPTIONAL {\n    ?physician schema:address [\n      a schema:PostalAddress ;\n      schema:streetAddress ?address ;\n      schema:postalCode ?postalCode\n    ]\n  }\n}",
+  "query": "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX schema: <http://schema.org/>\n\nSELECT *\nFROM <http://example.org/graph/patients-0>\nWHERE {\n  ?patient a schema:Patient ;\n    foaf:name ?name ;\n    schema:birthDate ?birthdate .\n  OPTIONAL {\n    ?patient schema:weight [\n      a schema:QuantitativeValue ;\n      schema:unitCode <http://www.ontology-of-units-of-measure.org/resource/om-2/kilogram> ;\n      schema:value ?weight\n    ]\n  }\n}",
   "requiresBasicAuth": false,
   "@context": {
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
