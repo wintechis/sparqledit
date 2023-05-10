@@ -243,14 +243,13 @@ PREFIX dbo: <http://dbpedia.org/ontology/>
 PREFIX dbp: <http://dbpedia.org/property/>
 PREFIX nobel: <http://data.nobelprize.org/terms/>
 
-SELECT ?familyName ?givenName ?birthday ?gender ?dateOfBirth ?dateOfDeath ?birthPlace ?deathPlace ?affiliation
+SELECT ?familyName ?givenName ?gender ?dateOfBirth ?dateOfDeath ?birthPlace ?affiliation
 WHERE {
   ?laureate rdf:type nobel:Laureate .
   ?laureate rdfs:label ?label .
   ?laureate foaf:name ?name .
   ?laureate foaf:familyName ?familyName .
   ?laureate foaf:givenName ?givenName .
-  ?laureate foaf:birthday ?birthday .
   ?laureate foaf:gender ?gender .
   ?laureate dbp:dateOfBirth ?dateOfBirth .
   ?laureate dbp:dateOfDeath ?dateOfDeath .
@@ -258,10 +257,6 @@ WHERE {
   ?birthPlaceURI a dbo:Country .
   ?birthPlaceURI rdfs:label ?birthPlace .
   FILTER (lang(?birthPlace) = 'en')
-  ?laureate dbo:deathPlace ?deathPlaceURI .
-  ?deathPlaceURI a dbo:Country .
-  ?deathPlaceURI rdfs:label ?deathPlace .
-  FILTER (lang(?deathPlace) = 'en')
   ?laureate dbo:affiliation ?affiliationURI .
   ?affiliationURI rdfs:label ?affiliation .
   FILTER (lang(?affiliation) = 'en')

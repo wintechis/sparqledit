@@ -16,15 +16,7 @@ import useLocalStorage from '../../hooks/useLocalStorage';
 import { createDowloadFileName, downloadJsonld } from '../../scripts/utilities';
 
 export default function SparqlViewList() {
-  const initialViews = [
-    SparqlViewFactory.createFrom('product'),
-    SparqlViewFactory.createFrom('nobel-laureates'),
-    SparqlViewFactory.createFrom('nobel-prizes'),
-    SparqlViewFactory.createFrom('patient'),
-    SparqlViewFactory.createFrom('physician'),
-    SparqlViewFactory.createFrom('patient-physician'),
-  ];
-  const [views, setViews] = useLocalStorage('sparqlViews', initialViews);
+  const [views, setViews] = useLocalStorage('sparqlViews', createInitialViewExamples());
   const viewCount = views.filter(view => view.deleted !== true).length;
   const initialActiveViewId = views[0]?.id || ''; // first view's id
   const [activeViewId, setActiveViewId] = React.useState(initialActiveViewId);
@@ -144,4 +136,22 @@ function SparqlViewListItemDeleted({ view, cardHandler }) {
       <Button variant='link' onClick={e => cardHandler.restore(view)}>Restore this view?</Button>
     </div>
   );
+}
+
+function createInitialViewExamples() {
+  let initialViews = [
+    SparqlViewFactory.createFrom('product'),
+    SparqlViewFactory.createFrom('nobel-laureates'),
+    SparqlViewFactory.createFrom('nobel-prizes'),
+    SparqlViewFactory.createFrom('patient'),
+    SparqlViewFactory.createFrom('physician'),
+    SparqlViewFactory.createFrom('patient-physician'),
+  ];
+  if (window.location.hash === '#init-product-view') {
+    initialViews.splice(1);
+  }
+  if (window.location.hash === '#init-empty') {
+    initialViews = [];
+  }
+  return initialViews;
 }
