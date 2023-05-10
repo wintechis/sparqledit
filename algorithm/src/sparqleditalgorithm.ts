@@ -70,8 +70,6 @@ export function buildUpdateCheckQuery(selectQueryObject: SparqlJS.SelectQuery, s
   // 1. analyse edited variable
   // 1.1 collect information about the edited literal (= variable in query)
   const editedVar = findEditedVariableInResultRow(sparqlEditResultRow);
-  // 1.2 collect BGP triples and find triple with edited variable
-  const editedVarBgpTripleRef = findEditedVariableBgpTriple(modQuery, editedVar);
   // 1.3 check if edited/inserted variable in BGP of an optional block
   const editedOptionalTriples = findEditedVariableOptionalBgpTriples(modQuery, editedVar);
   // if NOT insert mode && optional var edited: copy optional bgp as normal bgp to query's where array
