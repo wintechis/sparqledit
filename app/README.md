@@ -1,7 +1,5 @@
 # SPARQL_edit Application
 
-## Developer info
-
 SPARQL_edit is a React app written in JavaScript. The styling is done with Bootstrap.
 
 SPARQL_edit uses the [YASQE](https://triply.cc/docs/yasgui-api#yasqe) component from [YASGUI](https://github.com/TriplyDB/Yasgui) as query editor.
@@ -12,16 +10,7 @@ It uses different RDF-related libraries:
 * [jsonld-streaming-parser.js](https://github.com/rubensworks/jsonld-streaming-parser.js) for parsing JSON-LD
 * [@zazuko/rdf-vocabularies](https://github.com/zazuko/rdf-vocabularies) for shortening URIs with prefixes
 
-### Versions
-
-* v0.2: editing RDF literal values in SPARQL results
-* v0.3: "SPARQL view" configurations
-* v0.4: simple Solid integration
-* v0.5: "update log" feature
-* v0.6: restricted SPARQL grammar in query editor
-* v0.7: update guarantees/checks
-
-### Setup and commands
+## Setup and commands
 
 Install dependencies: `npm ci`
 
@@ -44,22 +33,18 @@ Solution: rename/delete index.mjs in node_modules
 
 `cd node_modules/@inrupt/solid-client-authn-core/dist/; mv index.mjs backup-index.mjs`
 
-#### Docker
+## Docker
 
-Build Docker image: `docker build -f Dockerfile.prod -t sparqledit .`
+You can start the [SPARQL_edit image from Docker Hub](https://hub.docker.com/r/smeckler/sparqledit):  
+`docker run -p 3001:80 --name sparql_edit smeckler/sparqledit`
 
-Start Docker container: `docker run -p 3001:80 --name sparql_edit sparqledit`
+Or you can build and run SPARQL_edit using the Dockerfile in the root of the repository:
+1. Build Docker image: `docker build -t sparqledit .`
+2. Start Docker container: `docker run -p 3001:80 --name sparql_edit sparqledit`
+3. Open http://{your-hostname}:3001, e.g. [http://localhost:3001](http://localhost:3001)
 
-#### Replay updates
+## Future app improvements
 
-install node-fetch library: `npm i -g node-fetch`
-
-run the NodeJS script: `node .\docs\updatelog\replay-sparql-updates.mjs`
-
-### Improvements
-
-* Algorithm
-  * support for named graphs (FROM NAMED) and graph patterns ?
 * React app
   * validation & checking
     * SPARQL endpoint (accessibility and SPARQL/Update support)
@@ -68,14 +53,16 @@ run the NodeJS script: `node .\docs\updatelog\replay-sparql-updates.mjs`
 * Solid
   * better UI for up-/downloading views to/from Solid Pod
 
-__Ideas for new features__
-* Editable object URIs
-* View uppdate permissions/restrictions
-  * define variables where updates are (not) permitted
-  * integration in SPARQL view RDF model
-  * HTML input controls are redndered read-only
+### Ideas for new features
+* Algorithm
+  * examine support for named graphs (FROM NAMED)
+  * test editing of object URIs
 * Graph visualization of query triple patterns
   * show edited table cell as leaf node in graph
+* View uppdate permissions/restrictions
+  * define variables where updates are (not) permitted in the view config
+  * SPARQL view ontology extension
+  * HTML input controls are rendered read-only
 * SPARQL_edit for RDF documents
   * using an internal SPARQL engine
   * RDF resources or LDP/Solid servers

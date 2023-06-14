@@ -9,7 +9,7 @@
   a prov:SoftwareAgent ;
   rdfs:label "SPARQL_edit app" ;
   prov:atLocation "https://sparqledit.netlify.app/"^^xsd:anyURI ;
-#  prov:actedOnBehalfOf <https://smeckler.solidcommunity.net/profile/card#me> ;
+#  prov:actedOnBehalfOf <https://example.org/bob#me> ;
 .
 
 _:testSparqlView 
@@ -38,7 +38,7 @@ _:updateQuery1
   rdfs:label "SPARQL_edit update activity #1" ;
   prov:used _:testSparqlView, _:updateQuery1 ;
   prov:wasAssociatedWith <http://iis.fraunhofer.de/sparqledit/app> ;
-#  prov:wasAssociatedWith <https://smeckler.solidcommunity.net/profile/card#me> ;
+#  prov:wasAssociatedWith <https://example.org/bob#me> ;
   prov:startedAtTime "2022-04-14T01:01:01Z"^^xsd:dateTime;
   prov:endedAtTime "2022-04-14T01:01:02Z"^^xsd:dateTime ;
 .
@@ -56,7 +56,7 @@ _:updateQuery2
   rdfs:label "SPARQL_edit update activity #2" ;
   prov:used _:testSparqlView, _:updateQuery2 ;
   prov:wasAssociatedWith <http://iis.fraunhofer.de/sparqledit/app> ;
-#  prov:wasAssociatedWith <https://smeckler.solidcommunity.net/profile/card#me> ;
+#  prov:wasAssociatedWith <https://example.org/bob#me> ;
   prov:startedAtTime "2022-04-14T02:02:02Z"^^xsd:dateTime;
   prov:endedAtTime "2022-04-14T02:02:03Z"^^xsd:dateTime ;
 .
