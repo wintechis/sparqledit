@@ -50,16 +50,14 @@ Or you can build and run SPARQL_edit using the Dockerfile in the root of the rep
     * SPARQL endpoint (accessibility and SPARQL/Update support)
     * input cell content (RDF datatype conformance)
   * load/save multiple view configs at the same time
-* Solid
-  * better UI for up-/downloading views to/from Solid Pod
+* Solid: better UI for up-/downloading views to/from Solid Pod
 
 ### Ideas for new features
 * Algorithm
   * examine support for named graphs (FROM NAMED)
-  * test editing of object URIs
 * Graph visualization of query triple patterns
   * show edited table cell as leaf node in graph
-* View uppdate permissions/restrictions
+* View update permissions/restrictions
   * define variables where updates are (not) permitted in the view config
   * SPARQL view ontology extension
   * HTML input controls are rendered read-only
@@ -75,7 +73,7 @@ The SPARQL_edit algorithm and application can be redistributed and/or modified u
 
 ### List of dependency licenses
 
-2023-04-25 v0.7.5 depth=1
+2023-06-16 v0.7.6 depth=1
 
 | name | version | repository | summary | from package.json | from license | from readme | 
 |---|---|---|---|---|---|---|

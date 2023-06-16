@@ -5,7 +5,7 @@ SPARQL_edit is a Web application that facilitates editing RDF literal values in 
 * :globe_with_meridians: __[Online version](https://wintechis.github.io/sparqledit/)__
   * user: bob / bobpw
 * :information_source: __[Tutorial](docs/tutorial/TUTORIAL.md)__
-* :whale: [Docker](https://hub.docker.com/r/smeckler/sparqledit)
+* :whale: __[Docker](https://hub.docker.com/r/smeckler/sparqledit)__
 
 The SPARQL_edit application in the [app](app) folder uses the alogrithm package from the [algorithm](algorithm) folder.
 
