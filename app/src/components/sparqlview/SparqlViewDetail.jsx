@@ -13,13 +13,13 @@ import QueryResult from '../queryresult/QueryResult';
 import ErrorBox from '../common/ErrorBox';
 
 import useFetchSparql from '../../hooks/useFetchSparql';
-import useEncodedSessionStorage from '../../hooks/useEncodedSessionStorage';
+import useCredentialsStorage from '../../hooks/useCredentialsStorage';
 import { QuerySubmission } from '../../scripts/models/QuerySubmission';
 
 export default function SparqlViewDetail({ sparqlView, sparqlViewUpdateCallback, isEditMode = true }) {
   // query execution
   const [submittedQuery, setSubmittedQuery] = React.useState();
-  const [credentials, setCredentials] = useEncodedSessionStorage(`sparqledit-${sparqlView.id}`,{ username: '', password: ''});
+  const [credentials, setCredentials] = useCredentialsStorage(sparqlView);
 
   const { 
     loading: isLoading, 

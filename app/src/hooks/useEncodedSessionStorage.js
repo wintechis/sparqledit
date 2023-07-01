@@ -13,7 +13,11 @@ export default function useEncodedSessionStorage(key, defaultValue) {
     // get data from sessionStorage
     const storedData = sessionStorage.getItem(key);
     if (storedData) {
-      return JSON.parse(decodeFromBase64(sessionStorage.getItem(key)));
+      try {
+        return JSON.parse(decodeFromBase64(sessionStorage.getItem(key)));
+      } catch (error) {
+        return defaultValue;
+      }
     }
     return defaultValue;
   }

@@ -11,7 +11,7 @@ Please use one of these user credentials:
 
 ## Lay user perspective
 
-Lay or business users open ready-to-use "SPARQL views" that have been created by experts colleagues. A "SPARQL view" is a simple configuration text file which defines how to load a table of values from an RDF Knowledge Graph. With this information, SPARQL_edit queries the Knowledge Graph and displays the results in a table where certain values can be changed.
+Lay or business users open ready-to-use "SPARQL views" that have been created by experts colleagues. A "SPARQL view" is a simple configuration which defines how to load a table of values from an RDF Knowledge Graph. With this information, SPARQL_edit queries the Knowledge Graph and displays the results in a table where certain values can be changed.
 
 ### Update RDF literal value
 
