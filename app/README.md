@@ -73,7 +73,7 @@ The SPARQL_edit algorithm and application can be redistributed and/or modified u
 
 ### List of dependency licenses
 
-2023-06-16 v0.7.6 depth=1
+2023-07-01 v0.7.7 depth=1
 
 | name | version | repository | summary | from package.json | from license | from readme | 
 |---|---|---|---|---|---|---|
