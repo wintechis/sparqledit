@@ -14,7 +14,7 @@ export default function LegalModal( { show, onHide } ) {
         <p>SPARQL_edit v{version}</p>
         <p>© <a href="mailto:sascha.meckler@iis.fraunhofer.de" className="text-secondary">S. Meckler</a> 2023</p>
         <p>This Web application is still in development. No liability is taken for any damage caused by the use of this website.</p>
-        <p>This Web application uses browser cookies and the HTML Web Storage (Local Storage) for storing data that is essential for the correct functioning of this Web application. By using this website, you consent to the use of data storage for technical reasons of function.</p>
+        <p>This Web application uses browser cookies and the Web Storage API for storing data that is essential for the correct functioning of this Web application. The embedded <a href="https://github.com/smeckler/yasgui-spedit" target="_blank" rel="noreferrer">TriplyDB/yasgui</a> query editor sends requests to the <a href="https://lov.linkeddata.es/" target="_blank" rel="noreferrer">Linked Open Vocabularies (LOV) server</a> for its autocomplete feature. By using this website, you consent to the described data storage and server requests for technical reasons of function.</p>
 
         <p>This Web application uses the following open-source software:</p>
         <ul>

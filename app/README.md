@@ -46,6 +46,7 @@ Or you can build and run SPARQL_edit using the Dockerfile in the root of the rep
 ## Future app improvements
 
 * React app
+  * own query editor instead of YASGUI component
   * validation & checking
     * SPARQL endpoint (accessibility and SPARQL/Update support)
     * input cell content (RDF datatype conformance)
