@@ -1,0 +1,35 @@
+name: GitHub Pages
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: NodeJS setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install deps and build app
+        working-directory: ./app
+        run: |
+          npm ci
+          rm node_modules/@inrupt/solid-client-authn-core/dist/index.mjs
+          npm run build
+
+      - name: Deploy GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/master'
+        with:
+          github_token: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          publish_dir: ./app/build

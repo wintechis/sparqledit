@@ -48,9 +48,7 @@
   "devDependencies": {
     "gh-pages": "^5.0.0",
     "react-error-overlay": "^6.0.9",
-    "sass": "^1.45.0",
-    "solid-auth-cli": "^1.0.15",
-    "solid-file-client": "^2.1.0"
+    "sass": "^1.45.0"
   },
   "resolutions": {
     "react-error-overlay": "6.0.9"
