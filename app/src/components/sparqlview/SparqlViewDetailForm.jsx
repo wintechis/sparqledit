@@ -24,9 +24,6 @@ export default function SparqlViewDetailForm({ sparqlView, sparqlViewUpdateCallb
 
   function handleSubmit(e) {
     e.preventDefault();
-    handleYasqeSubmit();
-  }
-  function handleYasqeSubmit() {
     submitQueryCallback();
   }
 
@@ -50,51 +47,30 @@ export default function SparqlViewDetailForm({ sparqlView, sparqlViewUpdateCallb
 
   // init and update YASQE
   React.useEffect(() => {
-    //const handlerSubmit = (yasqe, reqest) => handleYasqeSubmit(yasqe, reqest);
-    const handlerSubmit = () => handleYasqeSubmit();
     const handlerChange = (yasqe) => {
       handleFormChange('query', yasqe.getValue());
-      handleInvalidQuery();
     }
 
     if (!yasqe) {
       // create instance of YASQE
       const yasqeSettings = {
         lineNumbers: true,
-        persistent: null,
-        showQueryButton: true,
         tabSize: 2,
-        extraKeys: {
-          "Ctrl-Enter": handlerSubmit,
-          "Ctrl-S": null
-        }
+        extraKeys: { "Ctrl-S": null } // disable save shortcut
       }
       const newYasqe = new Yasqe(document.getElementById("yasqe"), yasqeSettings);
-      //newYasqe.query = () => Promise.reject("No querying via yasqe.");
-      newYasqe.query = async () => handlerSubmit();
-      // set initial query and endpoint
+      // set initial query
       newYasqe.setValue(sparqlView.query);
-      newYasqe.options.requestConfig.endpoint = sparqlView.queryURL;
       setYasqe(newYasqe);
     } else {
-      // update yasqe query function with new functions from new closure
-      yasqe.query = async () => handlerSubmit();
-      // override share url
-      yasqe.config.createShareableLink = () => window.location.href;
-      // override shortcut submit with own handler
-      yasqe.options.extraKeys["Ctrl-Enter"] = handlerSubmit;
-      // update query endpoint
-      yasqe.options.requestConfig.endpoint = sparqlView.queryURL;
-      // register event handler
-      yasqe.on("query", handlerSubmit);
+      // if yasqe already exists, register event handler
       yasqe.on("change", handlerChange);
     }
-    handleInvalidQuery();
+    handleInvalidQuery(); // validate initial query
 
     // cleanup
     return () => {
       if (yasqe) {
-        yasqe.off("query", handlerSubmit);
         yasqe.off("change", handlerChange);
       }
     };
