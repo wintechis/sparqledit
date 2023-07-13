@@ -214,7 +214,7 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
     }
   }, [inputCellState]);
 
-  // show buttons from start without value change
+  // insert mode: show buttons from start without value change
   React.useEffect( () => {
     if (insertMode) {
       const buildUpdateQuery = () => {
@@ -237,7 +237,7 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
   const inputValue = (inputCellState.currentCellValue || inputCellState.currentCellValue === '') ? inputCellState.currentCellValue : inputCellState.origCellValue;
 
   return (
-    <div>
+    <>
       <Form onSubmit={e => handleLiteralUpdate(e)}>
         {
           {
@@ -254,6 +254,6 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
       </Form>
       { datatypeError && <div className="text-warning" title={datatypeError.message}><i className="bi bi-exclamation-triangle"></i><small> RDF datatype incorrect</small></div> }
       <QueryResultTableInputCellModal show={modalShow} onHide={() => setModalShow(false)} inputCellState={inputCellState} />
-    </div>
+    </>
   );
 }

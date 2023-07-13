@@ -48,11 +48,11 @@ The algorithm is limited to SelectQueries that ...
 
 There are performance issues when loading more than 50000 results. Please use the SPARQL 'LIMIT' solution modifier to limit the number of result rows (e.g. 'LIMIT 10000').
 
-Shortcuts for the query editor (based on [YASGUI](https://triply.cc/docs/yasgui#sparql-editor))
+Shortcuts for the query editor
 
 | keys | command |
 |---|---|
-| [ctrl] + [enter] | submit query |
+| [ctrl] + [space] | autocomplete |
 | [ctrl] + # | comment/uncomment |
 | [crtl] + [shift] + F | auto-format |
 | [crtl] + Z | undo last change |

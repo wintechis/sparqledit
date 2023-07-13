@@ -2,13 +2,13 @@
 
 SPARQL_edit is a React app written in JavaScript. The styling is done with Bootstrap.
 
-SPARQL_edit uses the [YASQE](https://triply.cc/docs/yasgui-api#yasqe) component from [YASGUI](https://github.com/TriplyDB/Yasgui) as query editor.
-It uses different RDF-related libraries:
+SPARQL_edit uses different SPARQL/RDF-related libraries:
 * [SPARQL.js](https://github.com/RubenVerborgh/SPARQL.js) for translating SPARQL queries into JS objects and back
 * [fetch-sparql-endpoint.js](https://github.com/rubensworks/fetch-sparql-endpoint.js/) for sending queries to the SPARQL endpoint
 * [rdf-literal.js](https://github.com/rubensworks/rdf-literal.js) for mapping RDF literals to JavaScript primitives
 * [jsonld-streaming-parser.js](https://github.com/rubensworks/jsonld-streaming-parser.js) for parsing JSON-LD
 * [@zazuko/rdf-vocabularies](https://github.com/zazuko/rdf-vocabularies) for shortening URIs with prefixes
+* A [fork](https://github.com/smeckler/yasgui-spedit/tree/minimal) of [YASGUI](https://github.com/TriplyDB/Yasgui) for the SPARQL query editor
 
 ## Setup and commands
 
