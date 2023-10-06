@@ -47,18 +47,18 @@ export default function QueryResultTable({ refreshTableCallback, isRefreshing, s
     setSortColumnName(sortColumnName === key ? "" : key);
   }
   function compare(b1, b2) {
-    if (b1[sortColumnName] && b2[sortColumnName]) {
+    if (b1[sortColumnName]?.value?.length > 0 && b2[sortColumnName]?.value?.length > 0) {
       if (b1[sortColumnName].value.toLowerCase() === b2[sortColumnName].value.toLowerCase()) {
         return 0; // equal values
       } else { // compare
         return b1[sortColumnName].value.toLowerCase() < b2[sortColumnName].value.toLowerCase() ? -1 : 1;
       }
-    } else { // b1 and/or b2 are undefined
-      if (b1[sortColumnName]) {
+    } else { // b1 and/or b2 are undefined or empty str
+      if (b1[sortColumnName]?.value?.length > 0) {
         return -1; // sort values before null
-      } else if (b2[sortColumnName]) {
+      } else if (b2[sortColumnName]?.value?.length > 0) {
         return 1;
-      } else { // both undefined
+      } else { // both undefined or empty
         return 0;
       }
     }
