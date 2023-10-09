@@ -9,7 +9,8 @@ export default class SparqlView {
     updateURL: string,
     query: string,
     requiresBasicAuth: boolean,
-    updateLogGraph: string
+    updateLogGraph: undefined | string,
+    restrictedVariable: undefined | string[]
   );
   id: string;
   name: string;
@@ -20,7 +21,8 @@ export default class SparqlView {
   updateURL: string;
   query: string;
   requiresBasicAuth: boolean;
-  updateLogGraph: string
+  updateLogGraph: undefined | string;
+  restrictedVariable: undefined | string[];
   serializeToTurtle(): Promise<string>;
   serializeToJsonld(): Promise<string>;
 }

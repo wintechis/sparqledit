@@ -97,6 +97,12 @@ spedit:updateLogGraph a owl:DatatypeProperty ;
   rdfs:domain spedit:SparqlView ;
   rdfs:range xsd:anyURI .
 
+spedit:restrictVariable a owl:DatatypeProperty ;
+  rdfs:label "restricted variable" ;
+  rdfs:comment "Restrict the editing functionality for a query variable of the SPARQL view's query." ;
+  rdfs:domain spedit:SparqlView ;
+  rdfs:range xsd:string .
+
 
 # object properties and annotation properties
 

@@ -23,7 +23,11 @@ import {
 export default function QueryResultTableInputCell({ refreshTableCallback, isRefreshing, sparqlSubmission, rowBinding, variable, insertMode = false, sparqlView }) {
   const [showInput, setShowInput] = React.useState(false);
   
-  if (insertMode) {
+  const isRestrictedCell = sparqlView.restrictedVariable?.includes(variable);
+
+  if (insertMode && isRestrictedCell) {
+    return (<td></td>); // empty cell
+  } else if (insertMode && !isRestrictedCell) {
     return (
       <td className="align-middle">
         { !showInput && 
@@ -44,6 +48,12 @@ export default function QueryResultTableInputCell({ refreshTableCallback, isRefr
         }
       </td>
     );
+  } else if (!insertMode && isRestrictedCell) {
+    return (
+      <td className="align-middle">
+        <QueryResultTableInputCellRestrictedInput rowBinding={rowBinding} variable={variable} />
+      </td>
+    );  
   } else {
     return (
       <td className="align-middle">
@@ -53,11 +63,31 @@ export default function QueryResultTableInputCell({ refreshTableCallback, isRefr
           sparqlSubmission={sparqlSubmission} 
           rowBinding={rowBinding} 
           variable={variable} 
-          insertMode={insertMode}
+          insertMode={false}
           sparqlView={sparqlView} />
       </td>
     );
   }
+}
+
+function QueryResultTableInputCellRestrictedInput({ rowBinding, variable }) {
+  
+  const { error: datatypeError, value: origValue, inputType, language } = getInputTypeForLiteral(rowBinding[variable]);
+
+  return (
+    <>
+      <Form>
+        {
+          {
+            'checkbox': <Form.Check type="checkbox" label={origValue} checked={origValue === 'true' ? true : false} disabled />,
+            'textarea': <Form.Control as='textarea' value={origValue} lang={language} disabled />
+          }[inputType] ||
+          <Form.Control type={inputType} value={origValue} lang={language} disabled />
+        }
+      </Form>
+      { datatypeError && <div className="text-warning" title={datatypeError.message}><i className="bi bi-exclamation-triangle"></i><small> RDF datatype incorrect</small></div> }
+    </>
+  );
 }
 
 function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sparqlSubmission, rowBinding, variable, insertMode, insertModeReset, sparqlView }) {

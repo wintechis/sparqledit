@@ -13,7 +13,8 @@ export default class SparqlView {
     updateURL,
     query,
     requiresBasicAuth,
-    updateLogGraph
+    updateLogGraph,
+    restrictedVariable
   ) {
     this.id = id;
     this.name = name;
@@ -26,6 +27,7 @@ export default class SparqlView {
     this.query = query;
     this.requiresBasicAuth = requiresBasicAuth;
     this.updateLogGraph = updateLogGraph;
+    this.restrictedVariable = restrictedVariable;
   }
 
   createRdfQuads() {
@@ -87,6 +89,13 @@ export default class SparqlView {
         )
       );
     }
+    if (this.restrictedVariable && Array.isArray(this.restrictedVariable)) {
+      store.addQuads(
+        this.restrictedVariable.map(varName => 
+          quad(subjectBN, namedNode(SPARQLVIEW_NAMESPACES.spedit + 'restrictVariable'), literal(varName))
+        )
+      );
+    }
     return store.getQuads();
   }
 
@@ -134,6 +143,9 @@ export default class SparqlView {
       },
       query: {
         '@id': 'spedit:query'
+      },
+      restrictedVariable: {
+        '@id': 'spedit:restrictedVariable',
       },
       requiresBasicAuth: {
         '@id': 'spedit:requiresBasicAuth',

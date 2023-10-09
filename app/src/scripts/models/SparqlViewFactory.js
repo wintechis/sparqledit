@@ -34,7 +34,8 @@ export default class SparqlViewFactory {
     if (
       object instanceof SparqlView || 
       Object.keys(this.newBlankSparqlView())
-        .filter(key => key !== 'updateLogGraph')
+        .filter(key => key !== 'updateLogGraph') // optional
+        .filter(key => key !== 'restrictedVariable') // optional
         .every(key => object.hasOwnProperty(key)) 
     ) {
       return new SparqlView(
@@ -47,7 +48,8 @@ export default class SparqlViewFactory {
         object.updateURL,
         object.query,
         object.requiresBasicAuth,
-        object.updateLogGraph
+        object.updateLogGraph,
+        object.restrictedVariable
       );      
     }
     throw new TypeError('Cannot create a SparqlView instance from this object.');
@@ -103,12 +105,20 @@ export default class SparqlViewFactory {
     const query = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'query'), null)[0]?.value || 'unknown query';
     const requiresBasicAuth = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'requiresBasicAuth'), null)[0]?.value.toLowerCase() == 'true'; // eslint-disable-line eqeqeq
     const updateLogGraph = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'updateLogGraph'), null)[0]?.value;
+    const restrictedVariable = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'restrictedVariable'), null)?.map(q => q.value);
 
     return new SparqlView(
       this.generateUnsafeUuid(),
-      name, description, creator, dateCreated,
-      queryURL, updateURL, query, requiresBasicAuth,
-      updateLogGraph
+      name, 
+      description, 
+      creator, 
+      dateCreated,
+      queryURL, 
+      updateURL, 
+      query, 
+      requiresBasicAuth,
+      updateLogGraph, 
+      restrictedVariable
     );
   }
 
