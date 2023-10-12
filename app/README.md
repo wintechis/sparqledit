@@ -58,10 +58,6 @@ Or you can build and run SPARQL_edit using the Dockerfile in the root of the rep
   * examine support for named graphs (FROM NAMED)
 * Graph visualization of query triple patterns
   * show edited table cell as leaf node in graph
-* View update permissions/restrictions
-  * define variables where updates are (not) permitted in the view config
-  * SPARQL view ontology extension
-  * HTML input controls are rendered read-only
 * SPARQL_edit for RDF documents
   * using an internal SPARQL engine
   * RDF resources or LDP/Solid servers
