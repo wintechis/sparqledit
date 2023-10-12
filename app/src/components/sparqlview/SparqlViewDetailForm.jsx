@@ -132,7 +132,7 @@ export default function SparqlViewDetailForm({ sparqlView, sparqlViewUpdateCallb
             <Form.Group as={Row} className="mb-3" controlId="formBasicAuth">
               <Form.Label column sm={3}>Basic Auth</Form.Label>
               <Col sm={9}>
-                <Form.Check type="switch" className="form-switch-md" size="lg" id="formBasicAuthSwitch" checked={sparqlView.requiresBasicAuth} onChange={e => handleFormChange('requiresBasicAuth', e.target.checked)} />
+                <Form.Check type="switch" className="form-switch-md" size="lg" id="formBasicAuth" checked={sparqlView.requiresBasicAuth} onChange={e => handleFormChange('requiresBasicAuth', e.target.checked)} />
                 { sparqlView.requiresBasicAuth ? credentialsForm : null }
               </Col>
             </Form.Group>
@@ -186,7 +186,7 @@ function UpdateLogGraphForm({ sparqlView, handleGraphNameChange }) {
 
   return (
     <>
-      <Form.Check type="switch" className="form-switch-md" size="lg" id="formUpdateLogGraphSwitch" checked={isUpdateLog} onChange={e => handleSwitchChange(e.target.checked)} />
+      <Form.Check type="switch" className="form-switch-md" size="lg" id="formUpdateLogGraph" checked={isUpdateLog} onChange={e => handleSwitchChange(e.target.checked)} />
       { isUpdateLog &&   
         <FloatingLabel controlId="formUpdateLogGraphName" label="Named Graph for update logs *">
           <Form.Control type="text" placeholder="http://example.org/graph/updatelogs" autoComplete="graph-name" value={sparqlView.updateLogGraph} onChange={e => handleGraphNameChange(e.target.value)} required />
@@ -197,29 +197,29 @@ function UpdateLogGraphForm({ sparqlView, handleGraphNameChange }) {
 }
 
 function RestrictedVariablesForm({ sparqlView, handleRestrictedVariablesChange, variablesFromQuery }) {
-  const [isRestrictedVariables, setIsRestrictedVariables] = React.useState(sparqlView.restrictedVariable?.length > 0 ? true : false);
+  const isRestrictedVariables = Array.isArray(sparqlView.restrictedVariable);
  
   function handleSwitchChange(newCheckState) {
     if (newCheckState === true) {
-      setIsRestrictedVariables(true);
       handleRestrictedVariablesChange([]);
     } else {
-      setIsRestrictedVariables(false);
       handleRestrictedVariablesChange(undefined);
     }
   }
   
-  if (isRestrictedVariables) {
-    // remove restrictedVars from SparqlView which are not present in the query; update view if necessary
-    const filteredRestrVars = sparqlView.restrictedVariable.filter(viewRestrVar => variablesFromQuery.includes(viewRestrVar));
-    if (filteredRestrVars.length < sparqlView.restrictedVariable.length) {
-      handleRestrictedVariablesChange(filteredRestrVars);
+  React.useEffect(() => {
+    if (isRestrictedVariables) {
+      // remove restrictedVars from SparqlView which are not present in the query; update view if necessary
+      const filteredRestrVars = sparqlView.restrictedVariable.filter(viewRestrVar => variablesFromQuery.includes(viewRestrVar));
+      if (filteredRestrVars.length < sparqlView.restrictedVariable.length) {
+        handleRestrictedVariablesChange(filteredRestrVars);
+      }
     }
-  }
+  });
 
   return (
     <>
-      <Form.Check type="switch" className="form-switch-md" size="lg" id="formUpdateLogGraphSwitch" checked={isRestrictedVariables} onChange={e => handleSwitchChange(e.target.checked)} />
+      <Form.Check type="switch" className="form-switch-md" size="lg" id="formRestrictedVariables" checked={isRestrictedVariables} onChange={e => handleSwitchChange(e.target.checked)} />
       { isRestrictedVariables &&   
         <Form.Control as="select" multiple value={sparqlView.restrictedVariable} onChange={e => handleRestrictedVariablesChange([].slice.call(e.target.selectedOptions).map(item => item.value))}>
           {variablesFromQuery.map( queryVar => ( <option key={queryVar} value={queryVar}>{queryVar}</option>) )}
