@@ -12,7 +12,7 @@ import possibleErrorCauses from '../../scripts/component-scripts/possibleErrorCa
 const TEXTAREA_ROWS_MIN = 4;
 const TEXTAREA_ROWS_MAX = 10;
 
-export default function QueryResultTableInputCellModal({ show, onHide, inputCellState }) {
+export default function QueryResultTableEditCellModal({ show, onHide, inputCellState }) {
 
   const anyError = inputCellState.buildingError || inputCellState.updateCheckError || inputCellState.updateError;
   const isDataChanged = inputCellState.updateCheckError instanceof DataChangeUpdateCheckError;

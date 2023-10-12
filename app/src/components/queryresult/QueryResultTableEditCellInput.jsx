@@ -1,13 +1,10 @@
 import React from 'react';
 
-import '../../styles/component-styles/QueryResultTableInputCell.css';
-
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import Collapse from 'react-bootstrap/Collapse';
 
-import QueryResultTableInputCellButtons from './QueryResultTableInputCellButtons';
-import QueryResultTableInputCellModal from './QueryResultTableInputCellModal';
+import QueryResultTableEditCellButtons from './QueryResultTableEditCellButtons';
+import QueryResultTableEditCellModal from './QueryResultTableEditCellModal';
 
 import { initialInputCellState, inputCellStateReducer } from '../../scripts/component-scripts/inputCellStateReducer';
 import getInputTypeForLiteral from '../../scripts/component-scripts/inputCellDatatypeHelper';
@@ -20,77 +17,7 @@ import {
   executeSelectOrUpdateQuery 
 } from '../../scripts/sparqledit/sparqledit';
 
-export default function QueryResultTableInputCell({ refreshTableCallback, isRefreshing, sparqlSubmission, rowBinding, variable, insertMode = false, sparqlView }) {
-  const [showInput, setShowInput] = React.useState(false);
-  
-  const isRestrictedCell = sparqlView.restrictedVariable?.includes(variable);
-
-  if (insertMode && isRestrictedCell) {
-    return (<td></td>); // empty cell
-  } else if (insertMode && !isRestrictedCell) {
-    return (
-      <td className="align-middle">
-        { !showInput && 
-          <Button variant="link" className="text-secondary" onClick={() => setShowInput(true)} disabled={isRefreshing}>
-            <small>insert missing value</small>
-          </Button>
-        }
-        { showInput &&
-          <QueryResultTableInputCellInput  
-            refreshTableCallback={refreshTableCallback} 
-            isRefreshing={isRefreshing}
-            sparqlSubmission={sparqlSubmission} 
-            rowBinding={rowBinding} 
-            variable={variable} 
-            insertMode={true}
-            insertModeReset={() => setShowInput(false)}
-            sparqlView={sparqlView} /> 
-        }
-      </td>
-    );
-  } else if (!insertMode && isRestrictedCell) {
-    return (
-      <td className="align-middle">
-        <QueryResultTableInputCellRestrictedInput rowBinding={rowBinding} variable={variable} />
-      </td>
-    );  
-  } else {
-    return (
-      <td className="align-middle">
-        <QueryResultTableInputCellInput 
-          refreshTableCallback={refreshTableCallback} 
-          isRefreshing={isRefreshing}
-          sparqlSubmission={sparqlSubmission} 
-          rowBinding={rowBinding} 
-          variable={variable} 
-          insertMode={false}
-          sparqlView={sparqlView} />
-      </td>
-    );
-  }
-}
-
-function QueryResultTableInputCellRestrictedInput({ rowBinding, variable }) {
-  
-  const { error: datatypeError, value: origValue, inputType, language } = getInputTypeForLiteral(rowBinding[variable]);
-
-  return (
-    <>
-      <Form>
-        {
-          {
-            'checkbox': <Form.Check type="checkbox" label={origValue} checked={origValue === 'true' ? true : false} disabled />,
-            'textarea': <Form.Control as='textarea' value={origValue} lang={language} disabled />
-          }[inputType] ||
-          <Form.Control type={inputType} value={origValue} lang={language} disabled />
-        }
-      </Form>
-      { datatypeError && <div className="text-warning" title={datatypeError.message}><i className="bi bi-exclamation-triangle"></i><small> RDF datatype incorrect</small></div> }
-    </>
-  );
-}
-
-function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sparqlSubmission, rowBinding, variable, insertMode, insertModeReset, sparqlView }) {
+export default function QueryResultTableEditCellInput({ refreshTableCallback, isRefreshing, sparqlSubmission, rowBinding, variable, insertMode, insertModeReset, sparqlView }) {
   const [modalShow, setModalShow] = React.useState(false);
   const { error: datatypeError, value: origValue, inputType, inputStep, language } = getInputTypeForLiteral(rowBinding[variable]);
   const initialState = initialInputCellState(sparqlSubmission, origValue);
@@ -278,12 +205,12 @@ function QueryResultTableInputCellInput({ refreshTableCallback, isRefreshing, sp
         }
         <Collapse in={showButtons} mountOnEnter={true} unmountOnExit={true}>
           <div>
-            <QueryResultTableInputCellButtons handleLiteralUpdate={handleLiteralUpdate} handleInputReset={handleInputReset} openModal={() => setModalShow(true)} inputCellState={inputCellState} />
+            <QueryResultTableEditCellButtons handleLiteralUpdate={handleLiteralUpdate} handleInputReset={handleInputReset} openModal={() => setModalShow(true)} inputCellState={inputCellState} />
           </div>
         </Collapse>
       </Form>
       { datatypeError && <div className="text-warning" title={datatypeError.message}><i className="bi bi-exclamation-triangle"></i><small> RDF datatype incorrect</small></div> }
-      <QueryResultTableInputCellModal show={modalShow} onHide={() => setModalShow(false)} inputCellState={inputCellState} />
+      <QueryResultTableEditCellModal show={modalShow} onHide={() => setModalShow(false)} inputCellState={inputCellState} />
     </>
   );
 }

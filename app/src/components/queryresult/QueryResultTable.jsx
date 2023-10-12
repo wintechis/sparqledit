@@ -11,7 +11,7 @@ import Button from 'react-bootstrap/Button';
 import Pagination from 'react-bootstrap/Pagination';
 
 import QueryResultTableCell from './QueryResultTableCell';
-import QueryResultTableInputCell from './QueryResultTableInputCell';
+import QueryResultTableEditCell from './QueryResultTableEditCell';
 
 import prefixes from '@zazuko/rdf-vocabularies/prefixes';
 import { shrink } from '@zazuko/rdf-vocabularies/shrink';
@@ -118,7 +118,7 @@ export default function QueryResultTable({ refreshTableCallback, isRefreshing, s
         const keyForInputCell = `${key}_${Math.random()}`; // always rerender input fields
         const rowBinding = sparqlResultBindingsForPage[rowIndex];
         return (
-          <QueryResultTableInputCell 
+          <QueryResultTableEditCell 
             key={keyForInputCell} 
             refreshTableCallback={refreshTableCallback} 
             isRefreshing={isRefreshing}

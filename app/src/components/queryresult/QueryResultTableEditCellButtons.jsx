@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import { DataChangeUpdateCheckError } from '../../scripts/CustomErrors';
 
-export default function QueryResultTableInputCellButtons({ handleLiteralUpdate, handleInputReset, openModal, inputCellState }) {
+export default function QueryResultTableEditCellButtons({ handleLiteralUpdate, handleInputReset, openModal, inputCellState }) {
 
   const anyError = inputCellState.buildingError || inputCellState.updateCheckError || inputCellState.updateError;
   const isDataChanged = inputCellState.updateCheckError instanceof DataChangeUpdateCheckError;
