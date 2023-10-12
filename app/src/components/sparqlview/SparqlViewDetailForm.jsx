@@ -21,6 +21,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 export default function SparqlViewDetailForm({ sparqlView, sparqlViewUpdateCallback, isLoading, submitQueryCallback, credentialsForm }) {
   const [yasqe, setYasqe] = React.useState(null);
   const [isInvalidQuery, setIsInvalidQuery] = React.useState(false);
+  const yasqeQueryVariables = yasqe?.getVariablesFromQuery().map(varStr => varStr.substring(1));
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -141,6 +142,14 @@ export default function SparqlViewDetailForm({ sparqlView, sparqlViewUpdateCallb
                 <UpdateLogGraphForm sparqlView={sparqlView} handleGraphNameChange={graphName => handleFormChange('updateLogGraph', graphName)} />
               </Col>
             </Form.Group>
+            { yasqeQueryVariables?.length > 0 && 
+              <Form.Group as={Row} className="mb-3" controlId="formRestrictedVariables">
+                <Form.Label column sm={3}>Restricted variables</Form.Label>
+                <Col sm={9}>
+                  <RestrictedVariablesForm sparqlView={sparqlView} handleRestrictedVariablesChange={restrVars => handleFormChange('restrictedVariable', restrVars)} variablesFromQuery={yasqeQueryVariables} />
+                </Col>
+              </Form.Group>
+            }
           </Col>
           <Col lg="2"></Col>
         </Row>
@@ -182,6 +191,39 @@ function UpdateLogGraphForm({ sparqlView, handleGraphNameChange }) {
         <FloatingLabel controlId="formUpdateLogGraphName" label="Named Graph for update logs *">
           <Form.Control type="text" placeholder="http://example.org/graph/updatelogs" autoComplete="graph-name" value={sparqlView.updateLogGraph} onChange={e => handleGraphNameChange(e.target.value)} required />
         </FloatingLabel>
+      }
+    </>
+  );
+}
+
+function RestrictedVariablesForm({ sparqlView, handleRestrictedVariablesChange, variablesFromQuery }) {
+  const [isRestrictedVariables, setIsRestrictedVariables] = React.useState(sparqlView.restrictedVariable?.length > 0 ? true : false);
+ 
+  function handleSwitchChange(newCheckState) {
+    if (newCheckState === true) {
+      setIsRestrictedVariables(true);
+      handleRestrictedVariablesChange([]);
+    } else {
+      setIsRestrictedVariables(false);
+      handleRestrictedVariablesChange(undefined);
+    }
+  }
+  
+  if (isRestrictedVariables) {
+    // remove restrictedVars from SparqlView which are not present in the query; update view if necessary
+    const filteredRestrVars = sparqlView.restrictedVariable.filter(viewRestrVar => variablesFromQuery.includes(viewRestrVar));
+    if (filteredRestrVars.length < sparqlView.restrictedVariable.length) {
+      handleRestrictedVariablesChange(filteredRestrVars);
+    }
+  }
+
+  return (
+    <>
+      <Form.Check type="switch" className="form-switch-md" size="lg" id="formUpdateLogGraphSwitch" checked={isRestrictedVariables} onChange={e => handleSwitchChange(e.target.checked)} />
+      { isRestrictedVariables &&   
+        <Form.Control as="select" multiple value={sparqlView.restrictedVariable} onChange={e => handleRestrictedVariablesChange([].slice.call(e.target.selectedOptions).map(item => item.value))}>
+          {variablesFromQuery.map( queryVar => ( <option key={queryVar} value={queryVar}>{queryVar}</option>) )}
+        </Form.Control>
       }
     </>
   );
