@@ -49,8 +49,6 @@ function buildUpdateCheckQuery(selectQueryObject, sparqlEditResultRow) {
     // 1. analyse edited variable
     // 1.1 collect information about the edited literal (= variable in query)
     const editedVar = findEditedVariableInResultRow(sparqlEditResultRow);
-    // 1.2 collect BGP triples and find triple with edited variable
-    const editedVarBgpTripleRef = findEditedVariableBgpTriple(modQuery, editedVar);
     // 1.3 check if edited/inserted variable in BGP of an optional block
     const editedOptionalTriples = findEditedVariableOptionalBgpTriples(modQuery, editedVar);
     // if NOT insert mode && optional var edited: copy optional bgp as normal bgp to query's where array
@@ -69,6 +67,7 @@ function buildUpdateCheckQuery(selectQueryObject, sparqlEditResultRow) {
         // if check query does not have variables, we need to extend it so that we will have 0 or 1 solutions
         addMeaninglessBindPattern(modQuery);
     }
+    delete modQuery.values; // remove any value bindings ('VALUES') that would change number of results
     return modQuery;
 }
 exports.buildUpdateCheckQuery = buildUpdateCheckQuery;

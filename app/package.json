@@ -1,6 +1,6 @@
 {
   "name": "sparqledit",
-  "version": "0.7.11",
+  "version": "0.7.12",
   "description": "Web app for editing RDF literals in Knowledge Graphs using SPARQL",
   "keywords": [
     "SPARQL",

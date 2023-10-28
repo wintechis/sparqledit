@@ -90,6 +90,8 @@ export function buildUpdateCheckQuery(selectQueryObject: SparqlJS.SelectQuery, s
     // if check query does not have variables, we need to extend it so that we will have 0 or 1 solutions
     addMeaninglessBindPattern(modQuery);
   }
+  delete modQuery.values; // remove any value bindings ('VALUES') that would change number of results
+
   return modQuery;
 }
 

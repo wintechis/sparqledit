@@ -3,8 +3,8 @@ import * as SparqlJS from 'sparqljs';
 export interface SparqlResultBindings {
     [key: string]: RDF.Term;
 }
-export declare type SparqlResult = SparqlResultBindings[];
-export declare type SparqlEditTerm = RDF.NamedNode & {
+export type SparqlResult = SparqlResultBindings[];
+export type SparqlEditTerm = RDF.NamedNode & {
     include?: boolean;
 } | RDF.Literal & {
     include?: boolean;
@@ -14,16 +14,16 @@ export declare type SparqlEditTerm = RDF.NamedNode & {
 export interface SparqlEditResultBindings extends SparqlResultBindings {
     [key: string]: SparqlEditTerm;
 }
-export declare type SparqlEditResult = SparqlEditResultBindings[];
-export declare type EditedVariableInfo = {
+export type SparqlEditResult = SparqlEditResultBindings[];
+export type EditedVariableInfo = {
     name: string;
     datatype: RDF.NamedNode;
     language: string;
     valueNew: string;
     insertMode: boolean;
 };
-export declare type SubjectType = RDF.NamedNode | RDF.Variable | RDF.BlankNode | RDF.Quad;
-export declare type PredicateType = RDF.NamedNode | RDF.Variable | SparqlJS.PropertyPath;
-export declare type SelectWhereQuery = Omit<SparqlJS.SelectQuery, 'where'> & {
+export type SubjectType = RDF.NamedNode | RDF.Variable | RDF.BlankNode | RDF.Quad;
+export type PredicateType = RDF.NamedNode | RDF.Variable | SparqlJS.PropertyPath;
+export type SelectWhereQuery = Omit<SparqlJS.SelectQuery, 'where'> & {
     where: SparqlJS.Pattern[];
 };

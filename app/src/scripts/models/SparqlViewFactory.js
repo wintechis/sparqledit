@@ -105,7 +105,8 @@ export default class SparqlViewFactory {
     const query = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'query'), null)[0]?.value || 'unknown query';
     const requiresBasicAuth = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'requiresBasicAuth'), null)[0]?.value.toLowerCase() == 'true'; // eslint-disable-line eqeqeq
     const updateLogGraph = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'updateLogGraph'), null)[0]?.value;
-    const restrictedVariable = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'restrictedVariable'), null)?.map(q => q.value);
+    const restrictedVariableQuads = store.getObjects(sparqlViewBN, namedNode(RDF_NAMESPACES.spedit + 'restrictedVariable'), null);
+    const restrictedVariable = restrictedVariableQuads.length > 0 ? restrictedVariableQuads.map(q => q.value) : undefined;
 
     return new SparqlView(
       this.generateUnsafeUuid(),
