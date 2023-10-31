@@ -54,13 +54,12 @@ Or you can build and run SPARQL_edit using the Dockerfile in the root of the rep
 * Solid: better UI for up-/downloading views to/from Solid Pod
 
 ### Ideas for new features
+
 * Algorithm
-  * examine support for named graphs (FROM NAMED)
+  * limited support for named graphs (FROM NAMED)
+* Single inputs for solution mappings with (partly) identical result bindings
 * Graph visualization of query triple patterns
-  * show edited table cell as leaf node in graph
-* SPARQL_edit for RDF documents
-  * using an internal SPARQL engine
-  * RDF resources or LDP/Solid servers
+  * visualize edited table cell as leaf node in graph
 
 ## Licenses
 

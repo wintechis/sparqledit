@@ -81,11 +81,9 @@ export default function QueryResultTable({ refreshTableCallback, isRefreshing, s
     total: sparqlResultBindingsRaw.length
   }
 
-  // add prefixes
+  // add custom prefixes (override prefixes from library)
   prefixes['ex'] = 'http://example.org/'; // for demo cases
-  // prefixes from query (override default prefixes)
-  Object.entries(sparqlResult.queryObject.prefixes)
-    .forEach(([pref, uri]) => prefixes[pref] = uri);
+  const shrinkWithCustomPrefixes = iri => shrink(iri, sparqlResult.queryObject.prefixes);
 
   // create table head
   const tableColumns = getTableColumnsFromResultBindings(sparqlResultBindings);
@@ -93,7 +91,7 @@ export default function QueryResultTable({ refreshTableCallback, isRefreshing, s
     <th key={key}>
       <div className="d-flex justify-content-between">
         <h5 className="text-break my-auto mx-1">{key}</h5>
-        <Button variant="link" className={ key === sortColumnName ? 'text-primary' : 'text-secondary'} onClick={() => sortColumnNameHandler(key)}><i className="bi bi-sort-alpha-down"></i></Button>
+        <Button variant="link" className={ key === sortColumnName ? 'text-primary border-primary' : 'text-secondary'} onClick={() => sortColumnNameHandler(key)}><i className="bi bi-sort-alpha-down"></i></Button>
       </div>
     </th>)}</tr>;
 
@@ -129,7 +127,7 @@ export default function QueryResultTable({ refreshTableCallback, isRefreshing, s
             sparqlView={sparqlView} />
         );
       } else { // not editable
-        return <QueryResultTableCell key={key} rawUri={binding.value} prefixUri={shrink(binding.value)} />;
+        return <QueryResultTableCell key={key} rawUri={binding.value} prefixUri={shrinkWithCustomPrefixes(binding.value)} />;
       }      
     } else { // skip not selected vars
       return null;
