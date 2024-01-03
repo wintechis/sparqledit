@@ -92,3 +92,11 @@ Disable 'Mixed Content' blocking for a certain web page:
 © 2023 | S.Meckler | Fraunhofer IIS
 
 The SPARQL_edit algorithm and application can be redistributed and/or modified under the terms of the [GNU Affero General Public License version 3 (AGPL-3.0)](LICENSE).
+
+#### Citation
+
+Meckler, S., Harth, A. (2023). SPARQL_edit: Editing RDF Literals in Knowledge Graphs via View-Update Translations. In: Payne, T.R., et al. The Semantic Web – ISWC 2023. ISWC 2023. Lecture Notes in Computer Science, vol 14266. Springer, Cham. https://doi.org/10.1007/978-3-031-47243-5_10
+
+#### Acknowledgments 
+
+This work was funded by the Bavarian State Ministry of Economic Affairs and Media, Energy and Technology within the research program "Information and Communication Technology" (grant no. DIK0134/01).

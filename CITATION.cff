@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "Please cite this software as below."
+title: "SPARQL_edit"
+authors:
+- family-names: "Meckler"
+  given-names: "Sascha"
+url: "https://github.com/wintechis/sparqledit"
+license: AGPL-3.0
+preferred-citation:
+  type: conference-paper
+  title: "SPARQL_edit: Editing RDF Literals in Knowledge Graphs via View-Update Translations"
+  authors:
+  - family-names: "Meckler"
+    given-names: "Sascha"
+  - family-names: "Harth"
+    given-names: "Andreas"
+  year: 2023
+  doi: "10.1007/978-3-031-47243-5_10"
+  collection-title: "The Semantic Web – ISWC 2023"
